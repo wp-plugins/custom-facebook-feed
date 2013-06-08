@@ -25,5 +25,5 @@ To display photos and videos in your feed try out a demo of the PRO version on t
 
 == Changelog ==
 
-= 1.0.1 =
-* Minor bug fixes.
+= 1.0 =
+* Launch!
