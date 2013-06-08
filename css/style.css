@@ -1,0 +1,97 @@
+
+/**************/
+/*** LAYOUT ***/
+/**************/
+
+/* Feed container */
+#cff {
+  float: left;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Individual post item */
+#cff .cff-item{
+  float: left;
+  width: 100%;
+  clear: both;
+  padding: 20px 0;
+  border-bottom: 1px solid #ddd;
+}
+#cff .cff-item:first-child{
+  padding-top: 0;
+}
+
+
+/******************/
+/*** TYPOGRAPHY ***/
+/******************/
+
+/* Links */
+#cff a {
+  display: block;
+  padding: 5px 0;
+  color:#666;
+  text-decoration:underline;
+}
+
+#cff a:active, #cff a:hover {
+  color: #000;
+}
+
+/* Post titles and body text */
+#cff h4, #cff h3, #cff p{
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin: 5px 0;
+  line-height: 1.4;
+}
+
+#cff h4, #cff h3{
+  white-space: pre;
+  white-space: pre-wrap;
+  white-space: pre-line;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -hp-pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Date */
+#cff .cff-date{
+  float: left;
+  width: 100%;
+  padding-top: 5px;
+  font-size: 11px;
+}
+
+
+/*****************/
+/*** POST META ***/
+/*****************/
+
+/* Meta container */
+#cff .cff-meta{
+  float: left;
+  width: 100%;
+  list-style-type: none;
+  padding: 5px 0;
+  margin: 0;
+}
+
+/* View on Facebook / View Link text */
+#cff .cff-viewpost{
+  float: left;
+  clear: both;
+  font-size: 11px;
+}
+
+/* Like box */
+#cff .cff-likebox{
+  float: left;
+  width: 100%;
+  margin: 10px 0 0 -10px;
+}
