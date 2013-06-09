@@ -32,11 +32,11 @@ If you have a Facebook page with a URL like this: `https://www.facebook.com/Your
 
 = Are there any limitations on which page feeds I can display? =
 
-The feed you’re trying to display has to be a publicly accessible page or group. This means that you usually can’t display the feed from your own personal profile or a private group. This is to do with Facebook’s privacy policies. You can’t just grab a non-public feed and display it to the world. An easy way to test whether it's private it to log out of Facebook and try to view the page. If it forces it to log in in order to view the page then it isn't public. You can change your page to be public in your Facebook page settings.
+The feed you're trying to display has to be a publicly accessible page or group. This means that you usually can’t display the feed from your own personal profile or a private group. This is to do with Facebook's privacy policies. You can't just grab a non-public feed and display it to the world. An easy way to test whether it's private it to log out of Facebook and try to view the page. If it forces it to log in in order to view the page then it isn't public. You can change your page to be public in your Facebook page settings.
 
-= What’s an Access Token and why do I need one? =
+= What's an Access Token and why do I need one? =
 
-An Access Token is required by Facebook in order to access their feeds.  Don’t worry, it’s easy to get one.  Just follow the step-by-step instructions [here](http://smashballoon.com/custom-facebook-feed/access-token/ "Getting an Access Token"). to get yours. Your Access Token will never expire.
+An Access Token is required by Facebook in order to access their feeds.  Don't worry, it's easy to get one.  Just follow the step-by-step instructions [here](http://smashballoon.com/custom-facebook-feed/access-token/ "Getting an Access Token"). to get yours. Your Access Token will never expire.
 
 = Can I show photos and videos in my feed? =
 
