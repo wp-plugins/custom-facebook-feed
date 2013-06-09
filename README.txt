@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, social, feed, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,7 +52,7 @@ This plugin only allows you to display text updates from your feed. To display p
 
 == Changelog ==
 
-= 1.1 =
+= 1.2 =
 * Added the ability to define a maximum length for both the post title and body text
 
 = 1.0 =
