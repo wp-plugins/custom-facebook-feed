@@ -11,13 +11,13 @@ The Custom Facebook Feed allows you to display a customizable Facebook feed of a
 
 == Description ==
 
-The Custom Facebook Feed allows you to display a customizable Facebook feed of any public Facebook page or group on your website. Other Facebook plugins are Facebook branded and as they use iframes they don't allow you to customize the look, feel and functionality yourself. The Custom Facebook Feed is 100% customizable and by default inherits your theme's style.
+Other Facebook plugins are Facebook branded and don't allow you to customize how they look. The Custom Facebook Feed inherits your theme's style to seamlessly match the look and feel of your site.
 
 * Use the shortcode to display the feed in a page, post or widget
 * Responsive feed layout works on any screen size
 * Limit the number of posts to be shown in your feed
 * Set a maximum length for both the post title and body text
-* Use the shortcode to display feeds from different Facebook pages anywhere on your site
+* Use the shortcode to display feeds from multiple Facebook pages anywhere on your site
 
 To display photos, videos and the number of likes, shares and comments for each post then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
 
