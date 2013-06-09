@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.0
+Version: 1.1
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -39,7 +39,9 @@ function display_cff($atts) {
     $atts = shortcode_atts(
         array(
             'id' => get_option('cff_page_id'),
-            'show' => get_option('cff_num_show')
+            'show' => get_option('cff_num_show'),
+            'titlelength' => get_option('cff_title_length'),
+            'bodylength' => get_option('cff_body_length')
         ), $atts);
 
     //Assign the Access Token and Page ID variables
@@ -75,10 +77,34 @@ function display_cff($atts) {
         $content .= '<div class="cff-item">';
 
         //Text/title/description/date
-        if (!empty($news->story)) { $content .= '<h4>' . $news->story . '</h4>'; }
-        if (!empty($news->message)) { $content .= '<h4>' . $news->message . '</h4>'; }
-        if (!empty($news->description)) { $content .= '<p>' . $news->description . '</p>'; }
+        //Get text limits
+        $title_limit = $atts['titlelength'];
+        $body_limit = $atts['bodylength'];
 
+        if (!empty($news->story)) { 
+            $story_text = $news->story;
+            if (isset($title_limit) && $title_limit !== '') {
+                if (strlen($story_text) > $title_limit) $story_text = substr($story_text, 0, $title_limit) . '...';
+            }
+            $content .= '<h4>' . $story_text . '</h4>';
+        }
+        if (!empty($news->message)) {
+            $message_text = $news->message;
+            if (isset($title_limit) && $title_limit !== '') {
+                if (strlen($message_text) > $title_limit) $message_text = substr($message_text, 0, $title_limit) . '...';
+            }
+            $content .= '<h4>' . $message_text . '</h4>';
+        }
+        if (!empty($news->description)) {
+            $description_text = $news->description;
+            if (isset($body_limit) && $body_limit !== '') {
+                if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
+            }
+            $content .= '<p>' . $description_text . '</p>';
+        }
+
+
+        //Posted on
         $content .= '<p class="cff-date">Posted '. timeSince(strtotime($news->created_time)) . ' ago</p>';
 
 
@@ -93,6 +119,7 @@ function display_cff($atts) {
         }
 
 
+        //Show link
         if (!empty($news->link)) {
             $link = $news->link;
 
@@ -107,6 +134,8 @@ function display_cff($atts) {
             $content .= '<a class="cff-viewpost" href="' . $link . '" title="' . $link_text . '">' . $link_text . '</a>';
         }
 
+
+        //End item
         $content .= '</div> <!-- end .cff-item -->';
 
     };
@@ -191,6 +220,8 @@ function cff_uninstall()
     delete_option( 'cff_access_token' );
     delete_option( 'cff_page_id' );
     delete_option( 'cff_num_show' );
+    delete_option( 'cff_title_length' );
+    delete_option( 'cff_body_length' );
 }
 register_uninstall_hook( __FILE__, 'cff_uninstall' );
  
