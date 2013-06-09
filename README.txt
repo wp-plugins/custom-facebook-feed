@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, social, feed, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ To display photos and videos in your feed try out a demo of the PRO version on t
 5. You can display multiple feeds of different Facebook pages by specifying a Page ID directly in the shortcode: `[custom-facebook-feed id=SarahsBakery show=5]`.
 
 == Changelog ==
+
+= 1.1 =
+* Added the ability to define a maximum length for both the post title and body text
 
 = 1.0 =
 * Launch!
