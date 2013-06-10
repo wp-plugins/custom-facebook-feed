@@ -7,14 +7,18 @@ Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Custom Facebook Feed allows you to display a customizable Facebook feed of any public Facebook page or group on your website.
+The Custom Facebook Feed allows you to display a customizable Facebook feed of any public Facebook page on your website.
 
 == Description ==
 
-Other Facebook plugins are Facebook branded and don't allow you to customize how they look. The Custom Facebook Feed inherits your theme's style to seamlessly match the look and feel of your site.
+Display a **customizable**, **responsive** and **search engine crawlable** version of your Facebook feed on your WordPress site.
 
-* Use the shortcode to display the feed in a page, post or widget
-* Responsive feed layout works on any screen size
+Other Facebook plugins use iframes to show your feed which don't allow you to customize how they look, aren't responsive and are not crawlable by search engines. The Custom Facebook Feed inherits your theme's style to display a feed which is responsive, crawlable and seamlessly matches the look and feel of your site.
+
+* **100% Customizable** - by default inherits your theme's styles
+* **Feed content is crawlable by search engines adding SEO value to your site** - other Facebook plugins embed the feed using iframes which are not crawlable
+* **Completely responsive and mobile optimized** - works on any screen size
+* Use the shortcode to display the feed in a page, post or widget anywhere on your site
 * Limit the number of posts to be shown in your feed
 * Set a maximum length for both the post title and body text
 * Use the shortcode to display feeds from multiple Facebook pages anywhere on your site
@@ -50,11 +54,11 @@ This plugin only allows you to display text updates from your feed. To display p
 
 == Screenshots ==
 
-1. Configuring the plugin
-2. Adding the shortcode to your page or post. The shortcode parameters are optional and can be used to override the default settings you set on the plugin settings page
-3. Adding the shortcode to a widget
-4. Feed displayed in a page or post. By default the feed inherits your theme's default styles and is completely responsive.
-5. Feed displayed in a side widget.
+1. Feed displayed in a page or post. By default the feed inherits your theme's default styles and is completely responsive.
+2. Feed displayed in a side widget.
+3. Configuring the plugin
+4. Adding the shortcode to your page or post. The shortcode parameters are optional and can be used to override the default settings you set on the plugin settings page
+5. Adding the shortcode to a widget
 
 == Changelog ==
 
