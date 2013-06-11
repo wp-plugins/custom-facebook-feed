@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,9 @@ This plugin only allows you to display text updates from your feed. To display p
 5. Adding the shortcode to a widget
 
 == Changelog ==
+
+= 1.2.1 =
+* Minor bug fixes
 
 = 1.2 =
 * Added the ability to define a maximum length for both the post title and body text
