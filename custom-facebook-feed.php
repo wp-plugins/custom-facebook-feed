@@ -217,8 +217,8 @@ function cff_uninstall()
     if ( ! current_user_can( 'activate_plugins' ) )
         return;
 
-    // delete_option( 'cff_access_token' );
-    // delete_option( 'cff_page_id' );
+    delete_option( 'cff_access_token' );
+    delete_option( 'cff_page_id' );
     delete_option( 'cff_num_show' );
     delete_option( 'cff_title_length' );
     delete_option( 'cff_body_length' );
