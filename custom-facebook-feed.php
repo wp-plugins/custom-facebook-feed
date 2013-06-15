@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.2.2
+Version: 1.2.3
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -143,7 +143,7 @@ function display_cff($atts) {
 
     //Add the Like Box
     $content .= '<div class="cff-likebox"><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" width="200" show_faces="false" stream="false" header="true"></fb:like-box></div>';
-    $content .= '</div> <!-- end .Custom Facebook Feed -->';
+    $content .= '</div><div class="clear"></div> <!-- end .Custom Facebook Feed -->';
 
     //Return our feed HTML to display
     return $content;
