@@ -42,9 +42,9 @@ If you have a Facebook page with a URL like this: `https://www.facebook.com/Your
 
 = Are there any limitations on which page feeds I can display? =
 
-The feed you're trying to display has to be a publicly accessible page. This means that you can't display the feed from your own personal profile or a group. This is to do with Facebook's privacy policies. You can’t display a non-public feed publicly.
+The feed you're trying to display has to be a publicly accessible page. This means that you can't display the feed from your own personal profile or a group. This is to do with Facebook's privacy policies. You can't display a non-public feed publicly.
 
-If your page has any restrictions on it (age, for example) then it means that people have to be signed into Facebook in order to view your page. This isn’t desirable for most pages as it means that it isn't accessible by people who don't have a Facebook account and that your page can’t be crawled and indexed by search engines.
+If your page has any restrictions on it (age, for example) then it means that people have to be signed into Facebook in order to view your page. This isn't desirable for most pages as it means that it isn't accessible by people who don't have a Facebook account and that your page can't be crawled and indexed by search engines.
 
 An easy way to determine whether your page is set to public is to sign out of your Facebook account and try to visit your page. If Facebook forces you to sign in to view your page then it isn't public. You can change your page to public in your Facebook page settings simply by removing any restrictions you have on it, which will then allow the Custom Facebook Feed plugin to access and display your feed.
 
