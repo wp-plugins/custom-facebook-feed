@@ -58,7 +58,7 @@ This plugin only allows you to display text updates from your feed. To display p
 
 = Is the content of my feed crawlable by search engines? =
 
-It sure is. Unlike other Facebook plugins which use iframes to embed your feed into your page once it’s loaded, the Custom Facebook Feed uses PHP to embed your feed content directly into your page. This adds dynamic, search engine crawlable content to your site.
+It sure is. Unlike other Facebook plugins which use iframes to embed your feed into your page once it's loaded, the Custom Facebook Feed uses PHP to embed your feed content directly into your page. This adds dynamic, search engine crawlable content to your site.
 
 = Can I prevent my comments on posts from displaying in the feed? =
 
