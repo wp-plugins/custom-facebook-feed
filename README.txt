@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Display a **customizable**, **responsive** and **search engine crawlable** versi
 
 Other Facebook plugins use iframes to show your feed which don't allow you to customize how they look, aren't responsive and are not crawlable by search engines. The Custom Facebook Feed inherits your theme's style to display a feed which is responsive, crawlable and seamlessly matches the look and feel of your site.
 
-* **100% Customizable** - by default inherits your theme's styles
+* **Completely Customizable** - by default inherits your theme's styles
 * **Feed content is crawlable by search engines adding SEO value to your site** - other Facebook plugins embed the feed using iframes which are not crawlable
 * **Completely responsive and mobile optimized** - works on any screen size
 * Use the shortcode to display the feed in a page, post or widget anywhere on your site
@@ -42,7 +42,11 @@ If you have a Facebook page with a URL like this: `https://www.facebook.com/Your
 
 = Are there any limitations on which page feeds I can display? =
 
-The feed you're trying to display has to be a publicly accessible page or group. This means that you usually can't display the feed from your own personal profile or a private group. This is to do with Facebook's privacy policies. You can't just grab a non-public feed and display it to the world. An easy way to test whether it's private it to log out of Facebook and try to view the page. If it forces it to log in in order to view the page then it isn't public. You can change your page to be public in your Facebook page settings.
+The feed you're trying to display has to be a publicly accessible page. This means that you can't display the feed from your own personal profile or a group. This is to do with Facebook's privacy policies. You can’t display a non-public feed publicly.
+
+If your page has any restrictions on it (age, for example) then it means that people have to be signed into Facebook in order to view your page. This isn’t desirable for most pages as it means that it isn't accessible by people who don't have a Facebook account and that your page can’t be crawled and indexed by search engines.
+
+An easy way to determine whether your page is set to public is to sign out of your Facebook account and try to visit your page. If Facebook forces you to sign in to view your page then it isn't public. You can change your page to public in your Facebook page settings simply by removing any restrictions you have on it, which will then allow the Custom Facebook Feed plugin to access and display your feed.
 
 = What's an Access Token and why do I need one? =
 
@@ -50,7 +54,15 @@ An Access Token is required by Facebook in order to access their feeds.  Don't w
 
 = Can I show photos and videos in my feed? =
 
-This plugin only allows you to display text updates from your feed. To display photos and videos in your feed you need to upgrade to the PRO version of the plugin. Try out a demo of the PRO version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the PRO version [here](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO")
+This plugin only allows you to display text updates from your feed. To display photos and videos in your feed you need to upgrade to the PRO version of the plugin. Try out a demo of the PRO version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the PRO version [here](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO").
+
+= Is the content of my feed crawlable by search engines? =
+
+It sure is. Unlike other Facebook plugins which use iframes to embed your feed into your page once it’s loaded, the Custom Facebook Feed uses PHP to embed your feed content directly into your page. This adds dynamic, search engine crawlable content to your site.
+
+= Can I prevent my comments on posts from displaying in the feed? =
+
+Yep.  Comments will show up if you use the Access Token from an account which has adminstrative rights to your page (such as an owner or administrator).  To prevent your comments showing up you need to sign up for a new Facebook account which is not associated with your page, register as a developer with this new account, and then use that Access Token to display your feed.
 
 == Screenshots ==
 
