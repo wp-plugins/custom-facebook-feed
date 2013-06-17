@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,9 @@ Yep.  Comments will show up if you use the Access Token from an account which ha
 5. Adding the shortcode to a widget
 
 == Changelog ==
+
+= 1.2.6 =
+* Added help link to settings page
 
 = 1.2.5 =
 * Added clear fix
