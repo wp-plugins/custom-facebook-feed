@@ -140,8 +140,10 @@ function cff_settings_page() {
 
             </table>
 
-            <?php submit_button(); ?>
-
+            <p style="margin: 25px 0 40px 0;">
+                <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
+                &nbsp;&nbsp;<a href="http://smashballoon.com/custom-facebook-feed/troubleshooting" target="_blank"><b>HELP!</b> My feed is not showing up</a>
+            </p>
 
         </form>
 
@@ -160,7 +162,7 @@ function cff_settings_page() {
         <br /><br /><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank">Plugin Support</a>
 
         <br /><br /><br />
-        <a href="http://smashballoon.com/custom-facebook-feed/" target="_blank"><img src="<?php echo plugins_url( 'img/pro.jpg' , __FILE__ ) ?>" /></a>
+        <a href="http://smashballoon.com/custom-facebook-feed/troubleshooting" target="_blank"><img src="<?php echo plugins_url( 'img/pro.jpg' , __FILE__ ) ?>" /></a>
 
 <?php 
 } //End Settings_Page 
