@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.2.7
+Stable tag: 1.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,10 +60,6 @@ This plugin only allows you to display text updates from your feed. To display p
 
 It sure is. Unlike other Facebook plugins which use iframes to embed your feed into your page once it's loaded, the Custom Facebook Feed uses PHP to embed your feed content directly into your page. This adds dynamic, search engine crawlable content to your site.
 
-= Can I prevent my comments on posts from displaying in the feed? =
-
-Yep.  Comments will show up if you use the Access Token from an account which has adminstrative rights to your page (such as an owner or administrator).  To prevent your comments showing up you need to sign up for a new Facebook account which is not associated with your page, register as a developer with this new account, and then use that Access Token to display your feed.
-
 == Screenshots ==
 
 1. Feed displayed in a page or post. By default the feed inherits your theme's default styles and is completely responsive.
@@ -73,6 +69,9 @@ Yep.  Comments will show up if you use the Access Token from an account which ha
 5. Adding the shortcode to a widget
 
 == Changelog ==
+
+= 1.2.8 =
+* Fixed bug in specifying the number of posts to display
 
 = 1.2.7 =
 * Prevented likes and comments by the page author showing up in the feed

@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.2.7
+Version: 1.2.8
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -61,13 +61,15 @@ function display_cff($atts) {
     }
 
     //Get the contents of a Facebook page
-    $FBpage = @file_get_contents('https://graph.facebook.com/' . $page_id . '/posts?access_token=' . $access_token . '&limit=' . $atts['show']);
+    $FBpage = @file_get_contents('https://graph.facebook.com/' . $page_id . '/posts?access_token=' . $access_token);
 
     //Interpret data with JSON
     $FBdata = json_decode($FBpage);
 
     //Create HTML
     $content = '<div id="cff">';
+    //Limit var
+    $i = 0;
     foreach ($FBdata->data as $news ) {
 
         //Explode News and Page ID's into 2 values
@@ -76,6 +78,11 @@ function display_cff($atts) {
         //Check whether it's a status (author comment or like)
         if ($news->type !== 'status') {
             //If it isn't then create the post
+
+            //Only create posts for the amount of posts specified
+            if ( $i == $atts['show'] ) break;
+            $i++;
+
             //Start the container
             $content .= '<div class="cff-item">';
 
