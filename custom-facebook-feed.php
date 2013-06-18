@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.2.6
+Version: 1.2.7
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -73,72 +73,77 @@ function display_cff($atts) {
         //Explode News and Page ID's into 2 values
         $StatusID = explode("_", $news->id);
 
-        //Start the container
-        $content .= '<div class="cff-item">';
+        //Check whether it's a status (author comment or like)
+        if ($news->type !== 'status') {
+            //If it isn't then create the post
+            //Start the container
+            $content .= '<div class="cff-item">';
 
-        //Text/title/description/date
-        //Get text limits
-        $title_limit = $atts['titlelength'];
-        $body_limit = $atts['bodylength'];
+            //Text/title/description/date
+            //Get text limits
+            $title_limit = $atts['titlelength'];
+            $body_limit = $atts['bodylength'];
 
-        if (!empty($news->story)) { 
-            $story_text = $news->story;
-            if (isset($title_limit) && $title_limit !== '') {
-                if (strlen($story_text) > $title_limit) $story_text = substr($story_text, 0, $title_limit) . '...';
+            if (!empty($news->story)) { 
+                $story_text = $news->story;
+                if (isset($title_limit) && $title_limit !== '') {
+                    if (strlen($story_text) > $title_limit) $story_text = substr($story_text, 0, $title_limit) . '...';
+                }
+                $content .= '<h4>' . $story_text . '</h4>';
             }
-            $content .= '<h4>' . $story_text . '</h4>';
-        }
-        if (!empty($news->message)) {
-            $message_text = $news->message;
-            if (isset($title_limit) && $title_limit !== '') {
-                if (strlen($message_text) > $title_limit) $message_text = substr($message_text, 0, $title_limit) . '...';
+            if (!empty($news->message)) {
+                $message_text = $news->message;
+                if (isset($title_limit) && $title_limit !== '') {
+                    if (strlen($message_text) > $title_limit) $message_text = substr($message_text, 0, $title_limit) . '...';
+                }
+                $content .= '<h4>' . $message_text . '</h4>';
             }
-            $content .= '<h4>' . $message_text . '</h4>';
-        }
-        if (!empty($news->description)) {
-            $description_text = $news->description;
-            if (isset($body_limit) && $body_limit !== '') {
-                if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
-            }
-            $content .= '<p>' . $description_text . '</p>';
-        }
-
-
-        //Posted on
-        $content .= '<p class="cff-date">Posted '. timeSince(strtotime($news->created_time)) . ' ago</p>';
-
-
-        //Check whether it's a shared link
-        if ($news->type == 'link') {
-            $content .= '<a href="'.$news->link.'"><img src="'. $picture_b .'" border="0" style="padding-right:10px;" /></a>';  
-
-            //Display link name and description
             if (!empty($news->description)) {
-                $content .= '<a href="'.$news->link.'">'. '<b>' . $news->name . '</b></a>';
+                $description_text = $news->description;
+                if (isset($body_limit) && $body_limit !== '') {
+                    if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
+                }
+                $content .= '<p>' . $description_text . '</p>';
             }
-        }
 
 
-        //Show link
-        if (!empty($news->link)) {
-            $link = $news->link;
+            //Posted on
+            $content .= '<p class="cff-date">Posted '. timeSince(strtotime($news->created_time)) . ' ago</p>';
 
-            //Check whether it links to facebook or somewhere else
-            $facebook_str = 'facebook.com';
 
-            if(stripos($link, $facebook_str) !== false) {
-                $link_text = 'View on Facebook';
-            } else {
-                $link_text = 'View Link';
+            //Check whether it's a shared link
+            if ($news->type == 'link') {
+                $content .= '<a href="'.$news->link.'"><img src="'. $picture_b .'" border="0" style="padding-right:10px;" /></a>';  
+
+                //Display link name and description
+                if (!empty($news->description)) {
+                    $content .= '<a href="'.$news->link.'">'. '<b>' . $news->name . '</b></a>';
+                }
             }
-            $content .= '<a class="cff-viewpost" href="' . $link . '" title="' . $link_text . '">' . $link_text . '</a>';
-        }
 
 
-        //End item
-        $content .= '</div> <!-- end .cff-item -->';
+            //Show link
+            if (!empty($news->link)) {
+                $link = $news->link;
 
-    };
+                //Check whether it links to facebook or somewhere else
+                $facebook_str = 'facebook.com';
+
+                if(stripos($link, $facebook_str) !== false) {
+                    $link_text = 'View on Facebook';
+                } else {
+                    $link_text = 'View Link';
+                }
+                $content .= '<a class="cff-viewpost" href="' . $link . '" title="' . $link_text . '">' . $link_text . '</a>';
+            }
+
+
+            //End item
+            $content .= '</div> <!-- end .cff-item -->';
+
+        } //End status check
+
+    } //End the loop
 
 
     //Add the Like Box
