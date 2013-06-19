@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.3.0
+Version: 1.3.1
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -98,7 +98,7 @@ function display_cff($atts) {
         $StatusID = explode("_", $news->id);
 
         //Check whether it's a status (author comment or like)
-        if ($news->type !== 'status') {
+        if ( ( $news->type == 'status' && !empty($news->message) ) || $news->type !== 'status' ) {
             //If it isn't then create the post
 
             //Only create posts for the amount of posts specified
