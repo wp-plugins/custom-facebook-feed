@@ -48,6 +48,10 @@ function display_cff($atts) {
     $access_token = get_option('cff_access_token');
     $page_id = $atts['id'];
 
+    //Get show posts attribute. If not set then default to 10.
+    $show_posts = $atts['show'];
+    if ( $show_posts == 0 || $show_posts == undefined ) $show_posts = 10;
+
     //Check whether the Access Token is present and valid
     if ($access_token == '') {
         echo 'Please enter a valid Access Token. You can do this in the plugin settings (Settings > Custom Facebook Feed).<br /><br />';
@@ -98,7 +102,7 @@ function display_cff($atts) {
             //If it isn't then create the post
 
             //Only create posts for the amount of posts specified
-            if ( $i == $atts['show'] ) break;
+            if ( $i == $show_posts ) break;
             $i++;
 
             //Start the container
