@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.2.9
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,9 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your feed i
 5. Adding the shortcode to a widget
 
 == Changelog ==
+
+= 1.3.0 =
+* Tweak: If 'Number of Posts to show' is not set then default to 10
 
 = 1.2.9 =
 * Fix: Now using cURL instead of file_get_contents to prevent issues with php.ini configuration on some web servers
