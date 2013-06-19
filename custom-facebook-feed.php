@@ -64,21 +64,6 @@ function display_cff($atts) {
         return false;
     }
 
-    // cURL used to get JSON object of feed data
-    function fetchUrl($url){
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-        // Uncomment below if using SSL
-        // curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
-
-        $feedData = curl_exec($ch);
-        curl_close($ch); 
-
-        return $feedData;
-    }
-
     //Get the contents of the Facebook feed using the WP HTTP API
     if( !class_exists( 'WP_Http' ) )
     include_once( ABSPATH . WPINC. '/class-http.php' );
