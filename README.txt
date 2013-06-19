@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,23 +70,26 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your feed i
 
 == Changelog ==
 
+= 1.2.9 =
+* Fix: Now using cURL instead of file_get_contents to prevent issues with php.ini configuration on some web servers
+
 = 1.2.8 =
-* Fixed bug in specifying the number of posts to display
+* Fix: Fixed bug in specifying the number of posts to display
 
 = 1.2.7 =
-* Prevented likes and comments by the page author showing up in the feed
+* Tweak: Prevented likes and comments by the page author showing up in the feed
 
 = 1.2.6 =
-* Added help link to settings page
+* Tweak: Added help link to settings page
 
 = 1.2.5 =
-* Added clear fix
+* Fix: Added clear fix
 
 = 1.2.1 =
-* Minor bug fixes
+* Fix: Minor bug fixes
 
 = 1.2 =
-* Added the ability to define a maximum length for both the post title and body text
+* New: Added the ability to define a maximum length for both the post title and body text
 
 = 1.0 =
 * Launch!
