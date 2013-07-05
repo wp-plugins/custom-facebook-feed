@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.3.2
+Version: 1.3.3
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -29,8 +29,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 //Include admin
 include dirname( __FILE__ ) .'/custom-facebook-feed-admin.php';
-
-error_reporting(0);
 
 // Add shortcodes
 add_shortcode('custom-facebook-feed', 'display_cff');
@@ -64,14 +62,41 @@ function display_cff($atts) {
         return false;
     }
 
-    //Get the contents of the Facebook feed using the WP HTTP API
-    if( !class_exists( 'WP_Http' ) )
-    include_once( ABSPATH . WPINC. '/class-http.php' );
+    
 
-    $feed_url = 'https://graph.facebook.com/' . $page_id . '/posts?access_token=' . $access_token;
-    $request = new WP_Http;
-    $result = $request->request( $feed_url );
-    $json_object = $result['body'];
+    //Get JSON object of feed data
+    function fetchUrl($url){
+        //Can we use cURL?
+        if(is_callable('curl_init')){
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+            curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+
+            $feedData = curl_exec($ch);
+            curl_close($ch);
+
+        //If not then use file_get_contents
+        } elseif ( ini_get('allow_url_fopen') == 1 || ini_get('allow_url_fopen') === TRUE ) {
+            $feedData = @file_get_contents($url);
+
+        //Or else use the WP HTTP API
+        } else {
+            if( !class_exists( 'WP_Http' ) ) include_once( ABSPATH . WPINC. '/class-http.php' );
+            $request = new WP_Http;
+            $result = $request->request($url);
+            $feedData = $result['body'];
+
+        }
+        
+        return $feedData;
+    }
+
+    //Get the contents of the Facebook page
+    $json_object = fetchUrl('https://graph.facebook.com/' . $page_id . '/posts?access_token=' . $access_token);
+
+
 
     //Interpret data with JSON
     $FBdata = json_decode($json_object);
@@ -83,7 +108,7 @@ function display_cff($atts) {
     foreach ($FBdata->data as $news ) {
 
         //Explode News and Page ID's into 2 values
-        $StatusID = explode("_", $news->id);
+        $PostID = explode("_", $news->id);
 
         //Check whether it's a status (author comment or like)
         if ( ( $news->type == 'status' && !empty($news->message) ) || $news->type !== 'status' ) {
@@ -106,6 +131,7 @@ function display_cff($atts) {
                 if (isset($title_limit) && $title_limit !== '') {
                     if (strlen($story_text) > $title_limit) $story_text = substr($story_text, 0, $title_limit) . '...';
                 }
+                $story_text = ereg_replace("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]","<a href=\"\\0\" target='_blank'>\\0</a>", $story_text);
                 $content .= '<h4>' . $story_text . '</h4>';
             }
             if (!empty($news->message)) {
@@ -113,6 +139,7 @@ function display_cff($atts) {
                 if (isset($title_limit) && $title_limit !== '') {
                     if (strlen($message_text) > $title_limit) $message_text = substr($message_text, 0, $title_limit) . '...';
                 }
+                $message_text = ereg_replace("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]","<a href=\"\\0\" target='_blank'>\\0</a>", $message_text);
                 $content .= '<h4>' . $message_text . '</h4>';
             }
             if (!empty($news->description)) {
@@ -130,14 +157,39 @@ function display_cff($atts) {
 
             //Check whether it's a shared link
             if ($news->type == 'link') {
-                $content .= '<a href="'.$news->link.'"><img src="'. $picture_b .'" border="0" style="padding-right:10px;" /></a>';  
 
-                //Display link name and description
-                if (!empty($news->description)) {
-                    $content .= '<a href="'.$news->link.'">'. '<b>' . $news->name . '</b></a>';
+                $story = $news->story;
+
+                //Check whether it's an event
+                $created_event = 'created an event.';
+                $shared_event = 'shared an event.';
+
+                if ( stripos($story, $created_event) !== false || stripos($story, $shared_event) !== false ){
+                    //Get the event object
+                    $eventID = $PostID[1];
+                    //Get the contents of the event
+                    $event_json = fetchUrl('https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token);
+
+                    //Interpret data with JSON
+                    $event_object = json_decode($event_json);
+
+                    //Display the event details
+                    $content .= '<div class="details">';
+                    if (!empty($event_object->name)) $content .= '<h5>' . $event_object->name . '</h5>';
+                    if (!empty($event_object->location)) $content .= '<p>Where: ' . $event_object->location . '</p>';
+                    if (!empty($event_object->start_time)) $content .= '<p>When: ' . date("F j, Y, g:i a", strtotime($event_object->start_time)) . '</p>';
+                    if (!empty($event_object->description)){
+                        $description = $event_object->description;
+                        if (isset($body_limit) && $body_limit !== '') {
+                            if (strlen($description) > $body_limit) $description = substr($description, 0, $body_limit) . '...';
+                        }
+                        $content .= '<p>' . $description . '</p>';
+                    }
+
+                    $content .= '</div><!-- end .details -->';
                 }
-            }
 
+            }
 
             //Show link
             if (!empty($news->link)) {
@@ -246,5 +298,9 @@ function cff_uninstall()
     delete_option( 'cff_body_length' );
 }
 register_uninstall_hook( __FILE__, 'cff_uninstall' );
+
+
+//Comment out the line below to view errors
+error_reporting(0);
  
 ?>

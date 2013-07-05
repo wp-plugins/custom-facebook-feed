@@ -30,12 +30,9 @@
 
 /* Links */
 #cff a {
-  display: block;
-  padding: 5px 0;
   color:#666;
   text-decoration:underline;
 }
-
 #cff a:active, #cff a:hover {
   color: #000;
 }
@@ -64,8 +61,22 @@
 #cff .cff-date{
   float: left;
   width: 100%;
-  padding-top: 5px;
   font-size: 11px;
+}
+
+/* Event */
+#cff .details{
+  float: left;
+  clear: both;
+  width: 100%;
+  padding: 15px 0 10px 0;
+}
+#cff .details h5{
+  margin: 0 0 5px 0;
+  font-size: 16px;
+}
+#cff .details p{
+  font-size: 14px;
 }
 
 

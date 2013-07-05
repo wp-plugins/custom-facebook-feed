@@ -114,7 +114,7 @@ function cff_settings_page() {
 
                     <tr valign="top">
 
-                        <th scope="row"><?php _e('Maximum Post Title Length'); ?></th>
+                        <th scope="row"><?php _e('Maximum Post Text Length'); ?></th>
 
                         <td>
 
@@ -126,7 +126,7 @@ function cff_settings_page() {
 
                     <tr valign="top">
 
-                        <th scope="row"><?php _e('Maximum Post Body Text Length'); ?></th>
+                        <th scope="row"><?php _e('Maximum Link/Event Description Length'); ?></th>
 
                         <td>
 
@@ -159,7 +159,7 @@ function cff_settings_page() {
 
         <p>[custom-facebook-feed <b>id=Your_Page_ID show=3 titlelength=100 bodylength=150</b>]</p>
 
-        <br /><br /><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank">Plugin Support</a>
+        <br /><br /><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank">Plugin Support</a> - Smash Balloon is committed to making this plugin better. Please let us know if you have had any issues when using this plugin so that we can continue to make it better!
 
         <br /><br /><br />
         <a href="http://smashballoon.com/custom-facebook-feed/troubleshooting" target="_blank"><img src="<?php echo plugins_url( 'img/pro.jpg' , __FILE__ ) ?>" /></a>

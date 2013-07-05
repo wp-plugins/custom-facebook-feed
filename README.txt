@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,10 @@ An Access Token is required by Facebook in order to access their feeds.  Don't w
 
 This plugin only allows you to display text updates from your feed. To display photos and videos in your feed you need to upgrade to the PRO version of the plugin. Try out a demo of the PRO version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the PRO version [here](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO").
 
+= Can I show the comments associated with each post? =
+
+For this feature please upgrade to the [PRO version of the plugin](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO").
+
 = Is the content of my feed crawlable by search engines? =
 
 It sure is. Unlike other Facebook plugins which use iframes to embed your feed into your page once it's loaded, the Custom Facebook Feed uses PHP to embed your feed content directly into your page. This adds dynamic, search engine crawlable content to your site.
@@ -69,6 +73,11 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your feed i
 5. Adding the shortcode to a widget
 
 == Changelog ==
+
+= 1.3.3 =
+* New: Added support for events - display the event details (name, location, date/time, description) directly in the feed
+* Fix: Links within the post text are now hyperlinked
+* Tweak: Added additional methods for retrieving feed data
 
 = 1.3.2 =
 * Fix: Now using the built-in WordPress HTTP API to get retrieve the Facebook data
