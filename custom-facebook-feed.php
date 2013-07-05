@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.3.3
+Version: 1.3.4
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -131,28 +131,26 @@ function display_cff($atts) {
                 if (isset($title_limit) && $title_limit !== '') {
                     if (strlen($story_text) > $title_limit) $story_text = substr($story_text, 0, $title_limit) . '...';
                 }
-                $story_text = ereg_replace("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]","<a href=\"\\0\" target='_blank'>\\0</a>", $story_text);
-                $content .= '<h4>' . $story_text . '</h4>';
+                $content .= '<h4>' . cff_make_clickable($story_text) . '</h4>';
             }
             if (!empty($news->message)) {
                 $message_text = $news->message;
                 if (isset($title_limit) && $title_limit !== '') {
                     if (strlen($message_text) > $title_limit) $message_text = substr($message_text, 0, $title_limit) . '...';
                 }
-                $message_text = ereg_replace("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]","<a href=\"\\0\" target='_blank'>\\0</a>", $message_text);
-                $content .= '<h4>' . $message_text . '</h4>';
+                $content .= '<h4>' . cff_make_clickable($message_text) . '</h4>';
             }
             if (!empty($news->description)) {
                 $description_text = $news->description;
                 if (isset($body_limit) && $body_limit !== '') {
                     if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
                 }
-                $content .= '<p>' . $description_text . '</p>';
+                $content .= '<p>' . cff_make_clickable($description_text) . '</p>';
             }
 
 
             //Posted on
-            $content .= '<p class="cff-date">Posted '. timeSince(strtotime($news->created_time)) . ' ago</p>';
+            $content .= '<p class="cff-date">Posted '. cff_timeSince(strtotime($news->created_time)) . ' ago</p>';
 
 
             //Check whether it's a shared link
@@ -183,7 +181,7 @@ function display_cff($atts) {
                         if (isset($body_limit) && $body_limit !== '') {
                             if (strlen($description) > $body_limit) $description = substr($description, 0, $body_limit) . '...';
                         }
-                        $content .= '<p>' . $description . '</p>';
+                        $content .= '<p>' . cff_make_clickable($description) . '</p>';
                     }
 
                     $content .= '</div><!-- end .details -->';
@@ -226,11 +224,55 @@ function display_cff($atts) {
 
 
 
+//Make links in text clickable
+function cff_make_url_clickable($matches) {
+    $ret = '';
+    $url = $matches[2];
+ 
+    if ( empty($url) )
+        return $matches[0];
+    // removed trailing [.,;:] from URL
+    if ( in_array(substr($url, -1), array('.', ',', ';', ':')) === true ) {
+        $ret = substr($url, -1);
+        $url = substr($url, 0, strlen($url)-1);
+    }
+    return $matches[1] . "<a href=\"$url\" rel=\"nofollow\" target='_blank'>$url</a>" . $ret;
+}
+function cff_make_web_ftp_clickable($matches) {
+    $ret = '';
+    $dest = $matches[2];
+    $dest = 'http://' . $dest;
+ 
+    if ( empty($dest) )
+        return $matches[0];
+    // removed trailing [,;:] from URL
+    if ( in_array(substr($dest, -1), array('.', ',', ';', ':')) === true ) {
+        $ret = substr($dest, -1);
+        $dest = substr($dest, 0, strlen($dest)-1);
+    }
+    return $matches[1] . "<a href=\"$dest\" rel=\"nofollow\" target='_blank'>$dest</a>" . $ret;
+}
+function cff_make_email_clickable($matches) {
+    $email = $matches[2] . '@' . $matches[3];
+    return $matches[1] . "<a href=\"mailto:$email\">$email</a>";
+}
+function cff_make_clickable($ret) {
+    $ret = ' ' . $ret;
+    // in testing, using arrays here was found to be faster
+    $ret = preg_replace_callback('#([\s>])([\w]+?://[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is', 'cff_make_url_clickable', $ret);
+    $ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]*)#is', 'cff_make_web_ftp_clickable', $ret);
+    $ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', 'cff_make_email_clickable', $ret);
+ 
+    // this one is not in an array because we need it to run last, for cleanup of accidental links within links
+    $ret = preg_replace("#(<a( [^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i", "$1$3</a>", $ret);
+    $ret = trim($ret);
+    return $ret;
+}
 
 
 //Time stamp function
 
-function timeSince($original) {
+function cff_timeSince($original) {
 
     // Array of time period
     $chunks = array(

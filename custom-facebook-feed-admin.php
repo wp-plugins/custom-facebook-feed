@@ -162,7 +162,7 @@ function cff_settings_page() {
         <br /><br /><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank">Plugin Support</a> - Smash Balloon is committed to making this plugin better. Please let us know if you have had any issues when using this plugin so that we can continue to make it better!
 
         <br /><br /><br />
-        <a href="http://smashballoon.com/custom-facebook-feed/troubleshooting" target="_blank"><img src="<?php echo plugins_url( 'img/pro.jpg' , __FILE__ ) ?>" /></a>
+        <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.jpg' , __FILE__ ) ?>" /></a>
 
 <?php 
 } //End Settings_Page 

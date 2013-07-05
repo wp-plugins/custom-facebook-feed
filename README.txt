@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,10 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your feed i
 5. Adding the shortcode to a widget
 
 == Changelog ==
+
+= 1.3.4 =
+* New: Email addresses within the post text are now hyperlinked
+* Fix: Links beginning with 'www' are now also hyperlinked
 
 = 1.3.3 =
 * New: Added support for events - display the event details (name, location, date/time, description) directly in the feed
