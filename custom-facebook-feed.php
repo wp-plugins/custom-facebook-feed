@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.3.4
+Version: 1.3.5
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -162,9 +162,19 @@ function display_cff($atts) {
                 $created_event = 'created an event.';
                 $shared_event = 'shared an event.';
 
-                if ( stripos($story, $created_event) !== false || stripos($story, $shared_event) !== false ){
+                $created_event = stripos($story, $created_event);
+                $shared_event = stripos($story, $shared_event);
+
+                if ( $created_event || $shared_event ){
                     //Get the event object
                     $eventID = $PostID[1];
+                    if ( $shared_event ) {
+                        //Get the event id from the event URL. eg: http://www.facebook.com/events/123451234512345/
+                        $event_url = parse_url($news->link);
+                        $url_parts = explode('/', $event_url['path']);
+                        //Get the id from the parts
+                        $eventID = $url_parts[count($url_parts)-2];
+                    }
                     //Get the contents of the event
                     $event_json = fetchUrl('https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token);
 

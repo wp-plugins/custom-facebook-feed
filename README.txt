@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,9 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your feed i
 5. Adding the shortcode to a widget
 
 == Changelog ==
+
+= 1.3.5 =
+* New: Shared events now display event details (name, location, date/time, description) directly in the feed
 
 = 1.3.4 =
 * New: Email addresses within the post text are now hyperlinked
