@@ -158,6 +158,8 @@ function cff_settings_page() {
         <p>You can override the settings above directly in the shortcode like so:</p>
 
         <p>[custom-facebook-feed <b>id=Your_Page_ID show=3 titlelength=100 bodylength=150</b>]</p>
+        <br />
+        <p>Please note that the free version of the plugin only displays text updates. For <b>photos, videos, comments and more</b> please upgrade to the <a href="http://smashballoon.com/custom-facebook-feed/wordpress-plugin/" target="_blank">Pro version</a> of the plugin.</p>
 
         <br /><br /><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank">Plugin Support</a> - Smash Balloon is committed to making this plugin better. Please let us know if you have had any issues when using this plugin so that we can continue to make it better!
 
