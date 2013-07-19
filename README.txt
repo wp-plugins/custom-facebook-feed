@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.3.7
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,26 +13,27 @@ The Custom Facebook Feed allows you to display a customizable Facebook feed of a
 
 Display a **customizable**, **responsive** and **search engine crawlable** version of your Facebook feed on your WordPress site.
 
-Other Facebook plugins use iframes to show your feed which don't allow you to customize how they look, aren't responsive and are not crawlable by search engines. The Custom Facebook Feed inherits your theme's style to display a feed which is responsive, crawlable and seamlessly matches the look and feel of your site.
+The Custom Facebook Feed allows you to display a completely customizable, responsive, and search engine crawlable version of your Facebook page on your own website. No more ugly iframes! Customize your feed to seamlessly match the look and feel of your site.
 
-* **Completely Customizable** - by default inherits your theme's styles
+* **Completely Customizable** - By default the feed will adopt the style of your website, but can be completely customized to look however you like!
 * **Feed content is crawlable by search engines adding SEO value to your site** - other Facebook plugins embed the feed using iframes which are not crawlable
-* **Completely responsive and mobile optimized** - works on any screen size
-* Use the shortcode to display the feed in a page, post or widget anywhere on your site
-* Limit the number of posts to be shown in your feed
+* **Completely responsive and mobile optimized** - layout looks great on any screen size and in any container width
+* Control the width, height, padding and background color of your feed
+* Customize the size, weight and color of text
+* Select which parts of each post to display or hide
+* Select the number of posts to display
 * Set a maximum length for both the post title and body text
-* Use the shortcode to display feeds from multiple Facebook pages anywhere on your site
+* Use the shortcode to display the feed in a page, post or widget anywhere on your site
 
-To display photos, videos and the number of likes, shares and comments for each post then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
+To display photos, videos, the number of likes, shares and comments for each post, and for multiple layout options then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
 
 == Installation ==
 
 1. Install the Custom Facebook Feed either via the WordPress plugin directory, or by uploading the files to your web server (in the `/wp-content/plugins/` directory).
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Navigate to the plugin settings page to configure your feed.
+3. Navigate to the 'Facebook Feed' settings page to configure your feed.
 4. Use the shortcode `[custom-facebook-feed]` in your page, post or widget to display your feed.
 5. You can display multiple feeds of different Facebook pages by specifying a Page ID directly in the shortcode: `[custom-facebook-feed id=SarahsBakery show=5]`.
-6. You can limit the length of the title and body text by using `titlelength=100` and `bodylength=150` (for example) in the shortcode. `[custom-facebook-feed titlelength=100 bodylength=150]`.
 
 == Frequently Asked Questions ==
 
@@ -54,7 +55,7 @@ An Access Token is required by Facebook in order to access their feeds.  Don't w
 
 = Can I show photos and videos in my feed? =
 
-This plugin only allows you to display text updates from your feed. To display photos and videos in your feed you need to upgrade to the PRO version of the plugin. Try out a demo of the PRO version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the PRO version [here](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO").
+This plugin only allows you to display textual updates from your feed. To display photos and videos in your feed you need to upgrade to the PRO version of the plugin. Try out a demo of the PRO version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the PRO version [here](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO").
 
 = Can I show the comments associated with each post? =
 
@@ -66,13 +67,23 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your feed i
 
 == Screenshots ==
 
-1. Feed displayed in a page or post. By default the feed inherits your theme's default styles and is completely responsive.
-2. Feed displayed in a side widget.
+1. By default the feed inherits your theme's default styles and is completely responsive.
+2. Completely customize the way your feed looks to perfectly match your site.
 3. Configuring the plugin
-4. Adding the shortcode to your page or post. The shortcode parameters are optional and can be used to override the default settings you set on the plugin settings page
-5. Adding the shortcode to a widget
+4. Use the styling options to customize your feed
+5. It's super easy to display your feed in any page or post
+6. Add the shortcode to a widget
 
 == Changelog ==
+
+= 1.4.0 =
+* Major Update!
+* New: Loads of new customization options for your feed
+* New: Define feed width, height, padding and background color
+* New: Change the font-size, font-weight and color of the post text, description, date, links and event details
+* New: Choose whether to show or hide certain parts of the posts
+* New: Select whether the Like box is shown at the top of bottom of the feed
+* New: Choose Like box background color
 
 = 1.3.6 =
 * Minor modifications
