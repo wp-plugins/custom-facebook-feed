@@ -163,7 +163,6 @@ function cff_style_page() {
 
     //Save layout options in an array
     add_option( 'cff_style_settings', $options );
-    $options = get_option('cff_style_settings');
     $options = wp_parse_args(get_option('cff_style_settings'), $defaults);
     //Set the page variables
 

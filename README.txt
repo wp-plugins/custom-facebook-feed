@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,9 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your feed i
 6. Add the shortcode to a widget
 
 == Changelog ==
+
+= 1.4.1 =
+* Fix: Set all parts of the feed to display by default on activation
 
 = 1.4.0 =
 * Major Update!
