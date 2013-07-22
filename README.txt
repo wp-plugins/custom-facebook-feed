@@ -13,7 +13,7 @@ The Custom Facebook Feed allows you to display a customizable Facebook feed of a
 
 Display a **customizable**, **responsive** and **search engine crawlable** version of your Facebook feed on your WordPress site.
 
-The Custom Facebook Feed allows you to display a completely customizable, responsive, and search engine crawlable version of your Facebook page on your own website. No more ugly iframes! Customize your feed to seamlessly match the look and feel of your site.
+= Features =
 
 * **Completely Customizable** - By default the feed will adopt the style of your website, but can be completely customized to look however you like!
 * **Feed content is crawlable by search engines adding SEO value to your site** - other Facebook plugins embed the feed using iframes which are not crawlable
@@ -26,6 +26,16 @@ The Custom Facebook Feed allows you to display a completely customizable, respon
 * Use the shortcode to display the feed in a page, post or widget anywhere on your site
 
 To display photos, videos, the number of likes, shares and comments for each post, and for multiple layout options then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
+
+= Why do I need this plugin? =
+**Small Business Owners & Marketers**
+Don't have time to blog? Save time by using the Custom Facebook Feed instead to generate dynamic, search engine crawlable content on your website. All of that quality Facebook content from posts and comments is directly embedded into your website.
+
+**Designers & Developers**
+Integrate Facebook feeds into your websites that completely match the look and feel of the site. No more uncustomizable iframes.
+
+**Everyone**
+Display your photos at full size, embed your videos, promote your events, all with likes, shares and comments.
 
 == Installation ==
 
