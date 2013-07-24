@@ -478,8 +478,6 @@ function cff_activate() {
     $options[ 'cff_show_link' ] = true;
     $options[ 'cff_show_like_box' ] = true;
 
-    $options[ 'cff_sep_size' ] = '1';
-
     update_option( 'cff_style_settings', $options );
 }
 register_activation_hook( __FILE__, 'cff_activate' );
