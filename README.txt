@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,14 +16,15 @@ Display a **customizable**, **responsive** and **search engine crawlable** versi
 = Features =
 
 * **Completely Customizable** - By default the feed will adopt the style of your website, but can be completely customized to look however you like!
-* **Feed content is crawlable by search engines adding SEO value to your site** - other Facebook plugins embed the feed using iframes which are not crawlable
-* **Completely responsive and mobile optimized** - layout looks great on any screen size and in any container width
+* Feed content is **crawlable by search engines** adding SEO value to your site* - other Facebook plugins embed the feed using iframes which are not crawlable
+* Completely **responsive** and mobile optimized - layout looks great on any screen size and in any container width
+* Select which parts of each post to display or hide
 * Control the width, height, padding and background color of your feed
 * Customize the size, weight and color of text
-* Select which parts of each post to display or hide
 * Select the number of posts to display
+* Add your own custom CSS
 * Set a maximum length for both the post title and body text
-* Use the shortcode to display the feed in a page, post or widget anywhere on your site
+* Use the shortcode to display multiple feeds in a page, post or widget anywhere on your site
 
 To display photos, videos, the number of likes, shares and comments for each post, and for multiple layout options then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
 
@@ -33,9 +34,6 @@ Don't have time to blog? Save time by using the Custom Facebook Feed instead to 
 
 **Designers & Developers**
 Integrate Facebook feeds into your websites that completely match the look and feel of the site. No more uncustomizable iframes.
-
-**Everyone**
-Display your photos at full size, embed your videos, promote your events, all with likes, shares and comments.
 
 == Installation ==
 
@@ -85,6 +83,12 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your feed i
 6. Add the shortcode to a widget
 
 == Changelog ==
+
+= 1.4.2 =
+* New: Add your own custom CSS to allow for even deeper customization
+* New: Optionally link your post text to the Facebook post
+* New: Optionally link your event title to the Facebook event page
+* Some minor modifications
 
 = 1.4.1 =
 * Fix: Set all parts of the feed to display by default on activation
