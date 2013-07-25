@@ -201,20 +201,24 @@ function display_cff($atts) {
             //POST TEXT
             $cff_post_text = '';
             if ($cff_title_link) $cff_post_text .= '<a href="'.$news->link.'">';
-            $cff_post_text .= '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
+            
                 if (!empty($news->story)) { 
                     $story_text = $news->story;
                     if (!empty($title_limit)) {
                         if (strlen($story_text) > $title_limit) $story_text = substr($story_text, 0, $title_limit) . '...';
                     }
+                    $cff_post_text .= '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
                     $cff_post_text .= cff_make_clickable($story_text) . ' ';
+                    $cff_post_text .= '</' . $cff_title_format . '>';
                 }
                 if (!empty($news->message)) {
                     $message_text = $news->message;
                     if (!empty($title_limit)) {
                         if (strlen($message_text) > $title_limit) $message_text = substr($message_text, 0, $title_limit) . '...';
                     }
+                    $cff_post_text .= '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
                     $cff_post_text .= cff_make_clickable($message_text) . ' ';
+                    $cff_post_text .= '</' . $cff_title_format . '>';
                 }
                 if (!empty($news->name) && empty($news->story)) {
                     $name_text = $news->name;
@@ -222,9 +226,13 @@ function display_cff($atts) {
                         if (strlen($name_text) > $title_limit) $name_text = substr($name_text, 0, $title_limit) . '...';
                     }
                     //Only show name as last resort if both story and message are empty
-                    if ( empty($news->story) && empty($news->message) ) $cff_post_text .= cff_make_clickable($name_text);
+                    if ( empty($news->story) && empty($news->message) ) {
+                        $cff_post_text .= '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
+                        $cff_post_text .= cff_make_clickable($name_text);
+                        $cff_post_text .= '</' . $cff_title_format . '>';
+                    }
                 }
-            $cff_post_text .= '</' . $cff_title_format . '>';
+            
             if ($cff_title_link) $cff_post_text .= '</a>';
 
 
