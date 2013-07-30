@@ -104,6 +104,7 @@ function cff_settings_page() {
                         <td>
                             <input name="cff_access_token" type="text" value="<?php esc_attr_e( $access_token_val ); ?>" size="60" />
                             <a href="http://smashballoon.com/custom-facebook-feed/access-token/" target="_blank">How to get an Access Token</a>
+                            <br /><i style="color: #666; font-size: 11px; margin-left: 5px;">Eg. 548817464498533|gGbD45qMCG-uE9WfVt3-djx-6Sq</i>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -111,6 +112,7 @@ function cff_settings_page() {
                         <td>
                             <input name="cff_page_id" type="text" value="<?php esc_attr_e( $page_id_val ); ?>" size="60" />
                             <a href="http://smashballoon.com/custom-facebook-feed/faq/" target="_blank">What's my Page ID?</a>
+                            <br /><i style="color: #666; font-size: 11px; margin-left: 5px;">Eg. 1234567890123 or smashballoon</span>
                         </td>
                     </tr>
                     <tr valign="top">
