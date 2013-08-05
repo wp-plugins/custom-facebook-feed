@@ -18,13 +18,13 @@ Display a **customizable**, **responsive** and **search engine crawlable** versi
 * **Completely Customizable** - By default the feed will adopt the style of your website, but can be completely customized to look however you like!
 * Feed content is **crawlable by search engines** adding SEO value to your site* - other Facebook plugins embed the feed using iframes which are not crawlable
 * Completely **responsive** and mobile optimized - layout looks great on any screen size and in any container width
+* Display **feeds from multiple Facebook pages** and use the shortcode to embed them into a page, post or widget anywhere on your site
 * Select which parts of each post to display or hide
 * Control the width, height, padding and background color of your feed
 * Customize the size, weight and color of text
 * Select the number of posts to display
 * Add your own custom CSS
 * Set a maximum length for both the post title and body text
-* Use the shortcode to display multiple feeds in a page, post or widget anywhere on your site
 
 To display photos, videos, the number of likes, shares and comments for each post, and for multiple layout options then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
 
