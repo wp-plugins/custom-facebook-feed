@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,29 +11,23 @@ The Custom Facebook Feed allows you to display a customizable Facebook feed of a
 
 == Description ==
 
-Display a **customizable**, **responsive** and **search engine crawlable** version of your Facebook feed on your WordPress site.
+Display a **customizable**, **responsive** and **search engine crawlable** version of your Facebook feed on your website. Completely match the look and feel of the site!
 
 = Features =
 
-* **Completely Customizable** - By default the feed will adopt the style of your website, but can be completely customized to look however you like!
-* Feed content is **crawlable by search engines** adding SEO value to your site* - other Facebook plugins embed the feed using iframes which are not crawlable
+* **Completely Customizable** - By default the feed will adopt the style of your website, but can be completely customized to look however you like - with tons of styling options and custom CSS!
+* Feed content is **crawlable by search engines** adding SEO value to your site - other Facebook plugins embed the feed using iframes which are not crawlable
 * Completely **responsive** and mobile optimized - layout looks great on any screen size and in any container width
 * Display **feeds from multiple Facebook pages** and use the shortcode to embed them into a page, post or widget anywhere on your site
-* Select which parts of each post to display or hide
+* Show **events** with name, date/time, location and description
+* Add your own **custom CSS**
+* Show and hide certain parts of each post
 * Control the width, height, padding and background color of your feed
 * Customize the size, weight and color of text
 * Select the number of posts to display
-* Add your own custom CSS
-* Set a maximum length for both the post title and body text
+* Set a maximum character length for both the post title and body text
 
-To display photos, videos, the number of likes, shares and comments for each post, and for multiple layout options then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
-
-= Why do I need this plugin? =
-**Small Business Owners & Marketers**
-Don't have time to blog? Save time by using the Custom Facebook Feed instead to generate dynamic, search engine crawlable content on your website. All of that quality Facebook content from posts and comments is directly embedded into your website.
-
-**Designers & Developers**
-Integrate Facebook feeds into your websites that completely match the look and feel of the site. No more uncustomizable iframes.
+To display photos, videos, the number of likes, shares and comments for each post, multiple layout options and more then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
 
 == Installation ==
 
@@ -61,28 +55,41 @@ An easy way to determine whether your page is set to public is to sign out of yo
 
 An Access Token is required by Facebook in order to access their feeds.  Don't worry, it's easy to get one.  Just follow the step-by-step instructions [here](http://smashballoon.com/custom-facebook-feed/access-token/ "Getting an Access Token"). to get yours. Your Access Token will never expire.
 
+= Can I display feeds from multiple Facebook pages? =
+
+Yep. You set your default Facebook page ID in the plugin's settings but then you can define different page IDs in the shortcodes you use to show multiple feeds from different Facebook pages. Just use the id option in your shortcode like so: id=another_page_id.
+
 = Can I show photos and videos in my feed? =
 
-This plugin only allows you to display textual updates from your feed. To display photos and videos in your feed you need to upgrade to the PRO version of the plugin. Try out a demo of the PRO version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the PRO version [here](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO").
+This plugin only allows you to display textual updates from your feed. To display photos and videos in your feed you need to upgrade to the PRO version of the plugin. Try out a demo of the PRO version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the PRO version [here](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed PRO").
 
 = Can I show the comments associated with each post? =
 
-For this feature please upgrade to the [PRO version of the plugin](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO").
+For this feature please upgrade to the [PRO version of the plugin](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed PRO").
 
 = Is the content of my feed crawlable by search engines? =
 
 It sure is. Unlike other Facebook plugins which use iframes to embed your feed into your page once it's loaded, the Custom Facebook Feed uses PHP to embed your feed content directly into your page. This adds dynamic, search engine crawlable content to your site.
 
+= How do I embed the feed directly into a WordPress page template? =
+
+You can embed the feed directly into a template file by using the WordPress do_shortcode function: do_shortcode('[custom-facebook-feed]'');
+
 == Screenshots ==
 
-1. By default the feed inherits your theme's default styles and is completely responsive.
-2. Completely customize the way your feed looks to perfectly match your site.
-3. Configuring the plugin
-4. Use the styling options to customize your feed
-5. It's super easy to display your feed in any page or post
-6. Add the shortcode to a widget
+1. By default the feed inherits your theme's default styles and is completely responsive
+2. Completely customize the way your feed looks to perfectly match your site
+3. Use custom CSS to customize every part of the feed
+4. Display events
+5. Configuring the plugin
+6. Use the styling options to customize your feed
+7. It's super easy to display your feed in any page or post
+8. Add the shortcode to a widget
 
 == Changelog ==
+
+= 1.4.3 =
+* Minor tweaks
 
 = 1.4.2 =
 * New: Add your own custom CSS to allow for even deeper customization

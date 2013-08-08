@@ -30,42 +30,6 @@ function cff_styling_menu() {
 }
 add_action('admin_menu', 'cff_styling_menu');
 
-//Add system info page
-function cff_system_menu() {
-    add_submenu_page(
-        'cff-top',
-        'System Info',
-        'System Info',
-        'manage_options',
-        'cff-system',
-        'cff_system_info'
-    );
-}
-add_action('admin_menu', 'cff_system_menu');
-
-//Create Settings page
-function cff_system_info() { ?>
- 
-    <div class="wrap">
-        <h2><?php _e('System Info'); ?></h2>
-
-        <p>PHP Version:                    <b><?php echo PHP_VERSION . "\n"; ?></b></p>
-        <p>Web Server Info:                <b><?php echo $_SERVER['SERVER_SOFTWARE'] . "\n"; ?></b></p>
-
-        <p>PHP allow_url_fopen:            <b><?php echo ini_get( 'allow_url_fopen' ) ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>"; ?></b></p>
-        <p>PHP cURL:                       <b><?php echo is_callable('curl_init') ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>" ?></b></p>
-        <p>JSON:                       <b><?php echo function_exists("json_decode") ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>" ?></b></p>
-    </div>
-
-<?php 
-} //End cff_system_info 
-
-// function cff_register_option() {
-//     // creates our settings in the options table
-//     register_setting('cff_license', 'cff_license_key', 'cff_sanitize_license' );
-// }
-// add_action('admin_init', 'cff_register_option');
-
 //Create Settings page
 function cff_settings_page() {
     //Declare variables for fields
@@ -104,7 +68,6 @@ function cff_settings_page() {
                         <td>
                             <input name="cff_access_token" type="text" value="<?php esc_attr_e( $access_token_val ); ?>" size="60" />
                             <a href="http://smashballoon.com/custom-facebook-feed/access-token/" target="_blank">How to get an Access Token</a>
-                            <br /><i style="color: #666; font-size: 11px; margin-left: 5px;">Eg. 548817464498533|gGbD45qMCG-uE9WfVt3-djx-6Sq</i>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -112,7 +75,6 @@ function cff_settings_page() {
                         <td>
                             <input name="cff_page_id" type="text" value="<?php esc_attr_e( $page_id_val ); ?>" size="60" />
                             <a href="http://smashballoon.com/custom-facebook-feed/faq/" target="_blank">What's my Page ID?</a>
-                            <br /><i style="color: #666; font-size: 11px; margin-left: 5px;">Eg. 1234567890123 or smashballoon</span>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -128,15 +90,28 @@ function cff_settings_page() {
         <hr />
         <h4>Displaying your Feed</h4>
         <p>Copy and paste this shortcode directly into the page, post or widget where you'd like the feed to show up:</p>
-        <input type="text" value="[custom-facebook-feed]" size="23" />
+        <input type="text" value="[custom-facebook-feed]" size="22" readonly="readonly" onclick="this.focus();this.select()" id="system-info-textarea" name="edd-sysinfo" title="To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac)." />
+
         <p>You can override the settings above directly in the shortcode like so:</p>
-        <p>[custom-facebook-feed <b>id=Your_Page_ID show=3 titlelength=100 bodylength=150</b>]</p>
+
+        <p>[custom-facebook-feed <b><span style='color: green;'>id=Your_Page_ID</span> <span style='color: purple;'>show=3</span> <span style='color: blue;'>height=500px</span></b>]</p>
+
+        <p><a href="http://smashballoon.com/custom-facebook-feed/docs/shortcodes/" target="_blank">Click here</a> for a full list of shortcode options <i style="color: #666; font-size: 11px;">(Please note that some of them will only work with the Pro version of the plugin)</i></p>
         <br />
         <hr />
         <br />
         <p><a href="http://smashballoon.com/custom-facebook-feed/support" target="_blank">Plugin Support</a> - Smash Balloon is committed to making this plugin better. Please let us know if you have had any issues when using this plugin so that we can continue to improve it!</p>
         <br /><br />
         <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
+
+        <div class="wrap">
+            <h2><?php _e('System Info'); ?></h2>
+            <p>PHP Version:                    <b><?php echo PHP_VERSION . "\n"; ?></b></p>
+            <p>Web Server Info:                <b><?php echo $_SERVER['SERVER_SOFTWARE'] . "\n"; ?></b></p>
+            <p>PHP allow_url_fopen:            <b><?php echo ini_get( 'allow_url_fopen' ) ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>"; ?></b></p>
+            <p>PHP cURL:                       <b><?php echo is_callable('curl_init') ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>" ?></b></p>
+            <p>JSON:                       <b><?php echo function_exists("json_decode") ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>" ?></b></p>
+        </div>
 <?php 
 } //End Settings_Page 
 //Create Style page
@@ -180,7 +155,6 @@ function cff_style_page() {
         'cff_like_box_position'     => 'bottom',
         'cff_bg_color'              => '',
         'cff_likebox_bg_color'      => '',
-
         //New
         'cff_custom_css'            => '',
         'cff_title_link'            => false,
@@ -229,7 +203,6 @@ function cff_style_page() {
     $cff_open_links = $options[ 'cff_open_links' ];
     $cff_bg_color = $options[ 'cff_bg_color' ];
     $cff_likebox_bg_color = $options[ 'cff_likebox_bg_color' ];
-
     //New
     $cff_custom_css = $options[ 'cff_custom_css' ];
     $cff_title_link = $options[ 'cff_title_link' ];
@@ -297,7 +270,6 @@ function cff_style_page() {
         $cff_event_title_link = $_POST[ 'cff_event_title_link' ];
         $cff_sep_color = $_POST[ 'cff_sep_color' ];
         $cff_sep_size = $_POST[ 'cff_sep_size' ];
-
         //Update the options in the array in the database
         //Include
         $options[ 'cff_show_text' ] = $cff_show_text;
@@ -342,7 +314,6 @@ function cff_style_page() {
         $options[ 'cff_event_title_link' ] = $cff_event_title_link;
         $options[ 'cff_sep_color' ] = $cff_sep_color;
         $options[ 'cff_sep_size' ] = $cff_sep_size;
-
         //Update the array
         update_option( 'cff_style_settings', $options );
         // Put an settings updated message on the screen 
@@ -389,13 +360,10 @@ function cff_style_page() {
                     </tr>
                 </tbody>
             </table>
-
             <br />
             <hr />
-
             <table class="form-table">
                 <tbody>
-
                     <h3><?php _e('Post Types'); ?></h3>
                     <tr valign="top">
                         <th scope="row"><?php _e('Show these types of posts:'); ?></th>
@@ -419,7 +387,6 @@ function cff_style_page() {
                             <i style="color: #666; font-size: 11px; margin-left: 5px;"><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank">Upgrade to Pro</a></i>
                         </td>
                     </tr>
-
                 </tbody>
             </table>
             <br />
@@ -447,7 +414,7 @@ function cff_style_page() {
                             </div>
                             <div>
                                 <input type="checkbox" name="cff_show_desc" id="cff_show_desc" <?php if($cff_show_desc == true) echo 'checked="checked"' ?> />
-                                <label for="cff_show_desc">Video/link description</label>
+                                <label for="cff_show_desc">Link description</label>
                             </div>
                             <div>
                                 <input type="checkbox" name="cff_show_date" id="cff_show_date" <?php if($cff_show_date == true) echo 'checked="checked"' ?> />
@@ -748,7 +715,6 @@ function cff_style_page() {
             
             <br />
             <hr />
-
             <h3><?php _e('Custom CSS'); ?></h3>
             <table class="form-table">
                 <tbody>
@@ -766,7 +732,6 @@ function cff_style_page() {
             </table>
             <br />
             <hr />
-
             <h3><?php _e('Misc'); ?></h3>
             <table class="form-table">
                 <tbody>
@@ -807,7 +772,6 @@ function cff_style_page() {
                             <span>Eg. ED9A00</span>&nbsp;&nbsp;<a href="http://www.colorpicker.com/" target="_blank">Color Picker</a>
                         </td>
                     </tr>
-
                     <tr><td><b style="font-size: 14px;"><?php _e('Separating Line'); ?></b></td></tr>
                     <tr valign="top">
                         <th scope="row"><?php _e('Separating Line Color'); ?></th>
@@ -823,7 +787,6 @@ function cff_style_page() {
                             <input name="cff_sep_size" type="text" value="<?php esc_attr_e( $cff_sep_size ); ?>" size="1" /><span>px</span> <i style="color: #666; font-size: 11px; margin-left: 5px;">(Leave empty to hide)</i>
                         </td>
                     </tr>
-
                 </tbody>
             </table>
             <?php submit_button(); ?>
