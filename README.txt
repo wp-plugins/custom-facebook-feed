@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.5.1
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,7 +88,8 @@ You can embed the feed directly into a template file by using the WordPress do_s
 
 == Changelog ==
 
-= 1.4.3 =
+= 1.4.4 =
+* New: Added more shortcode options
 * Minor tweaks
 
 = 1.4.2 =

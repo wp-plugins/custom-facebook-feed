@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.4.3
+Version: 1.4.4
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -27,14 +27,72 @@ include dirname( __FILE__ ) .'/custom-facebook-feed-admin.php';
 // Add shortcodes
 add_shortcode('custom-facebook-feed', 'display_cff');
 function display_cff($atts) {
-    
+
     //Style options
     $options = get_option('cff_style_settings');
+
+    //Create the types string to set as shortcode default
+    if($options[ 'cff_show_text' ]) $include_string .= 'text,';
+    if($options[ 'cff_show_desc' ]) $include_string .= 'desc,';
+    if($options[ 'cff_show_date' ]) $include_string .= 'date,';
+    if($options[ 'cff_show_event_title' ]) $include_string .= 'eventtitle,';
+    if($options[ 'cff_show_event_details' ]) $include_string .= 'eventdetails,';
+    if($options[ 'cff_show_link' ]) $include_string .= 'link';
+    if($options[ 'cff_show_like_box' ]) $include_string .= 'likebox,';
+
+    //Pass in shortcode attrbutes
+    $atts = shortcode_atts(
+    array(
+        'id' => get_option('cff_page_id'),
+        'show' => get_option('cff_num_show'),
+        'num' => get_option('cff_num_show'),
+        'width' => $options[ 'cff_feed_width' ],
+        'height' => $options[ 'cff_feed_height' ],
+        'padding' => $options[ 'cff_feed_padding' ],
+        'bgcolor' => $options[ 'cff_bg_color' ],
+        'include' => $include_string,
+        //Typography
+        'textformat' => $options[ 'cff_title_format' ],
+        'textsize' => $options[ 'cff_title_size' ],
+        'textweight' => $options[ 'cff_title_weight' ],
+        'textcolor' => $options[ 'cff_title_color' ],
+        'textlink' => $options[ 'cff_title_link' ],
+        'descsize' => $options[ 'cff_body_size' ],
+        'descweight' => $options[ 'cff_body_weight' ],
+        'desccolor' => $options[ 'cff_body_color' ],
+        'eventtitleformat' => $options[ 'cff_event_title_format' ],
+        'eventtitlesize' => $options[ 'cff_event_title_size' 
+        'eventtitleweight' => $options[ 'cff_event_title_weight' ],
+        'eventtitlecolor' => $options[ 'cff_event_title_color' ],
+        'eventtitlelink' => $options[ 'cff_event_title_link' ],
+        'eventdetailssize' => $options[ 'cff_event_details_size' ],
+        'eventdetailsweight' => $options[ 'cff_event_details_weight' ],
+        'eventdetailscolor' => $options[ 'cff_event_details_color' ],
+        'datesize' => $options[ 'cff_date_size' ],
+        'dateweight' => $options[ 'cff_date_weight' ],
+        'datecolor' => $options[ 'cff_date_color' ],
+        'linksize' => $options[ 'cff_link_size' ],
+        'linkweight' => $options[ 'cff_link_weight' ],
+        'linkcolor' => $options[ 'cff_link_color' ],
+        //Misc
+        'textlength' => get_option('cff_title_length'),
+        'desclength' => get_option('cff_body_length'),
+        'likeboxpos' => $options[ 'cff_like_box_position' ],
+        'likeboxcolor' => $options[ 'cff_likebox_bg_color' ],
+        'videoheight' => $options[ 'cff_video_height' ],
+        'videoaction' => $options[ 'cff_video_action' ],
+        'sepcolor' => $options[ 'cff_sep_color' ],
+        'sepsize' => $options[ 'cff_sep_size' ]
+    ), $atts);
+
+
+    
+    
     /********** GENERAL **********/
-    $cff_feed_width = $options[ 'cff_feed_width' ];
-    $cff_feed_height = $options[ 'cff_feed_height' ];
-    $cff_feed_padding = $options[ 'cff_feed_padding' ];
-    $cff_bg_color = $options[ 'cff_bg_color' ];
+    $cff_feed_width = $atts['width'];
+    $cff_feed_height = $atts[ 'height' ];
+    $cff_feed_padding = $atts[ 'padding' ];
+    $cff_bg_color = $atts[ 'bgcolor' ];
     //Compile feed styles
     $cff_feed_styles = 'style="';
     if ( !empty($cff_feed_width) ) $cff_feed_styles .= 'width:' . $cff_feed_width . '; ';
@@ -43,77 +101,78 @@ function display_cff($atts) {
     if ( !empty($cff_bg_color) ) $cff_feed_styles .= 'background-color:#' . $cff_bg_color . '; ';
     $cff_feed_styles .= '"';
     //Like box
-    $cff_like_box_position = $options[ 'cff_like_box_position' ];
+    $cff_like_box_position = $atts[ 'likeboxpos' ];
     //Open links in new window?
     $cff_open_links = $options[ 'cff_open_links' ];
     $target = 'target="_blank"';
     if ($cff_open_links) $target = 'target="_blank"';
     /********** LAYOUT **********/
-    //Include
-    $cff_show_text = $options[ 'cff_show_text' ];
-    $cff_show_desc = $options[ 'cff_show_desc' ];
-    $cff_show_date = $options[ 'cff_show_date' ];
-    $cff_show_event_title = $options[ 'cff_show_event_title' ];
-    $cff_show_event_details = $options[ 'cff_show_event_details' ];
-    $cff_show_link = $options[ 'cff_show_link' ];
-    $cff_show_like_box = $options[ 'cff_show_like_box' ];
+    $cff_includes = $atts[ 'include' ];
+    //Look for non-plural version of string in the types string in case user specifies singular in shortcode
+    if ( stripos($cff_includes, 'text') !== false ) $cff_show_text = true;
+    if ( stripos($cff_includes, 'desc') !== false ) $cff_show_desc = true;
+    if ( stripos($cff_includes, 'date') !== false ) $cff_show_date = true;
+    if ( stripos($cff_includes, 'eventtitle') !== false ) $cff_show_event_title = true;
+    if ( stripos($cff_includes, 'eventdetail') !== false ) $cff_show_event_details = true;
+    if ( stripos($cff_includes, 'link') !== false ) $cff_show_link = true;
+    if ( stripos($cff_includes, 'like') !== false ) $cff_show_like_box = true;
     /********** TYPOGRAPHY **********/
     //Title
-    $cff_title_format = $options[ 'cff_title_format' ];
+    $cff_title_format = $atts[ 'textformat' ];
     if (empty($cff_title_format)) $cff_title_format = 'p';
-    $cff_title_size = $options[ 'cff_title_size' ];
-    $cff_title_weight = $options[ 'cff_title_weight' ];
-    $cff_title_color = $options[ 'cff_title_color' ];
+    $cff_title_size = $atts[ 'textsize' ];
+    $cff_title_weight = $atts[ 'textweight' ];
+    $cff_title_color = $atts[ 'textcolor' ];
     $cff_title_styles = 'style="';
     if ( !empty($cff_title_size) && $cff_title_size != 'inherit' ) $cff_title_styles .=  'font-size:' . $cff_title_size . 'px; ';
     if ( !empty($cff_title_weight) && $cff_title_weight != 'inherit' ) $cff_title_styles .= 'font-weight:' . $cff_title_weight . '; ';
     if ( !empty($cff_title_color) ) $cff_title_styles .= 'color:#' . $cff_title_color . ';';
     $cff_title_styles .= '"';
-    $cff_title_link = $options[ 'cff_title_link' ];
+    $cff_title_link = $atts[ 'textlink' ];
     //Description
-    $cff_body_size = $options[ 'cff_body_size' ];
-    $cff_body_weight = $options[ 'cff_body_weight' ];
-    $cff_body_color = $options[ 'cff_body_color' ];
+    $cff_body_size = $atts[ 'descsize' ];
+    $cff_body_weight = $atts[ 'descweight' ];
+    $cff_body_color = $atts[ 'desccolor' ];
     $cff_body_styles = 'style="';
     if ( !empty($cff_body_size) && $cff_body_size != 'inherit' ) $cff_body_styles .=  'font-size:' . $cff_body_size . 'px; ';
     if ( !empty($cff_body_weight) && $cff_body_weight != 'inherit' ) $cff_body_styles .= 'font-weight:' . $cff_body_weight . '; ';
     if ( !empty($cff_body_color) ) $cff_body_styles .= 'color:#' . $cff_body_color . ';';
     $cff_body_styles .= '"';
     //Event Title
-    $cff_event_title_format = $options[ 'cff_event_title_format' ];
+    $cff_event_title_format = $atts[ 'eventtitleformat' ];
     if (empty($cff_event_title_format)) $cff_event_title_format = 'p';
-    $cff_event_title_size = $options[ 'cff_event_title_size' ];
-    $cff_event_title_weight = $options[ 'cff_event_title_weight' ];
-    $cff_event_title_color = $options[ 'cff_event_title_color' ];
+    $cff_event_title_size = $atts[ 'eventtitlesize' ];
+    $cff_event_title_weight = $atts[ 'eventtitleweight' ];
+    $cff_event_title_color = $atts[ 'eventtitlecolor' ];
     $cff_event_title_styles = 'style="';
     if ( !empty($cff_event_title_size) && $cff_event_title_size != 'inherit' ) $cff_event_title_styles .=  'font-size:' . $cff_event_title_size . 'px; ';
     if ( !empty($cff_event_title_weight) && $cff_event_title_weight != 'inherit' ) $cff_event_title_styles .= 'font-weight:' . $cff_event_title_weight . '; ';
     if ( !empty($cff_event_title_color) ) $cff_event_title_styles .= 'color:#' . $cff_event_title_color . ';';
     $cff_event_title_styles .= '"';
-    $cff_event_title_link = $options[ 'cff_event_title_link' ];
+    $cff_event_title_link = $atts[ 'eventtitlelink' ];
     
     //Event Details
-    $cff_event_details_size = $options[ 'cff_event_details_size' ];
-    $cff_event_details_weight = $options[ 'cff_event_details_weight' ];
-    $cff_event_details_color = $options[ 'cff_event_details_color' ];
+    $cff_event_details_size = $atts[ 'eventdetailssize' ];
+    $cff_event_details_weight = $atts[ 'eventdetailsweight' ];
+    $cff_event_details_color = $atts[ 'eventdetailscolor' ];
     $cff_event_details_styles = 'style="';
     if ( !empty($cff_event_details_size) && $cff_event_details_size != 'inherit' ) $cff_event_details_styles .=  'font-size:' . $cff_event_details_size . 'px; ';
     if ( !empty($cff_event_details_weight) && $cff_event_details_weight != 'inherit' ) $cff_event_details_styles .= 'font-weight:' . $cff_event_details_weight . '; ';
     if ( !empty($cff_event_details_color) ) $cff_event_details_styles .= 'color:#' . $cff_event_details_color . ';';
     $cff_event_details_styles .= '"';
     //Date
-    $cff_date_size = $options[ 'cff_date_size' ];
-    $cff_date_weight = $options[ 'cff_date_weight' ];
-    $cff_date_color = $options[ 'cff_date_color' ];
+    $cff_date_size = $atts[ 'datesize' ];
+    $cff_date_weight = $atts[ 'dateweight' ];
+    $cff_date_color = $atts[ 'datecolor' ];
     $cff_date_styles = 'style="';
     if ( !empty($cff_date_size) && $cff_date_size != 'inherit' ) $cff_date_styles .=  'font-size:' . $cff_date_size . 'px; ';
     if ( !empty($cff_date_weight) && $cff_date_weight != 'inherit' ) $cff_date_styles .= 'font-weight:' . $cff_date_weight . '; ';
     if ( !empty($cff_date_color) ) $cff_date_styles .= 'color:#' . $cff_date_color . ';';
     $cff_date_styles .= '"';
     //Link to Facebook
-    $cff_link_size = $options[ 'cff_link_size' ];
-    $cff_link_weight = $options[ 'cff_link_weight' ];
-    $cff_link_color = $options[ 'cff_link_color' ];
+    $cff_link_size = $atts[ 'linksize' ];
+    $cff_link_weight = $atts[ 'linkweight' ];
+    $cff_link_color = $atts[ 'linkcolor' ];
     $cff_link_styles = 'style="';
     if ( !empty($cff_link_size) && $cff_link_size != 'inherit' ) $cff_link_styles .=  'font-size:' . $cff_link_size . 'px; ';
     if ( !empty($cff_link_weight) && $cff_link_weight != 'inherit' ) $cff_link_styles .= 'font-weight:' . $cff_link_weight . '; ';
@@ -121,36 +180,34 @@ function display_cff($atts) {
     $cff_link_styles .= '"';
     /********** MISC **********/
     //Like Box styles
-    $cff_likebox_bg_color = $options[ 'cff_likebox_bg_color' ];
+    $cff_likebox_bg_color = $atts[ 'likeboxcolor' ];
     $cff_likebox_styles = 'style="';
     if ( !empty($cff_likebox_bg_color) ) $cff_likebox_styles .=  'background-color:#' . $cff_likebox_bg_color . '; margin-left: 0; ';
     $cff_likebox_styles .= '"';
     //Separating Line
-    $cff_sep_color = $options[ 'cff_sep_color' ];
+    $cff_sep_color = $atts[ 'sepcolor' ];
     if (empty($cff_sep_color)) $cff_sep_color = 'ddd';
-    $cff_sep_size = $options[ 'cff_sep_size' ];
+    $cff_sep_size = $atts[ 'sepsize' ];
     if (empty($cff_sep_size)) $cff_sep_size = 0;
     //CFF item styles
     $cff_item_styles = 'style="';
     $cff_item_styles .= 'border-bottom: ' . $cff_sep_size . 'px solid #' . $cff_sep_color . '; ';
     $cff_item_styles .= '"';
     
-    //Pass in shortcode attrbutes
-    $atts = shortcode_atts(
-    array(
-        'id' => get_option('cff_page_id'),
-        'show' => get_option('cff_num_show'),
-        'titlelength' => get_option('cff_title_length'),
-        'bodylength' => get_option('cff_body_length')
-    ), $atts);
+    
+
     //Text limits
-    $title_limit = $atts['titlelength'];
-    $body_limit = $atts['bodylength'];
+    $title_limit = $atts['textlength'];
+    $body_limit = $atts['desclength'];
     //Assign the Access Token and Page ID variables
     $access_token = get_option('cff_access_token');
     $page_id = $atts['id'];
     //Get show posts attribute. If not set then default to 10.
     $show_posts = $atts['show'];
+    if ( empty($show_posts) ) {
+        $show_posts = $atts['num'];
+        if (empty($show_posts)) $show_posts = 25;
+    }
     if ( $show_posts == 0 || $show_posts == undefined ) $show_posts = 10;
     //Check whether the Access Token is present and valid
     if ($access_token == '') {
