@@ -61,7 +61,7 @@ function display_cff($atts) {
         'descweight' => $options[ 'cff_body_weight' ],
         'desccolor' => $options[ 'cff_body_color' ],
         'eventtitleformat' => $options[ 'cff_event_title_format' ],
-        'eventtitlesize' => $options[ 'cff_event_title_size' 
+        'eventtitlesize' => $options[ 'cff_event_title_size' ],
         'eventtitleweight' => $options[ 'cff_event_title_weight' ],
         'eventtitlecolor' => $options[ 'cff_event_title_color' ],
         'eventtitlelink' => $options[ 'cff_event_title_link' ],
