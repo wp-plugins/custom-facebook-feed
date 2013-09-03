@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.6
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,19 +15,19 @@ Display a **customizable**, **responsive** and **search engine crawlable** versi
 
 = Features =
 
-* **Completely Customizable** - By default the feed will adopt the style of your website, but can be completely customized to look however you like - with tons of styling options and custom CSS!
-* Feed content is **crawlable by search engines** adding SEO value to your site - other Facebook plugins embed the feed using iframes which are not crawlable
+* **Completely Customizable** - By default the Facebook feed will adopt the style of your website, but can be completely customized to look however you like - with tons of styling options and custom CSS!
+* Facebook feed content is **crawlable by search engines** adding SEO value to your site - other Facebook plugins embed the feed using iframes which are not crawlable
 * Completely **responsive** and mobile optimized - layout looks great on any screen size and in any container width
 * Display **feeds from multiple Facebook pages** and use the shortcode to embed them into a page, post or widget anywhere on your site
-* Show **events** with name, date/time, location and description
+* Show **events** from your Facebook feed with name, date/time, location and description
 * Add your own **custom CSS**
 * Show and hide certain parts of each post
-* Control the width, height, padding and background color of your feed
+* Control the width, height, padding and background color of your Facebook feed
 * Customize the size, weight and color of text
 * Select the number of posts to display
 * Set a maximum character length for both the post title and body text
 
-To display photos, videos, the number of likes, shares and comments for each post, multiple layout options and more then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
+To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options and more then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
 
 == Installation ==
 
@@ -41,15 +41,15 @@ To display photos, videos, the number of likes, shares and comments for each pos
 
 = How do I find the Page ID of my Facebook page? =
 
-If you have a Facebook page with a URL like this: `https://www.facebook.com/Your_Page_Name` then the Page ID is just `Your_Page_Name`.  If your page URL is structured like this: `https://www.facebook.com/pages/Your_Page_Name/123654123654123` then the Page ID is actually the number at the end, so in this case `123654123654123`.
+If you have a Facebook page with a URL like this: `https://www.facebook.com/Your_Page_Name` then the Page ID is just `Your_Page_Name`.  If your Facebook page URL is structured like this: `https://www.facebook.com/pages/Your_Page_Name/123654123654123` then the Page ID is actually the number at the end, so in this case `123654123654123`.
 
-= Are there any limitations on which page feeds I can display? =
+= Are there any limitations on which Facebook page feeds I can display? =
 
-The feed you're trying to display has to be a publicly accessible page. This means that you can't display the feed from your own personal profile or a group. This is to do with Facebook's privacy policies. You can't display a non-public feed publicly.
+The Facebook feed you're trying to display has to be from a publicly accessible Facebook page. This means that you can't display the feed from your own personal Facebook profile or Facebook group. This is to do with Facebook's privacy policies. You can't display a non-public Facebook feed publicly.
 
-If your page has any restrictions on it (age, for example) then it means that people have to be signed into Facebook in order to view your page. This isn't desirable for most pages as it means that it isn't accessible by people who don't have a Facebook account and that your page can't be crawled and indexed by search engines.
+If your Facebook page has any restrictions on it (age, for example) then it means that people have to be signed into Facebook in order to view your page. This isn't desirable for most Facebook pages as it means that it isn't accessible by people who don't have a Facebook account and that your Facebook page can't be crawled and indexed by search engines.
 
-An easy way to determine whether your page is set to public is to sign out of your Facebook account and try to visit your page. If Facebook forces you to sign in to view your page then it isn't public. You can change your page to public in your Facebook page settings simply by removing any restrictions you have on it, which will then allow the Custom Facebook Feed plugin to access and display your feed.
+An easy way to determine whether your Facebook page is set to public is to sign out of your Facebook account and try to visit your page. If Facebook forces you to sign in to view your page then it isn't public. You can change your Facebook page to public in your Facebook page settings simply by removing any restrictions you have on it, which will then allow the Custom Facebook Feed plugin to access and display your feed.
 
 = What's an Access Token and why do I need one? =
 
@@ -57,19 +57,19 @@ An Access Token is required by Facebook in order to access their feeds.  Don't w
 
 = Can I display feeds from multiple Facebook pages? =
 
-Yep. You set your default Facebook page ID in the plugin's settings but then you can define different page IDs in the shortcodes you use to show multiple feeds from different Facebook pages. Just use the id option in your shortcode like so: id=another_page_id.
+Yep. You set your default Facebook page ID in the plugin's settings but then you can define different Facebook page IDs in the shortcodes you use to show multiple feeds from different Facebook pages. Just use the id option in your shortcode like so: id=another_page_id.
 
-= Can I show photos and videos in my feed? =
+= Can I show photos and videos in my Custom Facebook feed? =
 
-This plugin only allows you to display textual updates from your feed. To display photos and videos in your feed you need to upgrade to the PRO version of the plugin. Try out a demo of the PRO version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the PRO version [here](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed PRO").
+This free plugin only allows you to display textual updates from your Facebook feed. To display photos and videos in your feed you need to upgrade to the PRO version of the plugin. Try out a demo of the PRO version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the PRO version [here](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed PRO").
 
-= Can I show the comments associated with each post? =
+= Can I show the comments associated with each Facebook post? =
 
 For this feature please upgrade to the [PRO version of the plugin](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed PRO").
 
 = Is the content of my feed crawlable by search engines? =
 
-It sure is. Unlike other Facebook plugins which use iframes to embed your feed into your page once it's loaded, the Custom Facebook Feed uses PHP to embed your feed content directly into your page. This adds dynamic, search engine crawlable content to your site.
+It sure is. Unlike other Facebook plugins which use iframes to embed your feed into your page once it's loaded, the Custom Facebook Feed uses PHP to embed your Facebook feed content directly into your page. This adds dynamic, search engine crawlable content to your site.
 
 = How do I embed the feed directly into a WordPress page template? =
 
@@ -77,16 +77,19 @@ You can embed the feed directly into a template file by using the WordPress do_s
 
 == Screenshots ==
 
-1. By default the feed inherits your theme's default styles and is completely responsive
-2. Completely customize the way your feed looks to perfectly match your site
-3. Use custom CSS to customize every part of the feed
-4. Display events
+1. By default the Facebook feed inherits your theme's default styles and is completely responsive
+2. Completely customize the way your Facebook feed looks to perfectly match your site
+3. Use custom CSS to customize every part of the Facebook feed
+4. Display Facebook events
 5. Configuring the plugin
-6. Use the styling options to customize your feed
-7. It's super easy to display your feed in any page or post
+6. Use the styling options to customize your Facebook feed
+7. It's super easy to display your Facebook feed in any page or post
 8. Add the shortcode to a widget
 
 == Changelog ==
+
+= 1.4.6 =
+* fix: Fixed 'num' option in shortcode
 
 = 1.4.4 =
 * New: Added more shortcode options

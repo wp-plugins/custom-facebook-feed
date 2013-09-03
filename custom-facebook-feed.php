@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.4.5
+Version: 1.4.6
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -44,7 +44,6 @@ function display_cff($atts) {
     $atts = shortcode_atts(
     array(
         'id' => get_option('cff_page_id'),
-        'show' => get_option('cff_num_show'),
         'num' => get_option('cff_num_show'),
         'width' => $options[ 'cff_feed_width' ],
         'height' => $options[ 'cff_feed_height' ],
@@ -202,13 +201,12 @@ function display_cff($atts) {
     //Assign the Access Token and Page ID variables
     $access_token = get_option('cff_access_token');
     $page_id = $atts['id'];
-    //Get show posts attribute. If not set then default to 10.
-    $show_posts = $atts['show'];
-    if ( empty($show_posts) ) {
-        $show_posts = $atts['num'];
-        if (empty($show_posts)) $show_posts = 25;
-    }
-    if ( $show_posts == 0 || $show_posts == undefined ) $show_posts = 10;
+
+    //Get show posts attribute. If not set then default to 25.
+    $show_posts = $atts['num'];
+    if (empty($show_posts)) $show_posts = 25;
+    if ( $show_posts == 0 || $show_posts == undefined ) $show_posts = 25;
+
     //Check whether the Access Token is present and valid
     if ($access_token == '') {
         echo 'Please enter a valid Access Token. You can do this in the Custom Facebook Feed plugin settings.<br /><br />';
