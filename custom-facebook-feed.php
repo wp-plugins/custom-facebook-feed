@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.4.6
+Version: 1.4.7
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -250,7 +250,13 @@ function display_cff($atts) {
             //********************************//
             //POST TEXT
             $cff_post_text = '';
-            if ($cff_title_link) $cff_post_text .= '<a href="'.$news->link.'">';
+
+            //Set the link
+            $link = $news->link;
+            //If there's no link provided then link to Facebook page
+            if (empty($news->link)) $link = 'http://facebook.com/' . $page_id;
+
+            if ($cff_title_link) $cff_post_text .= '<a href="'.$link.'" '.$target.'>';
             $cff_post_text .= '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
                 if (!empty($news->story)) { 
                     $story_text = $news->story;
@@ -333,14 +339,14 @@ function display_cff($atts) {
                         }
                         //Show event details
                         if ($cff_show_event_details){
-                            if (!empty($event_object->location)) $cff_event .= '<p ' . $cff_event_details_styles . '>Where: ' . $event_object->location . '</p>';
-                            if (!empty($event_object->start_time)) $cff_event .= '<p ' . $cff_event_details_styles . '>When: ' . date("F j, Y, g:i a", strtotime($event_object->start_time)) . '</p>';
+                            if (!empty($event_object->location)) $cff_event .= '<p class="where" ' . $cff_event_details_styles . '>' . $event_object->location . '</p>';
+                            if (!empty($event_object->start_time)) $cff_event .= '<p class="when" ' . $cff_event_details_styles . '>' . date("F j, Y, g:i a", strtotime($event_object->start_time)) . '</p>';
                             if (!empty($event_object->description)){
                                 $description = $event_object->description;
                                 if (!empty($body_limit)) {
                                     if (strlen($description) > $body_limit) $description = substr($description, 0, $body_limit) . '...';
                                 }
-                                $cff_event .= '<p ' . $cff_event_details_styles . '>' . cff_make_clickable($description) . '</p>';
+                                $cff_event .= '<p class="info" ' . $cff_event_details_styles . '>' . cff_make_clickable($description) . '</p>';
                             }
                         }
                         $cff_event .= '</div><!-- end .details -->';
@@ -350,17 +356,21 @@ function display_cff($atts) {
             //LINK
             //Display the link to the Facebook post or external link
             $cff_link = '';
+            //Default link
+            $link = 'http://facebook.com/' . $page_id;
+            $link_text = 'View on Facebook';
+            //If there's an actual link provided
             if (!empty($news->link)) {
                 $link = $news->link;
                 //Check whether it links to facebook or somewhere else
                 $facebook_str = 'facebook.com';
-                if(stripos($link, $facebook_str) !== false) {
-                    $link_text = 'View on Facebook';
-                } else {
+                if(stripos($link, $facebook_str) == false) {
                     $link_text = 'View Link';
                 }
-                $cff_link = '<div class="meta-wrap"><a class="cff-viewpost" href="' . $link . '" title="' . $link_text . '" ' . $target . ' ' . $cff_link_styles . '>' . $link_text . '</a></div><!-- end .meta-wrap -->';
             }
+            $cff_link = '<div class="meta-wrap"><a class="cff-viewpost" href="' . $link . '" title="' . $link_text . '" ' . $target . ' ' . $cff_link_styles . '>' . $link_text . '</a></div><!-- end .meta-wrap -->';
+
+
             //**************************//
             //***CREATE THE POST HTML***//
             //**************************//

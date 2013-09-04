@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.6
-Stable tag: 1.4.6
+Stable tag: 1.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,8 +88,13 @@ You can embed the feed directly into a template file by using the WordPress do_s
 
 == Changelog ==
 
+= 1.4.7 =
+* Tweak: Added links to statuses which link to the Facebook page
+* Tweak: Added classes to event date, location and description to allow custom styling
+* Tweak: Removed 'Where' and 'When' text from events and made bold instead
+
 = 1.4.6 =
-* fix: Fixed 'num' option in shortcode
+* Fix: Fixed 'num' option in shortcode
 
 = 1.4.4 =
 * New: Added more shortcode options

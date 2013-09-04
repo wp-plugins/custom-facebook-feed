@@ -77,6 +77,14 @@
 #cff .details p{
   font-size: 14px;
 }
+#cff .details .info{
+  padding: 10px 0 0 0;
+  line-height: 1.2;
+}
+#cff .details .where,
+#cff .details .when{
+  font-weight: bold;
+}
 /*****************/
 /*** POST META ***/
 /*****************/
