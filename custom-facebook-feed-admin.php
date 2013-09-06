@@ -94,7 +94,7 @@ function cff_settings_page() {
 
         <p>You can override the settings above directly in the shortcode like so:</p>
 
-        <p>[custom-facebook-feed <b><span style='color: green;'>id=Your_Page_ID</span> <span style='color: purple;'>show=3</span> <span style='color: blue;'>height=500px</span></b>]</p>
+        <p>Eg: [custom-facebook-feed <b><span style='color: green;'>id=<i>Put_Your_Page_ID_Here</i></span> <span style='color: purple;'>num=3</span> <span style='color: blue;'>height=500px</span></b>]</p>
 
         <p><a href="http://smashballoon.com/custom-facebook-feed/docs/shortcodes/" target="_blank">Click here</a> for a full list of shortcode options <i style="color: #666; font-size: 11px;">(Please note that some of them will only work with the Pro version of the plugin)</i></p>
         <br />

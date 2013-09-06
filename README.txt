@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.6
-Stable tag: 1.4.7
+Stable tag: 1.4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ To display photos, videos, the number of likes, shares and comments for each Fac
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Navigate to the 'Facebook Feed' settings page to configure your feed.
 4. Use the shortcode `[custom-facebook-feed]` in your page, post or widget to display your feed.
-5. You can display multiple feeds of different Facebook pages by specifying a Page ID directly in the shortcode: `[custom-facebook-feed id=SarahsBakery show=5]`.
+5. You can display multiple feeds of different Facebook pages by specifying a Page ID directly in the shortcode: `[custom-facebook-feed id=SarahsBakery num=5]`.
 
 == Frequently Asked Questions ==
 
@@ -87,6 +87,9 @@ You can embed the feed directly into a template file by using the WordPress do_s
 8. Add the shortcode to a widget
 
 == Changelog ==
+
+= 1.4.8 =
+* Minor fixes
 
 = 1.4.7 =
 * Tweak: Added links to statuses which link to the Facebook page
