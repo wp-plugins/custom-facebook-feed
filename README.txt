@@ -22,14 +22,14 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Show **events** from your Facebook feed with name, date/time, location and description
 * Add your own **custom CSS**
 * Show and hide certain parts of each post
-* Choose to show the profile picture and name above each post
-* Select whether to display posts by just the page owner, or everyone
+* Choose to show the Facebook profile picture and name above each post
+* Select whether to display posts by just the page owner, or everyone who posts on your Facebook page
 * Control the width, height, padding and background color of your Facebook feed
 * Customize the size, weight and color of text
 * Select from a range of date formats or enter your own
-* Use your own custom link text
-* Use the shortcode options to style multiple feeds in completely different ways
-* Select the number of posts to display
+* Use your own custom link text in place of the defaults
+* Use the shortcode options to style multiple Facebook feeds in completely different ways
+* Select the number of Facebook posts to display
 * Set a maximum character length for both the post title and body text
 
 To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options and more then [upgrade to the Pro version](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). Try out the [Pro demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
@@ -96,14 +96,14 @@ You can embed the feed directly into a template file by using the WordPress do_s
 
 = 1.5.1 =
 * New: Added a 'See More' link to expand any text which is longer than the character limit defined
-* New: Choose to show posts by other people in your feed
-* New: Option to show the post author's profile picture and name above each post
+* New: Choose to show Facebook posts by other people in your feed
+* New: Option to show the post author's Facebook profile picture and name above each post
 * New: Added options to customize and format the post date
-* New: Add your own text before and after the date and in place of the 'View on Facebook' and 'View Link' links
-* New: Specify the format of the Event date
+* New: Add your own text before and after the date and in place of the 'View on Facebook' and 'View Link' text links
+* New: Specify the format of the Facebook Event date
 * Tweak: Default date format is less specific and better mimics Facebook's - credit Mark Bebbington
 * Tweak: Changed the layout of the Typography section to allow for the additional options
-* Fix: When a photo album is shared it now links to the album itself and not just the cover photo
+* Fix: When a Facebook photo album is shared it now links to the album itself on Facebook and not just the cover photo
 * Fix: Fixed issue with hyperlinks in post text which don't have a space before them not being converted to links
 
 = 1.4.8 =
