@@ -47,10 +47,41 @@
 /* Date */
 #cff .cff-date{
   float: left;
-  width: 100%;
+  clear: left;
+  width: auto;
   font-size: 11px;
 }
+
+/************/
+/***AUTHOR***/
+/************/
+#cff .cff-author{
+  float: left;
+  clear: both;
+  display: block;
+  margin-bottom: 15px;
+}
+#cff .cff-author img{
+  float: left;
+  margin-right: 15px;
+}
+#cff .cff-author p{
+  float: left;
+  clear: none;
+  width: auto;
+  margin: 0;
+  padding-top: 15px;
+  font-weight: bold;
+}
+#cff .cff-author a{
+  text-decoration: none;
+}
+
 /* Link */
+#cff .cff-expand{
+  font-size: 11px;
+  font-weight: normal;
+}
 /*Link text*/
 #cff .text-link{
   float: left;
@@ -62,6 +93,9 @@
 #cff .text-link.no-image{
   width: 100%;
   margin-left: 0;
+}
+#cff .break-word{
+  word-break: break-all;
 }
 /* Event */
 #cff .details{
@@ -85,6 +119,9 @@
 #cff .details .when{
   font-weight: bold;
 }
+#cff .details .where{
+  margin-bottom: -4px;
+}
 /*****************/
 /*** POST META ***/
 /*****************/
@@ -97,7 +134,7 @@
 #cff .cff-viewpost{
   float: right;
   clear: none;
-  padding-top: 12px;
+  padding-top: 5px;
   font-size: 11px;
 }
 /* Like box */

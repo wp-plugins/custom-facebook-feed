@@ -1,33 +1,38 @@
 === Custom Facebook Feed ===
 Contributors: smashballoon
-Tags: facebook, custom, customizable, feed, seo, search engine, responsive, mobile, shortcode, social, status
+Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
-Tested up to: 3.6
-Stable tag: 1.4.8
+Tested up to: 3.6.1
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Custom Facebook Feed allows you to display a customizable Facebook feed of any public Facebook page on your website.
+The Custom Facebook Feed allows you to display a completely customizable Facebook feed of any public Facebook page on your website.
 
 == Description ==
 
-Display a **customizable**, **responsive** and **search engine crawlable** version of your Facebook feed on your website. Completely match the look and feel of the site!
+Display a **completely customizable**, **responsive** and **search engine crawlable** version of your Facebook feed on your website. Completely match the look and feel of the site!
 
 = Features =
 
 * **Completely Customizable** - By default the Facebook feed will adopt the style of your website, but can be completely customized to look however you like - with tons of styling options and custom CSS!
 * Facebook feed content is **crawlable by search engines** adding SEO value to your site - other Facebook plugins embed the feed using iframes which are not crawlable
 * Completely **responsive** and mobile optimized - layout looks great on any screen size and in any container width
-* Display **feeds from multiple Facebook pages** and use the shortcode to embed them into a page, post or widget anywhere on your site
+* Display **feeds from multiple different Facebook pages** and use the shortcode to embed them into a page, post or widget anywhere on your site
 * Show **events** from your Facebook feed with name, date/time, location and description
 * Add your own **custom CSS**
 * Show and hide certain parts of each post
+* Choose to show the profile picture and name above each post
+* Select whether to display posts by just the page owner, or everyone
 * Control the width, height, padding and background color of your Facebook feed
 * Customize the size, weight and color of text
+* Select from a range of date formats or enter your own
+* Use your own custom link text
+* Use the shortcode options to style multiple feeds in completely different ways
 * Select the number of posts to display
 * Set a maximum character length for both the post title and body text
 
-To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options and more then [upgrade to the PRO version](http://smashballoon.com/custom-facebook-feed/wordpress-plugin/ "Custom Facebook Feed PRO"). Try out the [PRO demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
+To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options and more then [upgrade to the Pro version](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). Try out the [Pro demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
 
 == Installation ==
 
@@ -35,7 +40,7 @@ To display photos, videos, the number of likes, shares and comments for each Fac
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Navigate to the 'Facebook Feed' settings page to configure your feed.
 4. Use the shortcode `[custom-facebook-feed]` in your page, post or widget to display your feed.
-5. You can display multiple feeds of different Facebook pages by specifying a Page ID directly in the shortcode: `[custom-facebook-feed id=SarahsBakery num=5]`.
+5. You can display multiple feeds of different Facebook pages by specifying a Page ID directly in the shortcode: `[custom-facebook-feed id=smashballoon num=5]`.
 
 == Frequently Asked Questions ==
 
@@ -81,12 +86,25 @@ You can embed the feed directly into a template file by using the WordPress do_s
 2. Completely customize the way your Facebook feed looks to perfectly match your site
 3. Use custom CSS to customize every part of the Facebook feed
 4. Display Facebook events
-5. Configuring the plugin
-6. Use the styling options to customize your Facebook feed
-7. It's super easy to display your Facebook feed in any page or post
-8. Add the shortcode to a widget
+5. Show and hide certain parts of the posts
+6. Configuring the plugin
+7. Use the styling options to customize your Facebook feed
+8. It's super easy to display your Facebook feed in any page or post
+9. Add the shortcode to a widget
 
 == Changelog ==
+
+= 1.4.9 =
+* New: Added a 'See More' link to expand any text which is longer than the character limit defined
+* New: Choose to show posts by other people in your feed
+* New: Option to show the post author's profile picture and name above each post
+* New: Added options to customize and format the post date
+* New: Add your own text before and after the date and in place of the 'View on Facebook' and 'View Link' links
+* New: Specify the format of the Event date
+* Tweak: Default date format is less specific and better mimics Facebook's - credit Mark Bebbington
+* Tweak: Changed the layout of the Typography section to allow for the additional options
+* Fix: When a photo album is shared it now links to the album itself and not just the cover photo
+* Fix: Fixed issue with hyperlinks in post text which don't have a space before them not being converted to links
 
 = 1.4.8 =
 * Minor fixes

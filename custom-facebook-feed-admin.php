@@ -37,20 +37,28 @@ function cff_settings_page() {
     $access_token       = 'cff_access_token';
     $page_id            = 'cff_page_id';
     $num_show           = 'cff_num_show';
+    $cff_show_others    = 'cff_show_others';
+
     // Read in existing option value from database
     $access_token_val = get_option( $access_token );
     $page_id_val = get_option( $page_id );
     $num_show_val = get_option( $num_show );
+    $cff_show_others_val = get_option( $cff_show_others );
+
     // See if the user has posted us some information. If they did, this hidden field will be set to 'Y'.
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
         // Read their posted value
         $access_token_val = $_POST[ $access_token ];
         $page_id_val = $_POST[ $page_id ];
         $num_show_val = $_POST[ $num_show ];
+        $cff_show_others_val = $_POST[ $cff_show_others ];
+
         // Save the posted value in the database
         update_option( $access_token, $access_token_val );
         update_option( $page_id, $page_id_val );
         update_option( $num_show, $num_show_val );
+        update_option( $cff_show_others, $cff_show_others_val );
+
         // Put an settings updated message on the screen 
     ?>
     <div class="updated"><p><strong><?php _e('Settings saved.', 'custom-facebook-feed' ); ?></strong></p></div>
@@ -81,6 +89,13 @@ function cff_settings_page() {
                         <th scope="row"><?php _e('Number of posts to display'); ?></th>
                         <td>
                             <input name="cff_num_show" type="text" value="<?php esc_attr_e( $num_show_val ); ?>" size="4" />
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row"><?php _e('Show posts by others on my page'); ?></th>
+                        <td>
+                            <input name="cff_show_others" type="checkbox" id="cff_show_others" <?php if($cff_show_others_val == true) echo "checked"; ?> />
+                            <i style="color: #666; font-size: 11px;">By default only posts by the page owner will be shown. Check this box to also show posts by others.</span>
                         </td>
                     </tr>
                 </tbody>
@@ -142,12 +157,23 @@ function cff_style_page() {
         'cff_event_details_size'    => 'inherit',
         'cff_event_details_weight'  => 'inherit',
         'cff_event_details_color'   => '',
+        'cff_event_date_formatting' => '1',
+        'cff_event_date_custom'     => '',
+        //Date
+        'cff_date_position'         => 'below',
         'cff_date_size'             => 'inherit',
         'cff_date_weight'           => 'inherit',
         'cff_date_color'            => '',
+        'cff_date_formatting'       => '1',
+        'cff_date_custom'           => '',
+        'cff_date_before'           => '',
+        'cff_date_after'            => '',
+        //Link to Facebook
         'cff_link_size'             => 'inherit',
         'cff_link_weight'           => 'inherit',
         'cff_link_color'            => '',
+        'cff_facebook_link_text'    => 'View on Facebook',
+        'cff_view_link_text'        => 'View Link',
         //Misc
         'cff_feed_width'            => '',
         'cff_feed_height'           => '',
@@ -155,6 +181,7 @@ function cff_style_page() {
         'cff_like_box_position'     => 'bottom',
         'cff_bg_color'              => '',
         'cff_likebox_bg_color'      => '',
+        'cff_show_author'           => false,
         //New
         'cff_custom_css'            => '',
         'cff_title_link'            => false,
@@ -189,12 +216,24 @@ function cff_style_page() {
     $cff_event_details_size = $options[ 'cff_event_details_size' ];
     $cff_event_details_weight = $options[ 'cff_event_details_weight' ];
     $cff_event_details_color = $options[ 'cff_event_details_color' ];
+    $cff_event_date_formatting = $options[ 'cff_event_date_formatting' ];
+    $cff_event_date_custom = $options[ 'cff_event_date_custom' ];
+
+    //Date
+    $cff_date_position = $options[ 'cff_date_position' ];
     $cff_date_size = $options[ 'cff_date_size' ];
     $cff_date_weight = $options[ 'cff_date_weight' ];
     $cff_date_color = $options[ 'cff_date_color' ];
+    $cff_date_formatting = $options[ 'cff_date_formatting' ];
+    $cff_date_custom = $options[ 'cff_date_custom' ];
+    $cff_date_before = $options[ 'cff_date_before' ];
+    $cff_date_after = $options[ 'cff_date_after' ];
+    //View on Facebook link
     $cff_link_size = $options[ 'cff_link_size' ];
     $cff_link_weight = $options[ 'cff_link_weight' ];
     $cff_link_color = $options[ 'cff_link_color' ];
+    $cff_facebook_link_text = $options[ 'cff_facebook_link_text' ];
+    $cff_view_link_text = $options[ 'cff_view_link_text' ];
     //Misc
     $cff_feed_width = $options[ 'cff_feed_width' ];
     $cff_feed_height = $options[ 'cff_feed_height' ];
@@ -203,6 +242,8 @@ function cff_style_page() {
     $cff_open_links = $options[ 'cff_open_links' ];
     $cff_bg_color = $options[ 'cff_bg_color' ];
     $cff_likebox_bg_color = $options[ 'cff_likebox_bg_color' ];
+    $cff_show_author = $options[ 'cff_show_author' ];
+
     //New
     $cff_custom_css = $options[ 'cff_custom_css' ];
     $cff_title_link = $options[ 'cff_title_link' ];
@@ -250,12 +291,24 @@ function cff_style_page() {
         $cff_event_details_size = $_POST[ 'cff_event_details_size' ];
         $cff_event_details_weight = $_POST[ 'cff_event_details_weight' ];
         $cff_event_details_color = $_POST[ 'cff_event_details_color' ];
+        $cff_event_date_formatting = $_POST[ 'cff_event_date_formatting' ];
+        $cff_event_date_custom = $_POST[ 'cff_event_date_custom' ];
+
+        //Date
+        $cff_date_position = $_POST[ 'cff_date_position' ];
         $cff_date_size = $_POST[ 'cff_date_size' ];
         $cff_date_weight = $_POST[ 'cff_date_weight' ];
         $cff_date_color = $_POST[ 'cff_date_color' ];
+        $cff_date_formatting = $_POST[ 'cff_date_formatting' ];
+        $cff_date_custom = $_POST[ 'cff_date_custom' ];
+        $cff_date_before = $_POST[ 'cff_date_before' ];
+        $cff_date_after = $_POST[ 'cff_date_after' ];
+        //View on Facebook link
         $cff_link_size = $_POST[ 'cff_link_size' ];
         $cff_link_weight = $_POST[ 'cff_link_weight' ];
         $cff_link_color = $_POST[ 'cff_link_color' ];
+        $cff_facebook_link_text = $_POST[ 'cff_facebook_link_text' ];
+        $cff_view_link_text = $_POST[ 'cff_view_link_text' ];
         //Misc
         $cff_feed_width = $_POST[ 'cff_feed_width' ];
         $cff_feed_height = $_POST[ 'cff_feed_height' ];
@@ -264,6 +317,8 @@ function cff_style_page() {
         $cff_open_links = $_POST[ 'cff_open_links' ];
         $cff_bg_color = $_POST[ 'cff_bg_color' ];
         $cff_likebox_bg_color = $_POST[ 'cff_likebox_bg_color' ];
+        $cff_show_author = $_POST[ 'cff_show_author' ];
+
         //New
         $cff_custom_css = $_POST[ 'cff_custom_css' ];
         $cff_title_link = $_POST[ 'cff_title_link' ];
@@ -294,12 +349,24 @@ function cff_style_page() {
         $options[ 'cff_event_details_size' ] = $cff_event_details_size;
         $options[ 'cff_event_details_weight' ] = $cff_event_details_weight;
         $options[ 'cff_event_details_color' ] = $cff_event_details_color;
+        $options[ 'cff_event_date_formatting' ] = $cff_event_date_formatting;
+        $options[ 'cff_event_date_custom' ] = $cff_event_date_custom;
+        
+        //Date
+        $options[ 'cff_date_position' ] = $cff_date_position;
         $options[ 'cff_date_size' ] = $cff_date_size;
         $options[ 'cff_date_weight' ] = $cff_date_weight;
         $options[ 'cff_date_color' ] = $cff_date_color;
+        $options[ 'cff_date_formatting' ] = $cff_date_formatting;
+        $options[ 'cff_date_custom' ] = $cff_date_custom;
+        $options[ 'cff_date_before' ] = $cff_date_before;
+        $options[ 'cff_date_after' ] = $cff_date_after;
+        //Link
         $options[ 'cff_link_size' ] = $cff_link_size;
         $options[ 'cff_link_weight' ] = $cff_link_weight;
         $options[ 'cff_link_color' ] = $cff_link_color;
+        $options[ 'cff_facebook_link_text' ] = $cff_facebook_link_text;
+        $options[ 'cff_view_link_text' ] = $cff_view_link_text;
         //Misc
         $options[ 'cff_feed_width' ] = $cff_feed_width;
         $options[ 'cff_feed_height' ] = $cff_feed_height;
@@ -308,6 +375,8 @@ function cff_style_page() {
         $options[ 'cff_open_links' ] = $cff_open_links;
         $options[ 'cff_bg_color' ] = $cff_bg_color;
         $options[ 'cff_likebox_bg_color' ] = $cff_likebox_bg_color;
+        $options[ 'cff_show_author' ] = $cff_show_author;
+
         //New
         $options[ 'cff_custom_css' ] = $cff_custom_css;
         $options[ 'cff_title_link' ] = $cff_title_link;
@@ -356,6 +425,15 @@ function cff_style_page() {
                             <label for="cff_bg_color">#</label>
                             <input name="cff_bg_color" type="text" value="<?php esc_attr_e( $cff_bg_color ); ?>" size="10" />
                             <span>Eg. ED9A00 <a href="http://www.colorpicker.com/" target="_blank">Color Picker</a></span>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th scope="row"><?php _e('Show name and picture of author'); ?></th>
+                        <td>
+                            <input name="cff_show_author" type="checkbox" id="cff_show_author" <?php if($cff_show_author == true) echo "checked"; ?> />
+                            <label for="cff_show_status_type">Yes</label>
+                            <i style="color: #666; font-size: 11px; margin-left: 5px;">This will show the thumbnail picture and name of the post author at the top of each post</i>
+                            
                         </td>
                     </tr>
                 </tbody>
@@ -450,12 +528,10 @@ function cff_style_page() {
             <h3><?php _e('Typography'); ?></h3>
             <table class="form-table">
                 <tbody>
-                    <tr valign="top">
-                        <th scope="row"><?php _e('Post Text'); ?></th>
-                        
-                        <!-- <p>What does inherit mean?</p> -->
+                    <tr><td><b style="font-size: 14px;"><?php _e('Post Text'); ?></b></td></tr>
+                    <tr>
+                        <th><label for="cff_title_format" class="bump-left">Format</label></th>
                         <td>
-                            <label for="cff_title_format">Format</label>
                             <select name="cff_title_format">
                                 <option value="p" <?php if($cff_title_format == "p") echo 'selected="selected"' ?> >Paragraph</option>
                                 <option value="h3" <?php if($cff_title_format == "h3") echo 'selected="selected"' ?> >Heading 3</option>
@@ -463,8 +539,11 @@ function cff_style_page() {
                                 <option value="h5" <?php if($cff_title_format == "h5") echo 'selected="selected"' ?> >Heading 5</option>
                                 <option value="h6" <?php if($cff_title_format == "h6") echo 'selected="selected"' ?> >Heading 6</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_title_size">Font Size</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_title_size" class="bump-left">Text Size</label></th>
+                        <td>
                             <select name="cff_title_size">
                                 <option value="inherit" <?php if($cff_title_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="10" <?php if($cff_title_size == "10") echo 'selected="selected"' ?> >10px</option>
@@ -483,30 +562,35 @@ function cff_style_page() {
                                 <option value="60" <?php if($cff_title_size == "54") echo 'selected="selected"' ?> >54px</option>
                                 <option value="60" <?php if($cff_title_size == "60") echo 'selected="selected"' ?> >60px</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_title_weight">Font Weight</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_title_weight" class="bump-left">Text Weight</label></th>
+                        <td>
                             <select name="cff_title_weight">
                                 <option value="inherit" <?php if($cff_title_weight == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="normal" <?php if($cff_title_weight == "normal") echo 'selected="selected"' ?> >Normal</option>
                                 <option value="bold" <?php if($cff_title_weight == "bold") echo 'selected="selected"' ?> >Bold</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_title_color">Font Color&nbsp;&nbsp;#</label>
-                            <input name="cff_title_color" type="text" value="<?php esc_attr_e( $cff_title_color ); ?>" size="10" placeholder="Eg. ED9A00" />
-                            <span><a href="http://www.colorpicker.com/" target="_blank">Color Picker</a></span>
-                            &nbsp;&nbsp;
-                            <input type="checkbox" name="cff_title_link" id="cff_title_link" <?php if($cff_title_link == true) echo 'checked="checked"' ?> />
-                            <label for="cff_title_link">Link to Facebook post</label>
                         </td>
                     </tr>
-                    <tr valign="top">
-                        <th scope="row"><?php _e('Link Description'); ?></th>
-                        
+                    <tr>
+                        <th><label for="cff_title_color" class="bump-left">Text Color</label></th>
                         <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <label for="cff_body_size">Font Size</label>
+                            #<input name="cff_title_color" type="text" value="<?php esc_attr_e( $cff_title_color ); ?>" size="10" placeholder="Eg. ED9A00" />
+                            <span><a href="http://www.colorpicker.com/" target="_blank">Color Picker</a></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_title_link" class="bump-left">Link text to Facebook post?</label></th>
+                        <td><input type="checkbox" name="cff_title_link" id="cff_title_link" <?php if($cff_title_link == true) echo 'checked="checked"' ?> />&nbsp;Yes</td>
+                    </tr>
+                            
+                    <tr><td><b style="font-size: 14px;"><?php _e('Photo/Video Description'); ?></b></td></tr>
+                    
+                    <tr>
+                        <th><label for="cff_body_size" class="bump-left">Text Size</label></th>
+                        <td>
                             <select name="cff_body_size">
                                 <option value="inherit" <?php if($cff_body_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="10" <?php if($cff_body_size == "10") echo 'selected="selected"' ?> >10px</option>
@@ -525,24 +609,31 @@ function cff_style_page() {
                                 <option value="60" <?php if($cff_body_size == "54") echo 'selected="selected"' ?> >54px</option>
                                 <option value="60" <?php if($cff_body_size == "60") echo 'selected="selected"' ?> >60px</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_body_weight">Font Weight</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_body_weight" class="bump-left">Text Weight</label></th>
+                        <td>
                             <select name="cff_body_weight">
                                 <option value="inherit" <?php if($cff_body_weight == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="normal" <?php if($cff_body_weight == "normal") echo 'selected="selected"' ?> >Normal</option>
                                 <option value="bold" <?php if($cff_body_weight == "bold") echo 'selected="selected"' ?> >Bold</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_body_color">Font Color&nbsp;&nbsp;#</label>
-                            <input name="cff_body_color" type="text" value="<?php esc_attr_e( $cff_body_color ); ?>" size="10" placeholder="Eg. ED9A00" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_body_color" class="bump-left">Text Color</label></th>
+                        
+                        <td>
+                            #<input name="cff_body_color" type="text" value="<?php esc_attr_e( $cff_body_color ); ?>" size="10" placeholder="Eg. ED9A00" />
                             <a href="http://www.colorpicker.com/" target="_blank">Color Picker</a>
                         </td>
                     </tr>
-                    <tr valign="top">
-                        <th scope="row"><?php _e('Event Title'); ?></th>
-                        
+                    <tr><td><b style="font-size: 14px;"><?php _e('Event Title'); ?></b></td></tr>
+                    
+                    <tr>
+                        <th><label for="cff_event_title_format" class="bump-left">Format</label></th>
                         <td>
-                            <label for="cff_event_title_format">Format</label>
                             <select name="cff_event_title_format">
                                 <option value="p" <?php if($cff_event_title_format == "p") echo 'selected="selected"' ?> >Paragraph</option>
                                 <option value="h3" <?php if($cff_event_title_format == "h3") echo 'selected="selected"' ?> >Heading 3</option>
@@ -550,8 +641,12 @@ function cff_style_page() {
                                 <option value="h5" <?php if($cff_event_title_format == "h5") echo 'selected="selected"' ?> >Heading 5</option>
                                 <option value="h6" <?php if($cff_event_title_format == "h6") echo 'selected="selected"' ?> >Heading 6</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_event_title_size">Font Size</label>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th><label for="cff_event_title_size" class="bump-left">Text Size</label></th>
+                        <td>
                             <select name="cff_event_title_size">
                                 <option value="inherit" <?php if($cff_event_title_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="10" <?php if($cff_event_title_size == "10") echo 'selected="selected"' ?> >10px</option>
@@ -570,30 +665,34 @@ function cff_style_page() {
                                 <option value="60" <?php if($cff_event_title_size == "54") echo 'selected="selected"' ?> >54px</option>
                                 <option value="60" <?php if($cff_event_title_size == "60") echo 'selected="selected"' ?> >60px</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_event_title_weight">Font Weight</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_event_title_weight" class="bump-left">Text Weight</label></th>
+                        <td>
                             <select name="cff_event_title_weight">
                                 <option value="inherit" <?php if($cff_event_title_weight == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="normal" <?php if($cff_event_title_weight == "normal") echo 'selected="selected"' ?> >Normal</option>
                                 <option value="bold" <?php if($cff_event_title_weight == "bold") echo 'selected="selected"' ?> >Bold</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_event_title_color">Font Color&nbsp;&nbsp;#</label>
-                            <input name="cff_event_title_color" type="text" value="<?php esc_attr_e( $cff_event_title_color ); ?>" size="10" placeholder="Eg. ED9A00" />
-                            <a href="http://www.colorpicker.com/" target="_blank">Color Picker</a>
-                            &nbsp;&nbsp;
-                            <input type="checkbox" name="cff_event_title_link" id="cff_event_title_link" <?php if($cff_event_title_link == true) echo 'checked="checked"' ?> />
-                            <label for="cff_event_title_link">Link to Facebook event</label>
                         </td>
                     </tr>
-                    <tr valign="top">
-                        <th scope="row"><?php _e('Event Details'); ?></th>
-                        
+                    <tr>
+                        <th><label for="cff_event_title_color" class="bump-left">Text Color</label></th>
                         <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <label for="cff_event_details_size">Font Size</label>
+                            <input name="cff_event_title_color" type="text" value="<?php esc_attr_e( $cff_event_title_color ); ?>" size="10" placeholder="Eg. ED9A00" />
+                            <a href="http://www.colorpicker.com/" target="_blank">Color Picker</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_title_link" class="bump-left">Link title to Facebook event page?</label></th>
+                        <td><input type="checkbox" name="cff_event_title_link" id="cff_event_title_link" <?php if($cff_event_title_link == true) echo 'checked="checked"' ?> />&nbsp;Yes</td>
+                    </tr>
+                    <tr><td><b style="font-size: 14px;"><?php _e('Event Details'); ?></b></td></tr>
+                    
+                    <tr>
+                        <th><label for="cff_event_details_size" class="bump-left">Text Size</label></th>
+                        <td>
                             <select name="cff_event_details_size">
                                 <option value="inherit" <?php if($cff_event_details_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="10" <?php if($cff_event_details_size == "10") echo 'selected="selected"' ?> >10px</option>
@@ -612,27 +711,67 @@ function cff_style_page() {
                                 <option value="60" <?php if($cff_event_details_size == "54") echo 'selected="selected"' ?> >54px</option>
                                 <option value="60" <?php if($cff_event_details_size == "60") echo 'selected="selected"' ?> >60px</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_event_details_weight">Font Weight</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_event_details_weight" class="bump-left">Text Weight</label></th>
+                        <td>
                             <select name="cff_event_details_weight">
                                 <option value="inherit" <?php if($cff_event_details_weight == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="normal" <?php if($cff_event_details_weight == "normal") echo 'selected="selected"' ?> >Normal</option>
                                 <option value="bold" <?php if($cff_event_details_weight == "bold") echo 'selected="selected"' ?> >Bold</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_event_details_color">Font Color&nbsp;&nbsp;#</label>
-                            <input name="cff_event_details_color" type="text" value="<?php esc_attr_e( $cff_event_details_color ); ?>" size="10" placeholder="Eg. ED9A00" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_event_details_color" class="bump-left">Text Color</label></th>
+                        <td>
+                            #<input name="cff_event_details_color" type="text" value="<?php esc_attr_e( $cff_event_details_color ); ?>" size="10" placeholder="Eg. ED9A00" />
                             <a href="http://www.colorpicker.com/" target="_blank">Color Picker</a>
                         </td>
                     </tr>
-                    <tr valign="top">
-                        <th scope="row"><?php _e('Date'); ?></th>
-                        
+                    <tr>
+                        <th><label for="cff_event_date_formatting" class="bump-left">Event date formatting</label></th>
                         <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <label for="cff_date_size">Font Size</label>
+                            <select name="cff_event_date_formatting">
+                                <?php $original = strtotime('2013-07-25T17:30:00+0000'); ?>
+                                <option value="1" <?php if($cff_event_date_formatting == "1") echo 'selected="selected"' ?> ><?php echo date('F j, Y, g:ia', $original); ?></option>
+                                <option value="2" <?php if($cff_event_date_formatting == "2") echo 'selected="selected"' ?> ><?php echo date('F jS, g:ia', $original); ?></option>
+                                <option value="3" <?php if($cff_event_date_formatting == "3") echo 'selected="selected"' ?> ><?php echo date('g:ia - F jS', $original); ?></option>
+                                <option value="4" <?php if($cff_event_date_formatting == "4") echo 'selected="selected"' ?> ><?php echo date('g:ia, F jS', $original); ?></option>
+                                <option value="5" <?php if($cff_event_date_formatting == "5") echo 'selected="selected"' ?> ><?php echo date('l F jS - g:ia', $original); ?></option>
+                                <option value="6" <?php if($cff_event_date_formatting == "6") echo 'selected="selected"' ?> ><?php echo date('D M jS, Y, g:iA', $original); ?></option>
+                                <option value="7" <?php if($cff_event_date_formatting == "7") echo 'selected="selected"' ?> ><?php echo date('l F jS, Y, g:iA', $original); ?></option>
+                                <option value="8" <?php if($cff_event_date_formatting == "8") echo 'selected="selected"' ?> ><?php echo date('l F jS, Y - g:ia', $original); ?></option>
+                                <option value="9" <?php if($cff_event_date_formatting == "9") echo 'selected="selected"' ?> ><?php echo date("l M jS, 'y", $original); ?></option>
+                                <option value="10" <?php if($cff_event_date_formatting == "10") echo 'selected="selected"' ?> ><?php echo date('m.d.y - g:iA', $original); ?></option>
+                                <option value="11" <?php if($cff_event_date_formatting == "11") echo 'selected="selected"' ?> ><?php echo date('m/d/y, g:ia', $original); ?></option>
+                                <option value="12" <?php if($cff_event_date_formatting == "12") echo 'selected="selected"' ?> ><?php echo date('d.m.y - g:iA', $original); ?></option>
+                                <option value="13" <?php if($cff_event_date_formatting == "13") echo 'selected="selected"' ?> ><?php echo date('d/m/y, g:ia', $original); ?></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_event_date_custom" class="bump-left">Custom event date format</label></th>
+                        <td>
+                            <input name="cff_event_date_custom" type="text" value="<?php esc_attr_e( $cff_event_date_custom ); ?>" size="10" placeholder="Eg. F j, Y - g:ia" />
+                            <i style="color: #666; font-size: 11px;">(<a href="http://smashballoon.com/custom-facebook-feed/docs/date/" target="_blank">Examples</a>)</i>
+                        </td>
+                    </tr>
+
+                    <tr><td><b style="font-size: 14px;"><?php _e('Date'); ?></b></td></tr>
+                    <tr>
+                        <th><label for="cff_date_position" class="bump-left">Position</label></th>
+                        <td>
+                            <select name="cff_date_position">
+                                <option value="below" <?php if($cff_date_position == "below") echo 'selected="selected"' ?> >Below Text</option>
+                                <option value="above" <?php if($cff_date_position == "above") echo 'selected="selected"' ?> >Above Text</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_date_size" class="bump-left">Text Size</label></th>
+                        <td>
                             <select name="cff_date_size">
                                 <option value="inherit" <?php if($cff_date_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="10" <?php if($cff_date_size == "10") echo 'selected="selected"' ?> >10px</option>
@@ -651,29 +790,67 @@ function cff_style_page() {
                                 <option value="60" <?php if($cff_date_size == "54") echo 'selected="selected"' ?> >54px</option>
                                 <option value="60" <?php if($cff_date_size == "60") echo 'selected="selected"' ?> >60px</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_date_weight">Font Weight</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_date_weight" class="bump-left">Text Weight</label></th>
+                        <td>
                             <select name="cff_date_weight">
                                 <option value="inherit" <?php if($cff_date_weight == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="normal" <?php if($cff_date_weight == "normal") echo 'selected="selected"' ?> >Normal</option>
                                 <option value="bold" <?php if($cff_date_weight == "bold") echo 'selected="selected"' ?> >Bold</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_date_color">Font Color&nbsp;&nbsp;#</label>
-                            <input name="cff_date_color" type="text" value="<?php esc_attr_e( $cff_date_color ); ?>" size="10" placeholder="Eg. ED9A00" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_date_color" class="bump-left">Text Color</label></th>
+                        <td>
+                            #<input name="cff_date_color" type="text" value="<?php esc_attr_e( $cff_date_color ); ?>" size="10" placeholder="Eg. ED9A00" />
                             <a href="http://www.colorpicker.com/" target="_blank">Color Picker</a>
                         </td>
                     </tr>
-                    <tr valign="top">
-                        <th scope="row"><?php _e('Link to Facebook'); ?></th>
-                        
-                        <!-- <p>What does inherit mean?</p> -->
-                        
+                            
+                    <tr>
+                        <th><label for="cff_date_formatting" class="bump-left">Date formatting</label></th>
                         <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <label for="cff_link_size">Font Size</label>
+                            <select name="cff_date_formatting">
+                                <?php $original = strtotime('2013-07-25T17:30:00+0000'); ?>
+                                <option value="1" <?php if($cff_date_formatting == "1") echo 'selected="selected"' ?> >Posted 2 days ago</option>
+                                <option value="2" <?php if($cff_date_formatting == "2") echo 'selected="selected"' ?> ><?php echo date('F jS, g:i a', $original); ?></option>
+                                <option value="3" <?php if($cff_date_formatting == "3") echo 'selected="selected"' ?> ><?php echo date('F jS', $original); ?></option>
+                                <option value="4" <?php if($cff_date_formatting == "4") echo 'selected="selected"' ?> ><?php echo date('D F jS', $original); ?></option>
+                                <option value="5" <?php if($cff_date_formatting == "5") echo 'selected="selected"' ?> ><?php echo date('l F jS', $original); ?></option>
+                                <option value="6" <?php if($cff_date_formatting == "6") echo 'selected="selected"' ?> ><?php echo date('D M jS, Y', $original); ?></option>
+                                <option value="7" <?php if($cff_date_formatting == "7") echo 'selected="selected"' ?> ><?php echo date('l F jS, Y', $original); ?></option>
+                                <option value="8" <?php if($cff_date_formatting == "8") echo 'selected="selected"' ?> ><?php echo date('l F jS, Y - g:i a', $original); ?></option>
+                                <option value="9" <?php if($cff_date_formatting == "9") echo 'selected="selected"' ?> ><?php echo date("l M jS, 'y", $original); ?></option>
+                                <option value="10" <?php if($cff_date_formatting == "10") echo 'selected="selected"' ?> ><?php echo date('m.d.y', $original); ?></option>
+                                <option value="11" <?php if($cff_date_formatting == "11") echo 'selected="selected"' ?> ><?php echo date('m/d/y', $original); ?></option>
+                                <option value="12" <?php if($cff_date_formatting == "12") echo 'selected="selected"' ?> ><?php echo date('d.m.y', $original); ?></option>
+                                <option value="13" <?php if($cff_date_formatting == "13") echo 'selected="selected"' ?> ><?php echo date('d/m/y', $original); ?></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_date_custom" class="bump-left">Custom format</label></th>
+                        <td>
+                            <input name="cff_date_custom" type="text" value="<?php esc_attr_e( $cff_date_custom ); ?>" size="10" placeholder="Eg. F j, Y" />
+                            <i style="color: #666; font-size: 11px;">(<a href="http://smashballoon.com/custom-facebook-feed/docs/date/" target="_blank">Examples</a>)</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_date_before" class="bump-left">Text before date</label></th>
+                        <td><input name="cff_date_before" type="text" value="<?php esc_attr_e( $cff_date_before ); ?>" size="10" placeholder="Eg. Posted" /></td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_date_after" class="bump-left">Text after date</label></th>
+                        <td><input name="cff_date_after" type="text" value="<?php esc_attr_e( $cff_date_after ); ?>" size="10" placeholder="Eg. ago" /></td>
+                    </tr>
+                    <tr><td><b style="font-size: 14px;"><?php _e('Link to Facebook'); ?></b></td></tr>
+                        
+                    <tr>
+                        <th><label for="cff_link_size" class="bump-left">Text Size</label></th>
+                        <td>
                             <select name="cff_link_size">
                                 <option value="inherit" <?php if($cff_link_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="10" <?php if($cff_link_size == "10") echo 'selected="selected"' ?> >10px</option>
@@ -692,23 +869,44 @@ function cff_style_page() {
                                 <option value="60" <?php if($cff_link_size == "54") echo 'selected="selected"' ?> >54px</option>
                                 <option value="60" <?php if($cff_link_size == "60") echo 'selected="selected"' ?> >60px</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_link_weight">Font Weight</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_link_weight" class="bump-left">Text Weight</label></th>
+                        <td>
                             <select name="cff_link_weight">
                                 <option value="inherit" <?php if($cff_link_weight == "inherit") echo 'selected="selected"' ?> >Inherit</option>
                                 <option value="normal" <?php if($cff_link_weight == "normal") echo 'selected="selected"' ?> >Normal</option>
                                 <option value="bold" <?php if($cff_link_weight == "bold") echo 'selected="selected"' ?> >Bold</option>
                             </select>
-                            &nbsp;&nbsp;
-                            <label for="cff_link_color">Font Color&nbsp;&nbsp;#</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_link_color" class="bump-left">Text Color</label></th>
+                        <td>
                             <input name="cff_link_color" type="text" value="<?php esc_attr_e( $cff_link_color ); ?>" size="10" placeholder="Eg. ED9A00" />
                             <a href="http://www.colorpicker.com/" target="_blank">Color Picker</a>
                         </td>
                     </tr>
-                    <tr><i style="color: #666; font-size: 11px; margin-left: 5px;">'Inherit' means that the text will inherit the styles from your theme.</i></tr>
+                    <tr>
+                        <th><label for="cff_facebook_link_text" class="bump-left">Custom 'View on Facebook' text</label></th>
+                        <td>
+                            <input name="cff_facebook_link_text" type="text" value="<?php esc_attr_e( $cff_facebook_link_text ); ?>" size="20" />
+                            <i style="color: #666; font-size: 11px; margin-left: 5px;">Use different text in place of the default 'View on Facebook' link</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="cff_view_link_text" class="bump-left">Custom 'View Link' text</label></th>
+                        <td>
+                            <input name="cff_view_link_text" type="text" value="<?php esc_attr_e( $cff_view_link_text ); ?>" size="20" />
+                            <i style="color: #666; font-size: 11px; margin-left: 5px;">Use different text in place of the default 'View on Facebook' link</i>
+                        </td>
+                    </tr>
+                    
                 </tbody>
             </table>
             <br />
+            <?php submit_button(); ?>
             <hr />
             <h3><?php _e('Likes, Shares and Comments'); ?></h3>
             <p style="color: #666; font-size: 11px; font-style: italic; margin-left: 5px;"><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank">Upgrade to Pro</a></p>
