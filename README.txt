@@ -94,7 +94,7 @@ You can embed the feed directly into a template file by using the WordPress do_s
 
 == Changelog ==
 
-= 1.4.9 =
+= 1.5.1 =
 * New: Added a 'See More' link to expand any text which is longer than the character limit defined
 * New: Choose to show posts by other people in your feed
 * New: Option to show the post author's profile picture and name above each post
