@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.6.1
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,9 @@ You can embed the feed directly into a template file by using the WordPress do_s
 9. Add the shortcode to a widget
 
 == Changelog ==
+
+= 1.5.2 =
+* Fix: Fixed JavaScript error in previous update
 
 = 1.5.1 =
 * New: Added a 'See More' link to expand any text which is longer than the character limit defined

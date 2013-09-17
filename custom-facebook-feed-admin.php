@@ -444,7 +444,7 @@ function cff_style_page() {
                 <tbody>
                     <h3><?php _e('Post Types'); ?></h3>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Show these types of posts:'); ?></th>
+                        <th scope="row"><?php _e('Only show these types of posts:'); ?></th>
                         <td>
                             <input name="cff_show_status_type" type="checkbox" id="cff_show_status_type" disabled checked />
                             <label for="cff_show_status_type">Statuses</label>
