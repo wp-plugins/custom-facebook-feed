@@ -24,14 +24,19 @@
 /******************/
 /*** TYPOGRAPHY ***/
 /******************/
+/*See more/less links*/
+#cff .less{
+  display: none;
+}
 /* Links */
 #cff a {
-  text-decoration:underline;
+  text-decoration: underline;
 }
 /* Post titles and body text */
 #cff h3, #cff h4, #cff h5, #cff h6, #cff p{
   float: left;
   width: 100%;
+  clear: both;
   padding: 0;
   margin: 5px 0;
   line-height: 1.4;
@@ -47,11 +52,9 @@
 /* Date */
 #cff .cff-date{
   float: left;
-  clear: left;
-  width: auto;
+  width: 100%;
   font-size: 11px;
 }
-
 /************/
 /***AUTHOR***/
 /************/
@@ -76,11 +79,29 @@
 #cff .cff-author a{
   text-decoration: none;
 }
-
+/*************/
+/*** MEDIA ***/
+/*************/
+#cff .break-word{
+  word-break: break-all;
+}
 /* Link */
 #cff .cff-expand{
+  display: none;
+}
+#cff .cff-expand a{
   font-size: 11px;
   font-weight: normal;
+}
+/*Link image*/
+#cff .link{
+  float: left;
+  clear: both;
+  max-width: 20%;
+  margin-top: 10px;
+}
+#cff .link img{
+  max-width: 100%;
 }
 /*Link text*/
 #cff .text-link{
@@ -94,15 +115,12 @@
   width: 100%;
   margin-left: 0;
 }
-#cff .break-word{
-  word-break: break-all;
-}
-/* Event */
+/* Feed events */
 #cff .details{
   float: left;
-  clear: both;
+  clear: none;
   width: 100%;
-  padding: 15px 0 10px 0;
+  padding: 0 0 10px 0;
 }
 #cff .details h5{
   margin: 0 0 5px 0;
@@ -117,24 +135,14 @@
 }
 #cff .details .where,
 #cff .details .when{
-  font-weight: bold;
+  /*font-weight: bold;*/
 }
-#cff .details .where{
-  margin-bottom: -4px;
-}
-/*****************/
-/*** POST META ***/
-/*****************/
-/* Meta container */
-#cff .meta-wrap{
-  float: left;
-  width: 100%;
-}
+
 /* View on Facebook / View Link text */
 #cff .cff-viewpost{
   float: right;
   clear: none;
-  padding-top: 5px;
+  padding-top: 12px;
   font-size: 11px;
 }
 /* Like box */
@@ -145,6 +153,13 @@
   float: left;
   width: 100%;
   margin-left: -10px;
+}
+/*Like box is not inside of #cff*/
+.cff-likebox.top.outside{
+  margin-bottom: 10px;
+}
+.cff-likebox.bottom.outside{
+  margin-top: 10px;
 }
 /* Clear fix */
 .clear:after {
@@ -158,7 +173,6 @@
     display: inline-block;
     display: block;
 }
-
 /*********************/
 /*** STYLE OPTIONS ***/
 /*********************/

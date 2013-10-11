@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.6.1
-Stable tag: 1.5.2
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,7 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Display **feeds from multiple different Facebook pages** and use the shortcode to embed them into a page, post or widget anywhere on your site
 * Show **events** from your Facebook feed with name, date/time, location and description
 * Add your own **custom CSS**
+* **Caching** means that posts load lightning fast. Set your own caching time - check for new posts every few seconds, minutes, hours or days. You decide.
 * Show and hide certain parts of each post
 * Choose to show the Facebook profile picture and name above each post
 * Select whether to display posts by just the page owner, or everyone who posts on your Facebook page
@@ -88,11 +89,26 @@ You can embed the feed directly into a template file by using the WordPress do_s
 4. Display Facebook events
 5. Show and hide certain parts of the posts
 6. Configuring the plugin
-7. Use the styling options to customize your Facebook feed
-8. It's super easy to display your Facebook feed in any page or post
-9. Add the shortcode to a widget
+7. Layout & Style page - General options
+8. Layout & Style page - Post Layout options
+9. Layout & Style page - Typography options
+10. Layout & Style page - Misc options
+11. It's super easy to display your Facebook feed in any page or post
+12. You can add the shortcode to a widget to display it in your sidebar, footer or any other widgetized area
 
 == Changelog ==
+
+= 1.6.0 =
+* New: Post caching now temporarily stores your post data in your WordPress database to allow for super quick load times
+* New: Define your own caching time. Check for new posts every few seconds, minutes, hours or days. You decide.
+* New: Define your own custom text for the 'See More' and 'See Less' buttons
+* New: Add your own CSS class to your feeds
+* New: Define a post limit which is higher or lower than the default 25
+* New: Include the Like box inside or outside of the feed's container
+* New: Customize the event date independently
+* New: Improved layout of admin pages for easier navigation and customization
+* Fix: Provided a fix for the Facebook API duplicate post bug
+* Fix: Fixed bug which ocurred when multiple feeds are displayed on the same page with different text lengths defined
 
 = 1.5.2 =
 * Fix: Fixed JavaScript error in previous update

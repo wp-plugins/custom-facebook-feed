@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.5.2
+Version: 1.6.0
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -27,33 +27,47 @@ include dirname( __FILE__ ) .'/custom-facebook-feed-admin.php';
 // Add shortcodes
 add_shortcode('custom-facebook-feed', 'display_cff');
 function display_cff($atts) {
-
+    
     //Style options
     $options = get_option('cff_style_settings');
-
     //Create the types string to set as shortcode default
-    $include_string = '';
+    if($options[ 'cff_show_links_type' ]) $type_string .= 'links,';
+    if($options[ 'cff_show_event_type' ]) $type_string .= 'events,';
+    if($options[ 'cff_show_video_type' ]) $type_string .= 'videos,';
+    if($options[ 'cff_show_photos_type' ]) $type_string .= 'photos,';
+    if($options[ 'cff_show_status_type' ]) $type_string .= 'statuses,';
+    //Create the types string to set as shortcode default
     if($options[ 'cff_show_text' ]) $include_string .= 'text,';
     if($options[ 'cff_show_desc' ]) $include_string .= 'desc,';
+    if($options[ 'cff_show_shared_links' ]) $include_string .= 'sharedlinks,';
     if($options[ 'cff_show_date' ]) $include_string .= 'date,';
+    if($options[ 'cff_show_media' ]) $include_string .= 'media,';
     if($options[ 'cff_show_event_title' ]) $include_string .= 'eventtitle,';
     if($options[ 'cff_show_event_details' ]) $include_string .= 'eventdetails,';
-    if($options[ 'cff_show_link' ]) $include_string .= 'link';
+    if($options[ 'cff_show_meta' ]) $include_string .= 'social,';
+    if($options[ 'cff_show_link' ]) $include_string .= 'link,';
     if($options[ 'cff_show_like_box' ]) $include_string .= 'likebox,';
-
     //Pass in shortcode attrbutes
     $atts = shortcode_atts(
     array(
         'id' => get_option('cff_page_id'),
         'num' => get_option('cff_num_show'),
+        'limit' => get_option('cff_post_limit'),
         'others' => get_option('cff_show_others'),
+        'cachetime' => get_option('cff_cache_time'),
+        'cacheunit' => get_option('cff_cache_time_unit'),
         'width' => $options[ 'cff_feed_width' ],
         'height' => $options[ 'cff_feed_height' ],
         'padding' => $options[ 'cff_feed_padding' ],
         'bgcolor' => $options[ 'cff_bg_color' ],
         'showauthor' => $options[ 'cff_show_author' ],
+        'class' => $options[ 'cff_class' ],
+        'layout' => $options[ 'cff_preset_layout' ],
+        'type' => $type_string,
         'include' => $include_string,
         //Typography
+        'seemoretext' => $options[ 'cff_see_more_text' ],
+        'seelesstext' => $options[ 'cff_see_less_text' ],
         'textformat' => $options[ 'cff_title_format' ],
         'textsize' => $options[ 'cff_title_size' ],
         'textweight' => $options[ 'cff_title_weight' ],
@@ -62,41 +76,59 @@ function display_cff($atts) {
         'descsize' => $options[ 'cff_body_size' ],
         'descweight' => $options[ 'cff_body_weight' ],
         'desccolor' => $options[ 'cff_body_color' ],
+        //Event title
         'eventtitleformat' => $options[ 'cff_event_title_format' ],
         'eventtitlesize' => $options[ 'cff_event_title_size' ],
         'eventtitleweight' => $options[ 'cff_event_title_weight' ],
         'eventtitlecolor' => $options[ 'cff_event_title_color' ],
         'eventtitlelink' => $options[ 'cff_event_title_link' ],
+        //Event date
+        'eventdatesize' => $options[ 'cff_event_date_size' ],
+        'eventdateweight' => $options[ 'cff_event_date_weight' ],
+        'eventdatecolor' => $options[ 'cff_event_date_color' ],
+        'eventdatepos' => $options[ 'cff_event_date_position' ],
+        'eventdateformat' => $options[ 'cff_event_date_formatting' ],
+        'eventdatecustom' => $options[ 'cff_event_date_custom' ],
+        //Event details
         'eventdetailssize' => $options[ 'cff_event_details_size' ],
         'eventdetailsweight' => $options[ 'cff_event_details_weight' ],
         'eventdetailscolor' => $options[ 'cff_event_details_color' ],
+        //Date
         'datepos' => $options[ 'cff_date_position' ],
         'datesize' => $options[ 'cff_date_size' ],
         'dateweight' => $options[ 'cff_date_weight' ],
         'datecolor' => $options[ 'cff_date_color' ],
+        'dateformat' => $options[ 'cff_date_formatting' ],
+        'datecustom' => $options[ 'cff_date_custom' ],
         'linksize' => $options[ 'cff_link_size' ],
         'linkweight' => $options[ 'cff_link_weight' ],
         'linkcolor' => $options[ 'cff_link_color' ],
         'facebooklinktext' => $options[ 'cff_facebook_link_text' ],
         'viewlinktext' => $options[ 'cff_view_link_text' ],
+        'iconstyle' => $options[ 'cff_icon_style' ],
+        'socialtextcolor' => $options[ 'cff_meta_text_color' ],
+        'socialbgcolor' => $options[ 'cff_meta_bg_color' ],
         //Misc
         'textlength' => get_option('cff_title_length'),
         'desclength' => get_option('cff_body_length'),
         'likeboxpos' => $options[ 'cff_like_box_position' ],
+        'likeboxoutside' => $options[ 'cff_like_box_outside' ],
         'likeboxcolor' => $options[ 'cff_likebox_bg_color' ],
+        'videoheight' => $options[ 'cff_video_height' ],
+        'videoaction' => $options[ 'cff_video_action' ],
         'sepcolor' => $options[ 'cff_sep_color' ],
         'sepsize' => $options[ 'cff_sep_size' ]
     ), $atts);
-
-
-    
-    
     /********** GENERAL **********/
     $cff_feed_width = $atts['width'];
     $cff_feed_height = $atts[ 'height' ];
     $cff_feed_padding = $atts[ 'padding' ];
     $cff_bg_color = $atts[ 'bgcolor' ];
     $cff_show_author = $atts[ 'showauthor' ];
+    $cff_cache_time = $atts[ 'cachetime' ];
+    if (!isset($cff_cache_time)) $cff_cache_time = 0;
+    $cff_cache_time_unit = $atts[ 'cacheunit' ];
+    $cff_class = $atts['class'];
     //Compile feed styles
     $cff_feed_styles = 'style="';
     if ( !empty($cff_feed_width) ) $cff_feed_styles .= 'width:' . $cff_feed_width . '; ';
@@ -106,21 +138,53 @@ function display_cff($atts) {
     $cff_feed_styles .= '"';
     //Like box
     $cff_like_box_position = $atts[ 'likeboxpos' ];
+    $cff_like_box_outside = $atts[ 'likeboxoutside' ];
     //Open links in new window?
     $cff_open_links = $options[ 'cff_open_links' ];
     $target = 'target="_blank"';
     if ($cff_open_links) $target = 'target="_blank"';
+    /********** POST TYPES **********/
+    $cff_types = $atts[ 'type' ];
+    //Look for non-plural version of string in the types string in case user specifies singular in shortcode
+    $cff_show_links_type = true;
+    $cff_show_event_type = true;
+    $cff_show_video_type = true;
+    $cff_show_photos_type = true;
+    $cff_show_status_type = true;
+    $cff_events_only = false;
+    //Are we showing ONLY events?
+    if ($cff_show_event_type && !$cff_show_links_type && !$cff_show_video_type && !$cff_show_photos_type && !$cff_show_status_type) $cff_events_only = true;
     /********** LAYOUT **********/
     $cff_includes = $atts[ 'include' ];
     //Look for non-plural version of string in the types string in case user specifies singular in shortcode
     if ( stripos($cff_includes, 'text') !== false ) $cff_show_text = true;
     if ( stripos($cff_includes, 'desc') !== false ) $cff_show_desc = true;
+    if ( stripos($cff_includes, 'sharedlink') !== false ) $cff_show_shared_links = true;
     if ( stripos($cff_includes, 'date') !== false ) $cff_show_date = true;
+    if ( stripos($cff_includes, 'media') !== false ) $cff_show_media = true;
     if ( stripos($cff_includes, 'eventtitle') !== false ) $cff_show_event_title = true;
     if ( stripos($cff_includes, 'eventdetail') !== false ) $cff_show_event_details = true;
-    if ( stripos($cff_includes, 'link') !== false ) $cff_show_link = true;
+    if ( stripos($cff_includes, 'social') !== false ) $cff_show_meta = true;
+    if ( stripos($cff_includes, ',link') !== false ) $cff_show_link = true; //comma used to separate it from 'sharedlinks' - which also contains 'link' string
     if ( stripos($cff_includes, 'like') !== false ) $cff_show_like_box = true;
+    $cff_preset_layout = 'thumb';
+    
+    /********** META **********/
+    $cff_icon_style = $atts[ 'iconstyle' ];
+    $cff_meta_text_color = $atts[ 'socialtextcolor' ];
+    $cff_meta_bg_color = $atts[ 'socialbgcolor' ];
+    $cff_meta_styles = 'style="';
+    if ( !empty($cff_meta_text_color) ) $cff_meta_styles .= 'color:#' . $cff_meta_text_color . ';';
+    if ( !empty($cff_meta_bg_color) ) $cff_meta_styles .= 'background-color:#' . $cff_meta_bg_color . ';';
+    $cff_meta_styles .= '"';
+    $cff_nocomments_text = $options[ 'cff_nocomments_text' ];
+    $cff_hide_comments = $options[ 'cff_hide_comments' ];
+    if (!isset($cff_nocomments_text) || empty($cff_nocomments_text)) $cff_hide_comments = true;
     /********** TYPOGRAPHY **********/
+    //See More text
+    $cff_see_more_text = $atts[ 'seemoretext' ];
+    $cff_see_less_text = $atts[ 'seelesstext' ];
+    //See Less text
     //Title
     $cff_title_format = $atts[ 'textformat' ];
     if (empty($cff_title_format)) $cff_title_format = 'p';
@@ -154,6 +218,18 @@ function display_cff($atts) {
     if ( !empty($cff_event_title_color) ) $cff_event_title_styles .= 'color:#' . $cff_event_title_color . ';';
     $cff_event_title_styles .= '"';
     $cff_event_title_link = $atts[ 'eventtitlelink' ];
+    //Event Date
+    $cff_event_date_size = $atts[ 'eventdatesize' ];
+    $cff_event_date_weight = $atts[ 'eventdateweight' ];
+    $cff_event_date_color = $atts[ 'eventdatecolor' ];
+    $cff_event_date_position = $atts[ 'eventdatepos' ];
+    $cff_event_date_formatting = $atts[ 'eventdateformat' ];
+    $cff_event_date_custom = $atts[ 'eventdatecustom' ];
+    $cff_event_date_styles = 'style="';
+    if ( !empty($cff_event_date_size) && $cff_event_date_size != 'inherit' ) $cff_event_date_styles .=  'font-size:' . $cff_event_date_size . 'px; ';
+    if ( !empty($cff_event_date_weight) && $cff_event_date_weight != 'inherit' ) $cff_event_date_styles .= 'font-weight:' . $cff_event_date_weight . '; ';
+    if ( !empty($cff_event_date_color) ) $cff_event_date_styles .= 'color:#' . $cff_event_date_color . ';';
+    $cff_event_date_styles .= '"';
     //Event Details
     $cff_event_details_size = $atts[ 'eventdetailssize' ];
     $cff_event_details_weight = $atts[ 'eventdetailsweight' ];
@@ -193,6 +269,20 @@ function display_cff($atts) {
     $cff_likebox_styles = 'style="';
     if ( !empty($cff_likebox_bg_color) ) $cff_likebox_styles .=  'background-color:#' . $cff_likebox_bg_color . '; margin-left: 0; ';
     $cff_likebox_styles .= '"';
+    //Video
+    //Dimensions
+    $cff_video_width = 640;
+    $cff_video_height = $atts[ 'videoheight' ];
+    
+    if ($cff_thumb_layout) {
+        if(empty($cff_video_height)) $cff_video_height = 100;
+    } else if ($cff_half_layout) {
+        if(empty($cff_video_height)) $cff_video_height = 180;
+    } else {
+        if(empty($cff_video_height)) $cff_video_height = 360;
+    }
+    //Action
+    $cff_video_action = $atts[ 'videoaction' ];
     //Separating Line
     $cff_sep_color = $atts[ 'sepcolor' ];
     if (empty($cff_sep_color)) $cff_sep_color = 'ddd';
@@ -202,20 +292,18 @@ function display_cff($atts) {
     $cff_item_styles = 'style="';
     $cff_item_styles .= 'border-bottom: ' . $cff_sep_size . 'px solid #' . $cff_sep_color . '; ';
     $cff_item_styles .= '"';
-    
-    
-
+   
     //Text limits
     $title_limit = $atts['textlength'];
-    $body_limit = $atts['desclength']; ?>
-    <?php //Assign the Access Token and Page ID variables
+    if (!isset($title_limit)) $title_limit = 9999;
+    $body_limit = $atts['desclength'];
+    //Assign the Access Token and Page ID variables
     $access_token = get_option('cff_access_token');
     $page_id = $atts['id'];
-
-    //Get show posts attribute. If not set then default to 25.
+    //Get show posts attribute. If not set then default to 25
     $show_posts = $atts['num'];
-    if (empty($show_posts) || $show_posts == '') $show_posts = 25;
-
+    if (empty($show_posts)) $show_posts = 25;
+    if ( $show_posts == 0 || $show_posts == undefined ) $show_posts = 25;
     //Check whether the Access Token is present and valid
     if ($access_token == '') {
         echo 'Please enter a valid Access Token. You can do this in the Custom Facebook Feed plugin settings.<br /><br />';
@@ -226,226 +314,297 @@ function display_cff($atts) {
         echo "Please enter the Page ID of the Facebook feed you'd like to display.  You can do this in either the Custom Facebook Feed plugin settings or in the shortcode itself. For example [custom_facebook_feed id=<b>YOUR_PAGE_ID</b>].<br /><br />";
         return false;
     }
-
     //Use posts? or feed?
     $show_others = $atts['others'];
     $graph_query = 'posts';
     if ($show_others) $graph_query = 'feed';
-    
-    //Get the contents of the Facebook page
-    $json_object = fetchUrl('https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token);
-    //Interpret data with JSON
-    $FBdata = json_decode($json_object);
+    $cff_post_limit = $atts['limit'];
+    //Calculate the cache time in seconds
+    if($cff_cache_time_unit == 'minutes') $cff_cache_time_unit = 60;
+    if($cff_cache_time_unit == 'hours') $cff_cache_time_unit = 60*60;
+    if($cff_cache_time_unit == 'days') $cff_cache_time_unit = 60*60*24;
+    $cache_seconds = $cff_cache_time * $cff_cache_time_unit;
     //Set like box variable
-    $like_box = '<div class="cff-likebox" ' . $cff_likebox_styles . '><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" width="300" show_faces="false" stream="false" header="true"></fb:like-box></div>';
-    
+    $like_box = '<div class="cff-likebox';
+    if ($cff_like_box_outside) $like_box .= ' outside';
+    $like_box .= ($cff_like_box_position == 'top') ? ' top' : ' bottom';
+    $like_box .= '"' . $cff_likebox_styles . '><script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" width="300" show_faces="false" stream="false" header="true"></fb:like-box></div>';
     //***START FEED***
-    //Create HTML
-    $content = '<div id="cff" rel="'.$title_limit.'" class="';
+    $content = '';
+    //Add like box to the outside of the top of feed
+    if ($cff_like_box_position == 'top' && $cff_show_like_box && $cff_like_box_outside) $content .= $like_box;
+    //Create CFF container HTML
+    $content .= '<div id="cff" rel="'.$title_limit.'" class="';
+    if( !empty($cff_class) ) $content .= $cff_class . ' ';
     if ( !empty($cff_feed_height) ) $content .= 'fixed-height ';
-    $content .= '"' . $cff_feed_styles . '>';
-    //Add like box to top of feed
-    if ($cff_like_box_position == 'top' && $cff_show_like_box) $content .= $like_box;
+    if ( $cff_thumb_layout ) $content .= 'thumb-layout ';
+    // if ( $cff_media_medium ) $content .= 'medium-image ';
+    if ( $cff_half_layout ) $content .= 'half-layout ';
+    $content .= '" ' . $cff_feed_styles . '>';
+    //Add like box to the inside of the top of feed
+    if ($cff_like_box_position == 'top' && $cff_show_like_box && !$cff_like_box_outside) $content .= $like_box;
     //Limit var
     $i = 0;
     
-    foreach ($FBdata->data as $news )
-    {
-        //Explode News and Page ID's into 2 values
-        $PostID = explode("_", $news->id);
-        //Check the post type
-        $cff_post_type = $news->type;
-        if ($cff_post_type == 'link') {
-            $story = $news->story;
-            //Check whether it's an event
-            $created_event = 'created an event.';
-            $shared_event = 'shared an event.';
-            $created_event = stripos($story, $created_event);
-            $shared_event = stripos($story, $shared_event);
-            if ( $created_event || $shared_event ) $cff_post_type = 'event';
+    
+    //ALL POSTS
+    if (!$cff_events_only){
+
+        // Get any existing copy of our transient data
+        $transient_name = 'cff_posts_json_' . $page_id;
+        if ( false === ( $posts_json = get_transient( $transient_name ) ) || $posts_json === null ) {
+            //Get the contents of the Facebook page
+            $posts_json = fetchUrl('https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token . '&limit=' . $cff_post_limit);
+            //Cache the JSON
+            set_transient( $transient_name, $posts_json, $cache_seconds );
+        } else {
+            $posts_json = get_transient( $transient_name );
         }
-        //Check whether it's a status (author comment or like)
-        if ( ( $news->type == 'status' && !empty($news->message) ) || $news->type !== 'status' ) {
-            //If it isn't then create the post
-            //Only create posts for the amount of posts specified
-            if ( $i == $show_posts ) break;
-            $i++;
-            //********************************//
-            //***COMPILE SECTION VARIABLES***//
-            //********************************//
-
-            //Set the post link
-            if(!empty($news->link)) {
-                $link = $news->link;
-            } else {
-                //If there's no link provided then link to Facebook page
-                $link = 'http://facebook.com/' . $page_id;
+        
+        //Interpret data with JSON
+        $FBdata = json_decode($posts_json);
+        //***STARTS POSTS LOOP***
+        foreach ($FBdata->data as $news )
+        {
+            //Explode News and Page ID's into 2 values
+            $PostID = explode("_", $news->id);
+            //Check the post type
+            $cff_post_type = $news->type;
+            if ($cff_post_type == 'link') {
+                $story = $news->story;
+                //Check whether it's an event
+                $created_event = 'created an event.';
+                $shared_event = 'shared an event.';
+                $created_event = stripos($story, $created_event);
+                $shared_event = stripos($story, $shared_event);
+                if ( $created_event || $shared_event ) $cff_post_type = 'event';
             }
+            //Should we show this post or not?
+            $cff_show_post = false;
+            switch ($cff_post_type) {
+                case 'link':
+                    if ( $cff_show_links_type ) $cff_show_post = true;
+                    break;
+                case 'event':
+                    if ( $cff_show_event_type ) $cff_show_post = true;
+                    break;
+                case 'video':
+                     if ( $cff_show_video_type ) $cff_show_post = true;
+                    break;
+                case 'swf':
+                     if ( $cff_show_video_type ) $cff_show_post = true;
+                    break;
+                case 'photo':
+                     if ( $cff_show_photos_type ) $cff_show_post = true;
+                    break;
+                case 'status':
+                    //Check whether it's a status (author comment or like)
+                    if ( $cff_show_status_type && !empty($news->message) ) $cff_show_post = true;
+                    break;
+            }
+            //Is it a duplicate post?
+            if ( ($prev_post_message == $news->message) && ($prev_post_link == $news->link) && ($prev_post_description == $news->description) ) $cff_show_post = false;
+            //Check post type and display post if selected
+            if ( $cff_show_post ) {
+                //If it isn't then create the post
+                //Only create posts for the amount of posts specified
+                if ( $i == $show_posts ) break;
+                $i++;
+                //********************************//
+                //***COMPILE SECTION VARIABLES***//
+                //********************************//
 
-            //Is it a shared album?
-            $shared_album_string = 'shared an album:';
-            if (!empty($news->story)){
+                //Set the post link
+                $link = $news->link;
+                //Is it a shared album?
+                $shared_album_string = 'shared an album:';
                 $shared_album = stripos($news->story, $shared_album_string);
                 if ( $shared_album ) {
                     $link = str_replace('photo.php?','media/set/?',$link);
                 }
-            }  
-
-
-            //POST AUTHOR
-            $cff_author = '<a class="cff-author" href="http://facebook.com/' . $news->from->id . '" '.$target.' title="'.$news->from->name.' on Facebook">';
-            $cff_author .= '<img src="http://graph.facebook.com/' . $news->from->id . '/picture">';
-            $cff_author .= '<p>'.$news->from->name.'</p>';
-            $cff_author .= '</a>';
-
-
-            //POST TEXT
-            $cff_post_text = '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
-            $cff_post_text .= '<span>';
-            if ($cff_title_link) $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
-
-            if (!empty($news->story)) $post_text = $news->story;
-            if (!empty($news->message)) $post_text = $news->message;
-            if (!empty($news->name) && empty($news->story) && empty($news->message)) $post_text = $news->name;
-
-            //If the text is wrapped in a link then don't hyperlink any text within
-            if ($cff_title_link) {
-                //Wrap links in a span so we can break the text if it's too long
-                $cff_post_text .= cff_wrap_span($post_text) . ' ';
-            } else {
-                $cff_post_text .= cff_make_clickable($post_text) . ' ';
-            }
-            
-            if ($cff_title_link) $cff_post_text .= '</a>';
-            $cff_post_text .= '</span>';
-            $cff_post_text .= '</' . $cff_title_format . '>';
-
-            //DESCRIPTION
-            $cff_description = '';
-            if (!empty($news->description)) {
-                $description_text = $news->description;
-                if (!empty($body_limit)) {
-                    if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
+                //If there's no link provided then link to Facebook page
+                if (empty($news->link)) $link = 'http://facebook.com/' . $page_id;       
+                //POST AUTHOR
+                $cff_author = '<a class="cff-author" href="http://facebook.com/' . $news->from->id . '" '.$target.' title="'.$news->from->name.' on Facebook">';
+                $cff_author .= '<img src="http://graph.facebook.com/' . $news->from->id . '/picture">';
+                $cff_author .= '<p>'.$news->from->name.'</p>';
+                $cff_author .= '</a>';
+                //POST TEXT
+                $cff_post_text = '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
+                $cff_post_text .= '<span class="text">';
+                if ($cff_title_link) $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
+                if (!empty($news->story)) $post_text = $news->story;
+                if (!empty($news->message)) $post_text = $news->message;
+                if (!empty($news->name) && empty($news->story) && empty($news->message)) $post_text = $news->name;
+                //If the text is wrapped in a link then don't hyperlink any text within
+                if ($cff_title_link) {
+                    //Wrap links in a span so we can break the text if it's too long
+                    $cff_post_text .= cff_wrap_span($post_text) . ' ';
+                } else {
+                    $cff_post_text .= cff_make_clickable($post_text) . ' ';
                 }
-                $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_make_clickable($description_text) . '</span></p>';
-            }
-
-            //LINK
-            $cff_shared_link = '';
-            //Display shared link
-            if ($news->type == 'link') {
-                //Display link name and description
+                
+                if ($cff_title_link) $cff_post_text .= '</a>';
+                $cff_post_text .= '</span>';
+                //'See More' link
+                $cff_post_text .= '<span class="cff-expand">... <a href="#"><span class="more">' . $cff_see_more_text . '</span><span class="less">' . $cff_see_less_text . '</span></a></span>';
+                $cff_post_text .= '</' . $cff_title_format . '>';
+                //DESCRIPTION
+                $cff_description = '';
                 if (!empty($news->description)) {
-                    $cff_shared_link .= '<p class="text-link no-image"><a href="'.$news->link.'" '.$target.'>'. '<b>' . $news->name . '</b></a></p>';
+                    $description_text = $news->description;
+                    if (!empty($body_limit)) {
+                        if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
+                    }
+                    $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_make_clickable($description_text) . '</span></p>';
                 }
-            }
-            //DATE
-            $cff_date_formatting = $options[ 'cff_date_formatting' ];
-            $cff_date_custom = $options[ 'cff_date_custom' ];
-            $cff_date = '<p class="cff-date" '.$cff_date_styles.'>'. $cff_date_before . ' ' . cff_getdate(strtotime($news->created_time), $cff_date_formatting, $cff_date_custom) . ' ' . $cff_date_after . '</p>';
-            //EVENT
-            $cff_event = '';
-            if ($cff_show_event_title || $cff_show_event_details) {
-                //Check for media
-                if ($cff_post_type == 'event') {
-                    
-                    //Get the event object
-                    $eventID = $PostID[1];
-                    if ( $shared_event ) {
-                        //Get the event id from the event URL. eg: http://www.facebook.com/events/123451234512345/
-                        $event_url = parse_url($link);
-                        $url_parts = explode('/', $event_url['path']);
-                        //Get the id from the parts
-                        $eventID = $url_parts[count($url_parts)-2];
+                //LINK
+                $cff_shared_link = '';
+                //Display shared link
+                if ($news->type == 'link') {
+                    //Display link name and description
+                    if (!empty($news->description)) {
+                        $cff_shared_link .= '<p class="text-link ';
+                        $cff_shared_link .= 'no-image';
+                        $cff_shared_link .= '"><a href="'.$link.'" '.$target.'>'. '<b>' . $news->name . '</b></a></p>';
                     }
-                    //Get the contents of the event using the WP HTTP API
-                    $event_json = fetchUrl('https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token);
-                    //Interpret data with JSON
-                    $event_object = json_decode($event_json);
-                    
-                    //EVENT
-                    //Display the event details
-                    $cff_event .= '<div class="details">';
-                    //Show event title
-                    if ($cff_show_event_title && !empty($event_object->name)) {
-                        if ($cff_event_title_link) $cff_event .= '<a href="'.$link.'">';
-                        $cff_event .= '<' . $cff_event_title_format . ' ' . $cff_event_title_styles . '>' . $event_object->name . '</' . $cff_event_title_format . '>';
-                        if ($cff_event_title_link) $cff_event .= '</a>';
-                    }
-                    //Show event details
-                    if ($cff_show_event_details){
+                }
+                //DATE
+                $cff_date_formatting = $atts[ 'dateformat' ];
+                $cff_date_custom = $atts[ 'datecustom' ];
+                $cff_date = '<p class="cff-date" '.$cff_date_styles.'>'. $cff_date_before . ' ' . cff_getdate(strtotime($news->created_time), $cff_date_formatting, $cff_date_custom) . ' ' . $cff_date_after . '</p>';
+                //EVENT
+                $cff_event = '';
+                if ($cff_show_event_title || $cff_show_event_details) {
+                    //Check for media
+                    if ($cff_post_type == 'event') {
+                        
+                        //Get the event object
+                        $eventID = $PostID[1];
+                        if ( $shared_event ) {
+                            //Get the event id from the event URL. eg: http://www.facebook.com/events/123451234512345/
+                            $event_url = parse_url($link);
+                            $url_parts = explode('/', $event_url['path']);
+                            //Get the id from the parts
+                            $eventID = $url_parts[count($url_parts)-2];
+                        }
+                        //Get the contents of the event using the WP HTTP API
+                        $event_json = fetchUrl('https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token);
+                        //Interpret data with JSON
+                        $event_object = json_decode($event_json);
+                        //Event date
                         $event_time = $event_object->start_time;
                         //If timezone migration is enabled then remove last 5 characters
                         if ( strlen($event_time) == 24 ) $event_time = substr($event_time, 0, -5);
-
-                        //Event date
-                        $cff_event_date_formatting = $options[ 'cff_event_date_formatting' ];
-                        $cff_event_date_custom = $options[ 'cff_event_date_custom' ];
-
-                        if (!empty($event_object->location)) $cff_event .= '<p class="where" ' . $cff_event_details_styles . '>' . $event_object->location . '</p>';
-                        if (!empty($event_object->start_time)) $cff_event .= '<p class="when" ' . $cff_event_details_styles . '>' . cff_eventdate(strtotime($event_time), $cff_event_date_formatting, $cff_event_date_custom) . '</p>';
-                        if (!empty($event_object->description)){
-                            $description = $event_object->description;
-                            if (!empty($body_limit)) {
-                                if (strlen($description) > $body_limit) $description = substr($description, 0, $body_limit) . '...';
-                            }
-                            $cff_event .= '<p class="info" ' . $cff_event_details_styles . '>' . cff_make_clickable($description) . '</p>';
+                        if (!empty($event_time)) $cff_event_date = '<p class="cff-date" '.$cff_event_date_styles.'>' . cff_eventdate(strtotime($event_time), $cff_event_date_formatting, $cff_event_date_custom) . '</p>';
+                        //EVENT
+                        //Display the event details
+                        $cff_event .= '<div class="details">';
+                        //show event date above title
+                        if ($cff_event_date_position == 'above') $cff_event .= $cff_event_date;
+                        //Show event title
+                        if ($cff_show_event_title && !empty($event_object->name)) {
+                            if ($cff_event_title_link) $cff_event .= '<a href="'.$link.'">';
+                            $cff_event .= '<' . $cff_event_title_format . ' ' . $cff_event_title_styles . '>' . $event_object->name . '</' . $cff_event_title_format . '>';
+                            if ($cff_event_title_link) $cff_event .= '</a>';
                         }
+                        //show event date below title
+                        if ($cff_event_date_position !== 'above') $cff_event .= $cff_event_date;
+                        //Show event details
+                        if ($cff_show_event_details){
+                            //Location
+                            if (!empty($event_object->location)) $cff_event .= '<p class="where" ' . $cff_event_details_styles . '>' . $event_object->location . '</p>';
+                            //Description
+                            if (!empty($event_object->description)){
+                                $description = $event_object->description;
+                                if (!empty($body_limit)) {
+                                    if (strlen($description) > $body_limit) $description = substr($description, 0, $body_limit) . '...';
+                                }
+                                $cff_event .= '<p class="info" ' . $cff_event_details_styles . '>' . cff_make_clickable($description) . '</p>';
+                            }
+                        }
+                        $cff_event .= '</div>';
+                        
                     }
-                    $cff_event .= '</div>';
-                    
                 }
-            }
-            //LINK
-            //Display the link to the Facebook post or external link
-            $cff_link = '';
-            //Default link
-            if ($cff_facebook_link_text == '') $cff_facebook_link_text = 'View on Facebook';
-            $link_text = $cff_facebook_link_text;
-
-            if (!empty($news->link)) {
-                //Check whether it links to facebook or somewhere else
-                $facebook_str = 'facebook.com';
-                if(stripos($link, $facebook_str) == false) {
-                    if ($cff_view_link_text == '') $cff_view_link_text = 'View Link';
-                    $link_text = $cff_view_link_text;
+                
+                //Display the link to the Facebook post or external link
+                $cff_link = '';
+                //Default link
+                if ($cff_facebook_link_text == '') $cff_facebook_link_text = 'View on Facebook';
+                $link_text = $cff_facebook_link_text;
+                if (!empty($news->link)) {
+                    //Check whether it links to facebook or somewhere else
+                    $facebook_str = 'facebook.com';
+                    if(stripos($link, $facebook_str) == false) {
+                        if ($cff_view_link_text == '') $cff_view_link_text = 'View Link';
+                        $link_text = $cff_view_link_text;
+                    }
                 }
-            }
-            $cff_link = '<a class="cff-viewpost" href="' . $link . '" title="' . $link_text . '" ' . $target . ' ' . $cff_link_styles . '>' . $link_text . '</a>';
+                $cff_link = '<a class="cff-viewpost" href="' . $link . '" title="' . $link_text . '" ' . $target . ' ' . $cff_link_styles . '>' . $link_text . '</a>';
+                //Compile the meta and link if included
+                if ($cff_show_meta) $cff_meta_total .= $cff_meta;
+                if ($cff_show_link) $cff_meta_total .= $cff_link;
+                $cff_meta_total .= '</div>';
+                $cff_comments = '';
+                if ( !($comment_count == 0 && $cff_hide_comments) ) {
+                    //Create the comments box
+                    $cff_comments .= '<div class="comments-box" ' . $cff_meta_styles . '>';
+                    //Get the comments
+                    if (!empty($news->comments->data)){
+                        foreach ($news->comments->data as $comment_item ) {
+                            $comment = $comment_item->message;
+                            $cff_comments .= '<p><a href="http://facebook.com/'. $comment_item->from->id .'" class="name" '.$target.' ' . $cff_meta_styles . '>' . $comment_item->from->name . '</a>' . cff_make_clickable($comment) . '<span class="time">'. cff_timeSince(strtotime($comment_item->created_time)) . '</span></p>';
+                        }
+                    } else {
+                        $cff_comments .= '<p>' . $cff_nocomments_text . '</p>';
+                    }
+                    $cff_comments .= '</div>';
+                }
+                //Compile comments if meta is included
+                if ($cff_show_meta) $cff_meta_total .= $cff_comments;
+                //**************************//
+                //***CREATE THE POST HTML***//
+                //**************************//
+                //Start the container
+                $content .= '<div class="cff-item ';
+                if ($news->type == 'link') $content .= 'link-item';
+                $content .=  '" id="'. $news->id .'" ' . $cff_item_styles . '>';
+                
+                    //POST AUTHOR
+                    if($cff_show_author) $content .= $cff_author;
+                    //DATE ABOVE
+                    if ($cff_show_date && $cff_date_position == 'above') $content .= $cff_date;
+                    //POST TEXT
+                    if($cff_show_text) $content .= $cff_post_text;
+                    //DESCRIPTION
+                    if($cff_show_desc) $content .= $cff_description;
+                    //LINK
+                    if($cff_show_shared_links) $content .= $cff_shared_link;
+                    //DATE BELOW
+                    if ($cff_show_date && $cff_date_position == 'below') $content .= $cff_date;
+                    //VIEW ON FACEBOOK LINK
+                    if($cff_show_link) $content .= $cff_link;
+                
+                //EVENT
+                if($cff_show_event_title || $cff_show_event_details) $content .= $cff_event;
 
-
-            //**************************//
-            //***CREATE THE POST HTML***//
-            //**************************//
-            //Start the container
-            $content .= '<div class="cff-item ';
-            if ($news->type == 'link') $content .= 'link-item';
-            $content .=  '" ' . $cff_item_styles . '>';
-            //POST AUTHOR
-            if($cff_show_author) $content .= $cff_author;
-            //DATE ABOVE
-            if($cff_show_date && $cff_date_position == 'above') $content .= $cff_date;
-            //POST TEXT
-            if($cff_show_text) $content .= $cff_post_text;
-            //DESCRIPTION
-            if($cff_show_desc) $content .= $cff_description;
-            //SHARED LINK
-            if($cff_show_desc) $content .= $cff_shared_link;
-            //EVENT
-            if($cff_show_event_title || $cff_show_event_details) $content .= $cff_event;
-            //DATE BELOW
-            if($cff_show_date && $cff_date_position == 'below') $content .= $cff_date;
-            //VIEW ON FACEBOOK LINK
-            if($cff_show_link) $content .= $cff_link;
-            
-            //End the post item
-            $content .= '</div><div class="clear"></div>';
-        } // End status check
-    } // End the loop
-    //Add the Like Box
-    if ($cff_like_box_position == 'bottom' && $cff_show_like_box) $content .= $like_box;
+                //End the post item
+                $content .= '</div><div class="clear"></div>';
+            } // End post type check
+            $prev_post_message = $news->message;
+            $prev_post_link = $news->link;
+            $prev_post_description = $news->description;
+        } // End the loop
+    } // End ALL POSTS
+    //Load more posts
+    // $content .= '<button class="loadmore">Load More Posts</button>';
+    //Add the Like Box inside
+    if ($cff_like_box_position == 'bottom' && $cff_show_like_box && !$cff_like_box_outside) $content .= $like_box;
     //End the feed
     $content .= '</div><div class="clear"></div>';
+    //Add the Like Box outside
+    if ($cff_like_box_position == 'bottom' && $cff_show_like_box && $cff_like_box_outside) $content .= $like_box;
     //Return our feed HTML to display
     return $content;
 }
@@ -484,27 +643,21 @@ function auto_link_text_callback($matches) {
     $max_depth_if_over_length = 2;
     $ellipsis = '&hellip;';
     $target = 'target="_blank"';
-
     $url_full = $matches[0];
     $url_short = '';
-
     if (strlen($url_full) > $max_url_length) {
         $parts = parse_url($url_full);
         $url_short = $parts['scheme'] . '://' . preg_replace('/^www\./', '', $parts['host']) . '/';
-
         $path_components = explode('/', trim($parts['path'], '/'));
         foreach ($path_components as $dir) {
             $url_string_components[] = $dir . '/';
         }
-
         if (!empty($parts['query'])) {
             $url_string_components[] = '?' . $parts['query'];
         }
-
         if (!empty($parts['fragment'])) {
             $url_string_components[] = '#' . $parts['fragment'];
         }
-
         for ($k = 0; $k < count($url_string_components); $k++) {
             $curr_component = $url_string_components[$k];
             if ($k >= $max_depth_if_over_length || strlen($url_short) + strlen($curr_component) > $max_url_length) {
@@ -517,15 +670,11 @@ function auto_link_text_callback($matches) {
             }
             $url_short .= $curr_component;
         }
-
     } else {
         $url_short = $url_full;
     }
-
-    return "<a class='break-word' rel=\"nofollow\" href=\"$url_full\">$url_short</a>";
+    return "<a class='break-word' rel=\"nofollow\" href=\"$url_full\">$url_full</a>";
 }
-
-
 //Make links into span instead when the post text is made clickable
 function cff_wrap_span($text) {
     $pattern  = '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#';
@@ -536,27 +685,21 @@ function cff_wrap_span_callback($matches) {
     $max_depth_if_over_length = 2;
     $ellipsis = '&hellip;';
     $target = 'target="_blank"';
-
     $url_full = $matches[0];
     $url_short = '';
-
     if (strlen($url_full) > $max_url_length) {
         $parts = parse_url($url_full);
         $url_short = $parts['scheme'] . '://' . preg_replace('/^www\./', '', $parts['host']) . '/';
-
         $path_components = explode('/', trim($parts['path'], '/'));
         foreach ($path_components as $dir) {
             $url_string_components[] = $dir . '/';
         }
-
         if (!empty($parts['query'])) {
             $url_string_components[] = '?' . $parts['query'];
         }
-
         if (!empty($parts['fragment'])) {
             $url_string_components[] = '#' . $parts['fragment'];
         }
-
         for ($k = 0; $k < count($url_string_components); $k++) {
             $curr_component = $url_string_components[$k];
             if ($k >= $max_depth_if_over_length || strlen($url_short) + strlen($curr_component) > $max_url_length) {
@@ -569,15 +712,11 @@ function cff_wrap_span_callback($matches) {
             }
             $url_short .= $curr_component;
         }
-
     } else {
         $url_short = $url_full;
     }
-
     return "<span class='break-word'>$url_short</span>";
 }
-
-
 //2013-04-28T21:06:56+0000
 //Time stamp function - used for posts
 function cff_getdate($original, $date_format, $custom_date) {
@@ -619,7 +758,6 @@ function cff_getdate($original, $date_format, $custom_date) {
         case '13':
             $print = date('d/m/y', $original);
             break;
-
         default:
             
             $periods = array("second", "minute", "hour", "day", "week", "month", "year", "decade");
@@ -643,11 +781,8 @@ function cff_getdate($original, $date_format, $custom_date) {
             if($difference != 1) {
                 $periods[$j].= "s";
             }
-
             $print = "$difference $periods[$j] {$tense}";
-
             break;
-
         
     }
     if ( !empty($custom_date) ){
@@ -655,8 +790,6 @@ function cff_getdate($original, $date_format, $custom_date) {
     }
     return $print;
 }
-
-
 function cff_eventdate($original, $date_format, $custom_date) {
     switch ($date_format) {
         
@@ -696,7 +829,6 @@ function cff_eventdate($original, $date_format, $custom_date) {
         case '13':
             $print = date('d/m/y, g:ia', $original);
             break;
-
         default:
             $print = date('F j, Y, g:ia', $original);
             break;
@@ -706,40 +838,75 @@ function cff_eventdate($original, $date_format, $custom_date) {
     }
     return $print;
 }
-
-
-
+//Time stamp function - used for comments
+function cff_timesince($original) {
+            
+    $periods = array("second", "minute", "hour", "day", "week", "month", "year", "decade");
+    $lengths = array("60","60","24","7","4.35","12","10");
+    $now = time();
+    
+    // is it future date or past date
+    if($now > $original) {    
+        $difference = $now - $original;
+        $tense = "ago";
+    } else {
+        $difference = $original - $now;
+        $tense = "from now";
+    }
+    for($j = 0; $difference >= $lengths[$j] && $j < count($lengths)-1; $j++) {
+        $difference /= $lengths[$j];
+    }
+    
+    $difference = round($difference);
+    
+    if($difference != 1) {
+        $periods[$j].= "s";
+    }
+    return "$difference $periods[$j] {$tense}";
+            
+}
+//Use custom stripos function if it's not available (only available in PHP 5+)
+if(!is_callable('stripos')){
+    function stripos($haystack, $needle){
+        return strpos($haystack, stristr( $haystack, $needle ));
+    }
+}
 //Enqueue stylesheet
 add_action( 'wp_enqueue_scripts', 'cff_add_my_stylesheet' );
 function cff_add_my_stylesheet() {
     // Respects SSL, Style.css is relative to the current file
-    wp_register_style( 'cff', plugins_url('css/cff-style.css', __FILE__) );
+    wp_register_style( 'cff', plugins_url('css/cff-style.css?3', __FILE__) );
     wp_enqueue_style( 'cff' );
 }
-
 //Enqueue scripts
 add_action( 'wp_enqueue_scripts', 'cff_scripts_method' );
 function cff_scripts_method() {
     wp_enqueue_script(
         'cffscripts',
-        plugins_url( '/js/cff-scripts.js' , __FILE__ ),
+        plugins_url( '/js/cff-scripts.js?3' , __FILE__ ),
         array( 'jquery' )
     );
 }
-
-//Allows shortcodes in sidebar of theme
+//Allows shortcodes in theme
 add_filter('widget_text', 'do_shortcode');
 function cff_activate() {
     $options = get_option('cff_style_settings');
-    //Show all parts of the feed by default on activation
+    $options[ 'cff_show_links_type' ] = true;
+    $options[ 'cff_show_event_type' ] = true;
+    $options[ 'cff_show_video_type' ] = true;
+    $options[ 'cff_show_photos_type' ] = true;
+    $options[ 'cff_show_status_type' ] = true;
+    // Show all parts of the feed by default on activation
     $options[ 'cff_show_text' ] = true;
     $options[ 'cff_show_desc' ] = true;
+    $options[ 'cff_show_shared_links' ] = true;
     $options[ 'cff_show_date' ] = true;
+    $options[ 'cff_show_media' ] = true;
     $options[ 'cff_show_event_title' ] = true;
     $options[ 'cff_show_event_details' ] = true;
+    $options[ 'cff_show_meta' ] = true;
     $options[ 'cff_show_link' ] = true;
     $options[ 'cff_show_like_box' ] = true;
-    $options[ 'cff_sep_size' ] = '1';
     update_option( 'cff_style_settings', $options );
 }
 register_activation_hook( __FILE__, 'cff_activate' );
@@ -748,10 +915,15 @@ function cff_uninstall()
 {
     if ( ! current_user_can( 'activate_plugins' ) )
         return;
+    //Settings
     delete_option( 'cff_access_token' );
     delete_option( 'cff_page_id' );
     delete_option( 'cff_num_show' );
+    delete_option( 'cff_post_limit' );
     delete_option( 'cff_show_others' );
+    delete_option('cff_cache_time');
+    delete_option('cff_cache_time_unit');
+    //Style & Layout
     delete_option( 'cff_title_length' );
     delete_option( 'cff_body_length' );
     delete_option('cff_style_settings');
@@ -768,6 +940,22 @@ function cff_custom_css() {
     echo $cff_custom_css;
     echo "\r\n";
     echo '</style>';
+    echo "\r\n";
+}
+add_action( 'wp_footer', 'cff_js' );
+function cff_js() {
+    // $path = site_url();
+    $url = site_url();
+    $path = urlencode(ABSPATH);
+    echo '<!-- Custom Facebook Feed JS -->';
+    echo "\r\n";
+    echo '<script type="text/javascript">';
+    echo "\r\n";
+    echo 'var siteURL = "' . $url . '";';
+    echo "\r\n";
+    echo 'var rootPath = "' . $path . '";';
+    echo "\r\n";
+    echo '</script>';
     echo "\r\n";
 }
 //Comment out the line below to view errors
