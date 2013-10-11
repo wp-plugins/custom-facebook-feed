@@ -92,7 +92,6 @@ You can embed the feed directly into a template file by using the WordPress do_s
 7. Layout & Style page - Typography options
 8. Layout & Style page - Misc options
 9. It's super easy to display your Facebook feed in any page or post
-91. You can add the shortcode to a widget to display it in your sidebar, footer or any other widgetized area
 
 == Changelog ==
 
