@@ -87,14 +87,12 @@ You can embed the feed directly into a template file by using the WordPress do_s
 2. Completely customize the way your Facebook feed looks to perfectly match your site
 3. Use custom CSS to customize every part of the Facebook feed
 4. Display Facebook events
-5. Show and hide certain parts of the posts
-6. Configuring the plugin
-7. Layout & Style page - General options
-8. Layout & Style page - Post Layout options
-9. Layout & Style page - Typography options
-10. Layout & Style page - Misc options
-11. It's super easy to display your Facebook feed in any page or post
-12. You can add the shortcode to a widget to display it in your sidebar, footer or any other widgetized area
+5. Configuring the plugin
+6. Layout & Style page - General options
+7. Layout & Style page - Typography options
+8. Layout & Style page - Misc options
+9. It's super easy to display your Facebook feed in any page or post
+91. You can add the shortcode to a widget to display it in your sidebar, footer or any other widgetized area
 
 == Changelog ==
 
