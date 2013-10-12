@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status
 Requires at least: 3.0
 Tested up to: 3.6.1
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,7 +95,7 @@ You can embed the feed directly into a template file by using the WordPress do_s
 
 == Changelog ==
 
-= 1.6.0 =
+= 1.6.2 =
 * New: Post caching now temporarily stores your post data in your WordPress database to allow for super quick load times
 * New: Define your own caching time. Check for new posts every few seconds, minutes, hours or days. You decide.
 * New: Define your own custom text for the 'See More' and 'See Less' buttons
