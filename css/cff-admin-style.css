@@ -1,0 +1,17 @@
+#cff-admin .bump-left{
+    padding-left: 10px;
+}
+#cff-admin .tooltip{
+	display: none;
+}
+#cff-admin hr{
+	border: none;
+	margin: 25px 0;
+	border-bottom: 3px solid #eee;
+}
+#cff-admin select{
+	width: 150px;
+}
+#wpbody-content #cff-admin .metabox-holder {
+	padding-top: 0;
+}
