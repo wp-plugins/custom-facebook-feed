@@ -198,7 +198,7 @@ You can embed the feed directly into a template file by using the WordPress do_s
 * Fix: Minor bug fixes
 
 = 1.2 =
-* New: Added the ability to define a maximum length for both the post title and body text
+* New: Added the ability to define a maximum length for both the post text and description
 
 = 1.0 =
 * Launch!
