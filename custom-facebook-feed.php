@@ -354,7 +354,7 @@ function display_cff($atts) {
         $transient_name = 'cff_posts_json_' . $page_id;
         if ( false === ( $posts_json = get_transient( $transient_name ) ) || $posts_json === null ) {
             //Get the contents of the Facebook page
-            $posts_json = fetchUrl('https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token . '&limit=' . $cff_post_limit);
+            $posts_json = cff_fetchUrl('https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token . '&limit=' . $cff_post_limit);
             //Cache the JSON
             set_transient( $transient_name, $posts_json, $cache_seconds );
         } else {
@@ -489,7 +489,7 @@ function display_cff($atts) {
                             $eventID = $url_parts[count($url_parts)-2];
                         }
                         //Get the contents of the event using the WP HTTP API
-                        $event_json = fetchUrl('https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token);
+                        $event_json = cff_fetchUrl('https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token);
                         //Interpret data with JSON
                         $event_object = json_decode($event_json);
                         //Event date
@@ -609,7 +609,7 @@ function display_cff($atts) {
     return $content;
 }
 //Get JSON object of feed data
-function fetchUrl($url){
+function cff_fetchUrl($url){
     //Can we use cURL?
     if(is_callable('curl_init')){
         $ch = curl_init();
@@ -636,9 +636,9 @@ function fetchUrl($url){
 //Make links in text clickable
 function cff_make_clickable($text) {
     $pattern  = '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#';
-    return preg_replace_callback($pattern, 'auto_link_text_callback', $text);
+    return preg_replace_callback($pattern, 'cff_auto_link_text_callback', $text);
 }
-function auto_link_text_callback($matches) {
+function cff_auto_link_text_callback($matches) {
     $max_url_length = 50;
     $max_depth_if_over_length = 2;
     $ellipsis = '&hellip;';
