@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.6.2
+Version: 1.6.3
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -317,7 +317,7 @@ function display_cff($atts) {
     //Use posts? or feed?
     $show_others = $atts['others'];
     $graph_query = 'posts';
-    if ($show_others) $graph_query = 'feed';
+    if ($show_others == 'true') $graph_query = 'feed';
     $cff_post_limit = $atts['limit'];
     //Calculate the cache time in seconds
     if($cff_cache_time_unit == 'minutes') $cff_cache_time_unit = 60;
@@ -349,16 +349,20 @@ function display_cff($atts) {
     
     //ALL POSTS
     if (!$cff_events_only){
-
-        // Get any existing copy of our transient data
-        $transient_name = 'cff_posts_json_' . $page_id;
-        if ( false === ( $posts_json = get_transient( $transient_name ) ) || $posts_json === null ) {
-            //Get the contents of the Facebook page
-            $posts_json = cff_fetchUrl('https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token . '&limit=' . $cff_post_limit);
-            //Cache the JSON
-            set_transient( $transient_name, $posts_json, $cache_seconds );
+        //Don't use caching if the cache time is set to zero
+        if ($cff_cache_time != 0){
+            // Get any existing copy of our transient data
+            $transient_name = 'cff_'. $graph_query .'_json_' . $page_id;
+            if ( false === ( $posts_json = get_transient( $transient_name ) ) || $posts_json === null ) {
+                //Get the contents of the Facebook page
+                $posts_json = cff_fetchUrl('https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token . '&limit=' . $cff_post_limit);
+                //Cache the JSON
+                set_transient( $transient_name, $posts_json, $cache_seconds );
+            } else {
+                $posts_json = get_transient( $transient_name );
+            }
         } else {
-            $posts_json = get_transient( $transient_name );
+            $posts_json = cff_fetchUrl('https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token . '&limit=' . $cff_post_limit);
         }
         
         //Interpret data with JSON
@@ -397,6 +401,9 @@ function display_cff($atts) {
                 case 'photo':
                      if ( $cff_show_photos_type ) $cff_show_post = true;
                     break;
+                case 'offer':
+                     $cff_show_post = true;
+                    break;
                 case 'status':
                     //Check whether it's a status (author comment or like)
                     if ( $cff_show_status_type && !empty($news->message) ) $cff_show_post = true;
@@ -413,7 +420,6 @@ function display_cff($atts) {
                 //********************************//
                 //***COMPILE SECTION VARIABLES***//
                 //********************************//
-
                 //Set the post link
                 $link = $news->link;
                 //Is it a shared album?
@@ -435,7 +441,8 @@ function display_cff($atts) {
                 if ($cff_title_link) $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
                 if (!empty($news->story)) $post_text = $news->story;
                 if (!empty($news->message)) $post_text = $news->message;
-                if (!empty($news->name) && empty($news->story) && empty($news->message)) $post_text = $news->name;
+                //Use the name if neither the story or message are available, or if the post type is an offer
+                if ( (!empty($news->name) && empty($news->story) && empty($news->message)) || $cff_post_type == 'offer') $post_text = $news->name;
                 //If the text is wrapped in a link then don't hyperlink any text within
                 if ($cff_title_link) {
                     //Wrap links in a span so we can break the text if it's too long
@@ -451,7 +458,8 @@ function display_cff($atts) {
                 $cff_post_text .= '</' . $cff_title_format . '>';
                 //DESCRIPTION
                 $cff_description = '';
-                if (!empty($news->description)) {
+                //Use the description if it's available and the post type isn't set to offer (offer description isn't useful)
+                if (!empty($news->description) && $cff_post_type != 'offer') {
                     $description_text = $news->description;
                     if (!empty($body_limit)) {
                         if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
@@ -541,6 +549,7 @@ function display_cff($atts) {
                         $link_text = $cff_view_link_text;
                     }
                 }
+                if ($cff_post_type == 'offer') $link_text = 'View Offer';
                 $cff_link = '<a class="cff-viewpost" href="' . $link . '" title="' . $link_text . '" ' . $target . ' ' . $cff_link_styles . '>' . $link_text . '</a>';
                 //Compile the meta and link if included
                 if ($cff_show_meta) $cff_meta_total .= $cff_meta;
@@ -583,14 +592,13 @@ function display_cff($atts) {
                     if($cff_show_shared_links) $content .= $cff_shared_link;
                     //DATE BELOW
                     if ($cff_show_date && $cff_date_position == 'below') $content .= $cff_date;
+                    //EVENT
+                    if($cff_show_event_title || $cff_show_event_details) $content .= $cff_event;
                     //VIEW ON FACEBOOK LINK
                     if($cff_show_link) $content .= $cff_link;
                 
-                //EVENT
-                if($cff_show_event_title || $cff_show_event_details) $content .= $cff_event;
-
                 //End the post item
-                $content .= '</div><div class="clear"></div>';
+                $content .= '</div><div class="cff-clear"></div>';
             } // End post type check
             $prev_post_message = $news->message;
             $prev_post_link = $news->link;
@@ -602,7 +610,7 @@ function display_cff($atts) {
     //Add the Like Box inside
     if ($cff_like_box_position == 'bottom' && $cff_show_like_box && !$cff_like_box_outside) $content .= $like_box;
     //End the feed
-    $content .= '</div><div class="clear"></div>';
+    $content .= '</div><div class="cff-clear"></div>';
     //Add the Like Box outside
     if ($cff_like_box_position == 'bottom' && $cff_show_like_box && $cff_like_box_outside) $content .= $like_box;
     //Return our feed HTML to display
@@ -871,6 +879,10 @@ if(!is_callable('stripos')){
         return strpos($haystack, stristr( $haystack, $needle ));
     }
 }
+
+// remove_filter( 'the_content', 'wpautop' );
+// add_filter( 'the_content', 'wpautop', 99 );
+
 //Enqueue stylesheet
 add_action( 'wp_enqueue_scripts', 'cff_add_my_stylesheet' );
 function cff_add_my_stylesheet() {
@@ -958,6 +970,7 @@ function cff_js() {
     echo '</script>';
     echo "\r\n";
 }
+
 //Comment out the line below to view errors
 error_reporting(0);
 ?>

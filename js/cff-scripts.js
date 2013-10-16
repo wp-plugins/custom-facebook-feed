@@ -1,17 +1,22 @@
 jQuery(document).ready(function() {
-
-	//Wpautop fix
-	if( jQuery('.cff-viewpost').parent('p').length ){
-		jQuery('.cff-viewpost').unwrap('p');
-	}
-	if( jQuery('#cff .link').parent('p').length ){
-		jQuery('#cff .link').unwrap('p');
-	}
 	
 	jQuery('#cff .cff-item').each(function(){
+		var $self = jQuery(this);
+
+		//Wpautop fix
+		if( $self.find('.cff-viewpost').parent('p').length ){
+			$self.find('.cff-viewpost').unwrap('p');
+		}
+		if( $self.find('.cff-author').parent('p').length ){
+			$self.find('.cff-author').eq(1).unwrap('p');
+			$self.find('.cff-author').eq(1).remove();
+		}
+		if( $self.find('#cff .link').parent('p').length ){
+			$self.find('#cff .link').unwrap('p');
+		}
+
 		//Expand post
-		var $self = jQuery(this),
-			expanded = false,
+		var expanded = false,
 			$post_text = $self.find('.cff-post-text .text'),
 			text_limit = $self.closest('#cff').attr('rel');
 		if (typeof text_limit === 'undefined' || text_limit == '') text_limit = 99999;
@@ -45,5 +50,4 @@ jQuery(document).ready(function() {
 			}
 		});
 	});
-
 });

@@ -120,7 +120,7 @@
   float: left;
   clear: none;
   width: 100%;
-  padding: 0 0 10px 0;
+  padding: 10px 0 0 0;
 }
 #cff .details h5{
   margin: 0 0 5px 0;
@@ -137,7 +137,6 @@
 #cff .details .when{
   /*font-weight: bold;*/
 }
-
 /* View on Facebook / View Link text */
 #cff .cff-viewpost{
   float: right;
@@ -162,14 +161,14 @@
   margin-top: 10px;
 }
 /* Clear fix */
-.clear:after {
+.cff-clear:after {
     clear: both;
     content: ".";
     display: block;
     height: 0;
     visibility: hidden;
 }
-.clear {
+.cff-clear {
     display: inline-block;
     display: block;
 }
