@@ -1,6 +1,5 @@
 === Custom Facebook Feed ===
 Contributors: smashballoon
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8G3NJYS7V85RG
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
 Requires at least: 3.0
 Tested up to: 3.6.1
