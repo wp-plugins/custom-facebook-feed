@@ -25,7 +25,7 @@
 /*** TYPOGRAPHY ***/
 /******************/
 /*See more/less links*/
-#cff .less{
+#cff .cff-less{
   display: none;
 }
 /* Links */
@@ -82,7 +82,7 @@
 /*************/
 /*** MEDIA ***/
 /*************/
-#cff .break-word{
+#cff .cff-break-word{
   word-break: break-all;
 }
 /* Link */
@@ -94,51 +94,52 @@
   font-weight: normal;
 }
 /*Link image*/
-#cff .link{
+#cff .cff-link{
   float: left;
   clear: both;
   max-width: 20%;
   margin-top: 10px;
 }
-#cff .link img{
+#cff .cff-link img{
   max-width: 100%;
 }
 /*Link text*/
-#cff .text-link{
+#cff .cff-text-link{
   float: left;
   clear: none;
   width: 72%;
   margin-left: 3%;
   padding: 5px 0 10px 0;
 }
-#cff .text-link.no-image{
+#cff .cff-text-link.cff-no-image{
   width: 100%;
   margin-left: 0;
 }
 /* Feed events */
-#cff .details{
+#cff .cff-details{
   float: left;
   clear: none;
   width: 100%;
   padding: 10px 0 0 0;
 }
-#cff .details h5{
+#cff .cff-details h5{
   margin: 0 0 5px 0;
   font-size: 16px;
 }
-#cff .details p{
+#cff .cff-details p{
   font-size: 14px;
 }
-#cff .details .info{
+#cff .cff-details .cff-info{
   padding: 10px 0 0 0;
   line-height: 1.2;
 }
-#cff .details .where,
-#cff .details .when{
+#cff .cff-details .cff-where,
+#cff .cff-details .cff-when{
   /*font-weight: bold;*/
 }
 /* View on Facebook / View Link text */
-#cff .cff-viewpost{
+#cff .cff-viewpost-link,
+#cff .cff-viewpost-facebook{
   float: right;
   clear: none;
   padding-top: 12px;
@@ -154,10 +155,10 @@
   margin-left: -10px;
 }
 /*Like box is not inside of #cff*/
-.cff-likebox.top.outside{
+.cff-likebox.cff-top.cff-outside{
   margin-bottom: 10px;
 }
-.cff-likebox.bottom.outside{
+.cff-likebox.cff-bottom.cff-outside{
   margin-top: 10px;
 }
 /* Clear fix */
@@ -175,7 +176,7 @@
 /*********************/
 /*** STYLE OPTIONS ***/
 /*********************/
-#cff.fixed-height{
+#cff.cff-fixed-height{
   overflow: hidden;
   overflow-y: auto;
   padding: 5px 10px;

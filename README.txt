@@ -2,8 +2,8 @@
 Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
 Requires at least: 3.0
-Tested up to: 3.7.0
-Stable tag: 1.6.3
+Tested up to: 3.7.1
+Stable tag: 1.6.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,7 +11,13 @@ The Custom Facebook Feed allows you to display a completely customizable Faceboo
 
 == Description ==
 
-Display a **completely customizable**, **responsive** and **search engine crawlable** version of your Facebook feed on your website. Completely match the look and feel of the site!
+Display a **completely customizable**, **responsive** and **search engine crawlable** version of your Facebook feed on your website. Completely match the look and feel of the site with tons of customization options!
+
+*"The perfect plugin with amazing support! What else do you want? Get it!"* - [JoeJeffries](http://wordpress.org/support/topic/you-dont-already-have-this)
+
+*"Loving the Facebook feed plugin from @smashballoon. It's gonna transform my work's website! Great customer service too :)"* - [Grace Snow](https://twitter.com/GraceSnow/statuses/365915197149429760)
+
+*"I tried a few other Facebook plugins but this was by far the simplest and easiest to use. The others were quite confusing or didn't let you change even the simplest things. This plugin lets you change literally every part of it. Didn't have any issues setting it up at all and it's working great. Keep up the good work!"* [Ben Donald](http://wordpress.org/support/topic/simple-to-set-up-and-looks-great)
 
 = Features =
 
@@ -32,8 +38,9 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Use the shortcode options to style multiple Facebook feeds in completely different ways
 * Select the number of Facebook posts to display
 * Set a maximum character length for both the text and descriptions of your Facebook posts
+* Localization support
 
-To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options and more then [upgrade to the Pro version](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). Try out the [Pro demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
+To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options, post filtering by type or #hashtag/string and more then [upgrade to the Pro version](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). Try out the [Pro demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
 
 == Installation ==
 
@@ -67,11 +74,11 @@ Yep. You set your default Facebook page ID in the plugin's settings but then you
 
 = Can I show photos and videos in my Custom Facebook feed? =
 
-This free plugin only allows you to display textual updates from your Facebook feed. To display photos and videos in your feed you need to upgrade to the PRO version of the plugin. Try out a demo of the PRO version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the PRO version [here](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed PRO").
+This free plugin only allows you to display textual updates from your Facebook feed. To display photos and videos in your feed you need to upgrade to the Pro version of the plugin. Try out a demo of the Pro version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the Pro version [here](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
 
 = Can I show the comments associated with each Facebook post? =
 
-For this feature please upgrade to the [PRO version of the plugin](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed PRO").
+For this feature please upgrade to the [Pro version of the plugin](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro).
 
 = Is the content of my Custom Facebook Feed crawlable by search engines? =
 
@@ -94,6 +101,14 @@ You can embed your Facebook feed directly into a template file by using the Word
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 1.6.4 =
+* New: Added localization support. Full support for various languages coming soon
+* New: Added CSS classes to different post types to allow for different styling based on post type
+* New: Option to link statuses to either the status post itself or the directly to the page/timeline
+* New: Added option to add thumbnail faces of fans to the Like box and define a width
+* Tweak: Added separate classes to 'View on Facebook' and 'View Link' links so that they can be targeted with CSS
+* Tweak: Prefixed every CSS class to prevent styling conflicts with theme stylesheets. Please note that if you used custom CSS to style parts of the feed that the CSS classes are now prefixed with 'cff-' to prevent theme conflicts. Eg. '.more' is now '.cff-more'.
 
 = 1.6.3 =
 * New: Added support for Facebook 'Offers'
