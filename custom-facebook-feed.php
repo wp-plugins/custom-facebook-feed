@@ -326,7 +326,7 @@ function display_cff($atts) {
     //Use posts? or feed?
     $show_others = $atts['others'];
     $graph_query = 'posts';
-    if ($show_others == true || $show_others == 'true') $graph_query = 'feed';
+    if ($show_others == 'on' || $show_others == 'true' || $show_others == true) $graph_query = 'feed';
     $cff_post_limit = $atts['limit'];
     //Calculate the cache time in seconds
     if($cff_cache_time_unit == 'minutes') $cff_cache_time_unit = 60;
