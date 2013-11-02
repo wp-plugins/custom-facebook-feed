@@ -143,7 +143,7 @@ function cff_settings_page() {
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Show posts by others on my page'); ?></th>
+                        <th scope="row"><?php _e('Show posts by others on my page'); ?><br /><i style="color: #666; font-size: 11px;"><?php _e('(Check this if using a group)'); ?></i></th>
                         <td>
                             <input name="cff_show_others" type="checkbox" id="cff_show_others" <?php if($cff_show_others_val == true) echo "checked"; ?> />
                             <i style="color: #666; font-size: 11px;"><?php _e('By default only posts by the page owner will be shown. Check this box to also show posts by others.'); ?></i>
