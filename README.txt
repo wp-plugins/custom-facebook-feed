@@ -1,13 +1,13 @@
 === Custom Facebook Feed ===
 Contributors: smashballoon
-Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
+Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, groups, status, posts
 Requires at least: 3.0
 Tested up to: 3.7.1
-Stable tag: 1.6.4.1
+Stable tag: 1.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Custom Facebook Feed allows you to display a completely customizable Facebook feed of any public Facebook page on your website.
+The Custom Facebook Feed allows you to display a completely customizable Facebook feed of any public Facebook page or group on your website.
 
 == Description ==
 
@@ -24,7 +24,7 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * **Completely Customizable** - By default the Facebook feed will adopt the style of your website, but can be completely customized to look however you like - with tons of styling and customization options!
 * Facebook feed content is **crawlable by search engines** adding SEO value to your site - other Facebook plugins embed the feed using iframes which are not crawlable
 * Completely **responsive** and mobile optimized - layout looks great on any screen size and in any container width
-* Display **feeds from multiple different Facebook pages** and use the shortcode to embed them into a page, post or widget anywhere on your site
+* Display **feeds from multiple different Facebook pages/groups** and use the shortcode to embed them into a page, post or widget anywhere on your site
 * Show **events** from your Facebook feed with name, date/time, location and description
 * Add your own **custom CSS**
 * **Caching** means that your Facebook posts load lightning fast. Set your own caching time - check for new posts on Facebook every few seconds, minutes, hours or days. You decide.
@@ -56,9 +56,11 @@ To display photos, videos, the number of likes, shares and comments for each Fac
 
 If you have a Facebook page with a URL like this: `https://www.facebook.com/Your_Page_Name` then the Page ID is just `Your_Page_Name`.  If your Facebook page URL is structured like this: `https://www.facebook.com/pages/Your_Page_Name/123654123654123` then the Page ID is actually the number at the end, so in this case `123654123654123`.
 
+If you have a Facebook group with a URL like this: `https://www.facebook.com/groups/123654123654123`, then the Page ID is simply `123654123654123`.
+
 = Are there any limitations on which Facebook page feeds I can display? =
 
-The Facebook feed you're trying to display has to be from a publicly accessible Facebook page. This means that you can't display the feed from your own personal Facebook profile or Facebook group. This is to do with Facebook's privacy policies. You can't display a non-public Facebook feed publicly.
+The Facebook feed you're trying to display has to be from a publicly accessible Facebook page or group. This means that you can't display the feed from your own personal Facebook profile or private Facebook group. This is to do with Facebook's privacy policies. You can't display a non-public Facebook feed publicly.
 
 If your Facebook page has any restrictions on it (age, for example) then it means that people have to be signed into Facebook in order to view your page. This isn't desirable for most Facebook pages as it means that it isn't accessible by people who don't have a Facebook account and that your Facebook page can't be crawled and indexed by search engines.
 
@@ -68,9 +70,14 @@ An easy way to determine whether your Facebook page is set to public is to sign 
 
 An Access Token is required by Facebook in order to access their feeds.  Don't worry, it's easy to get one.  Just follow the step-by-step instructions [here](http://smashballoon.com/custom-facebook-feed/access-token/ "Getting an Access Token"). to get yours. Your Access Token will never expire.
 
-= Can I display feeds from multiple Facebook pages? =
+= Can I display feeds from multiple Facebook pages or groups? =
 
 Yep. You set your default Facebook page ID in the plugin's settings but then you can define different Facebook page IDs in the shortcodes you use to show multiple feeds from different Facebook pages. Just use the id option in your shortcode like so: id=another_page_id.
+
+= Why isn't the feed from my group displaying? =
+
+Firstly, check that your group is public and not a private group.
+Secondly, be sure to check the 'Show posts by others on my page' option in the Custom Facebook Feed settings page.
 
 = Can I show photos and videos in my Custom Facebook feed? =
 
@@ -102,7 +109,8 @@ You can embed your Facebook feed directly into a template file by using the Word
 
 == Changelog ==
 
-= 1.6.4.1 =
+= 1.6.5 =
+* New: Now works with groups.
 * Fix: Fixed an issue with the 'Show posts by others' option not working correctly in the previous version.
 
 = 1.6.4 =

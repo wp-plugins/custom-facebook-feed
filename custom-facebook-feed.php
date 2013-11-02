@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.6.4.1
+Version: 1.6.5
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
