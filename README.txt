@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
 Requires at least: 3.0
 Tested up to: 3.7.1
-Stable tag: 1.6.5.1
+Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 
 *"Loving the Facebook feed plugin from @smashballoon. It's gonna transform my work's website! Great customer service too :)"* - [Grace Snow](https://twitter.com/GraceSnow/statuses/365915197149429760)
 
-*"I tried a few other Facebook plugins but this was by far the simplest and easiest to use. The others were quite confusing or didn't let you change even the simplest things. This plugin lets you change literally every part of it. Didn't have any issues setting it up at all and it's working great. Keep up the good work!"* [Ben Donald](http://wordpress.org/support/topic/simple-to-set-up-and-looks-great)
+*"I tried a few other Facebook plugins but this was by far the simplest and easiest to use. The others were quite confusing or didn't let you change even the simplest things. This plugin lets you change literally every part of it. Didn't have any issues setting it up at all and it's working great. Keep up the good work!"* - [Ben Donald](http://wordpress.org/support/topic/simple-to-set-up-and-looks-great)
 
 = Features =
 
@@ -109,7 +109,7 @@ You can embed your Facebook feed directly into a template file by using the Word
 
 == Changelog ==
 
-= 1.6.5.1 =
+= 1.6.6 =
 * New: Now works with groups.
 * Fix: Fixed an issue with the 'Show posts by others' option not working correctly in the previous version.
 
