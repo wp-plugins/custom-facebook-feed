@@ -7,7 +7,7 @@ Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Custom Facebook Feed allows you to display a completely customizable Facebook feed of any public Facebook page or group on your website.
+The Custom Facebook Feed allows you to display a completely customizable Facebook feed of any public Facebook page or group on your website
 
 == Description ==
 
