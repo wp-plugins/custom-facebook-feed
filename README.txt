@@ -110,8 +110,8 @@ You can embed your Facebook feed directly into a template file by using the Word
 == Changelog ==
 
 = 1.6.6 =
-* New: Now works with groups.
-* Fix: Fixed an issue with the 'Show posts by others' option not working correctly in the previous version.
+* New: Now works with groups
+* Fix: Fixed an issue with the 'Show posts by others' option not working correctly in the previous version
 
 = 1.6.4 =
 * New: Added localization support. Full support for various languages coming soon
