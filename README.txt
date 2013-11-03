@@ -1,6 +1,6 @@
 === Custom Facebook Feed ===
 Contributors: smashballoon
-Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, groups, status, posts
+Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
 Requires at least: 3.0
 Tested up to: 3.7.1
 Stable tag: 1.6.5.1
