@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
 Requires at least: 3.0
 Tested up to: 3.7.1
-Stable tag: 1.6.6.2
+Stable tag: 1.6.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -109,7 +109,7 @@ You can embed your Facebook feed directly into a template file by using the Word
 
 == Changelog ==
 
-= 1.6.6.2 =
+= 1.6.6.3 =
 * New: Added support for group events
 
 = 1.6.6.1 =
