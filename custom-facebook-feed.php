@@ -31,12 +31,7 @@ function display_cff($atts) {
     //Style options
     $options = get_option('cff_style_settings');
     //Create the types string to set as shortcode default
-    if($options[ 'cff_show_links_type' ]) $type_string .= 'links,';
-    if($options[ 'cff_show_event_type' ]) $type_string .= 'events,';
-    if($options[ 'cff_show_video_type' ]) $type_string .= 'videos,';
-    if($options[ 'cff_show_photos_type' ]) $type_string .= 'photos,';
-    if($options[ 'cff_show_status_type' ]) $type_string .= 'statuses,';
-    //Create the types string to set as shortcode default
+    $include_string = '';
     if($options[ 'cff_show_text' ]) $include_string .= 'text,';
     if($options[ 'cff_show_desc' ]) $include_string .= 'desc,';
     if($options[ 'cff_show_shared_links' ]) $include_string .= 'sharedlinks,';
@@ -64,7 +59,6 @@ function display_cff($atts) {
         'showauthor' => $options[ 'cff_show_author' ],
         'class' => $options[ 'cff_class' ],
         'layout' => $options[ 'cff_preset_layout' ],
-        'type' => $type_string,
         'include' => $include_string,
         //Typography
         'seemoretext' => $options[ 'cff_see_more_text' ],
@@ -148,12 +142,8 @@ function display_cff($atts) {
     $cff_like_box_position = $atts[ 'likeboxpos' ];
     $cff_like_box_outside = $atts[ 'likeboxoutside' ];
     //Open links in new window?
-    $cff_open_links = $options[ 'cff_open_links' ];
     $target = 'target="_blank"';
-    if ($cff_open_links) $target = 'target="_blank"';
     /********** POST TYPES **********/
-    $cff_types = $atts[ 'type' ];
-    //Look for non-plural version of string in the types string in case user specifies singular in shortcode
     $cff_show_links_type = true;
     $cff_show_event_type = true;
     $cff_show_video_type = true;
@@ -283,13 +273,6 @@ function display_cff($atts) {
     $cff_video_width = 640;
     $cff_video_height = $atts[ 'videoheight' ];
     
-    if ($cff_thumb_layout) {
-        if(empty($cff_video_height)) $cff_video_height = 100;
-    } else if ($cff_half_layout) {
-        if(empty($cff_video_height)) $cff_video_height = 180;
-    } else {
-        if(empty($cff_video_height)) $cff_video_height = 360;
-    }
     //Action
     $cff_video_action = $atts[ 'videoaction' ];
     //Separating Line
@@ -312,7 +295,7 @@ function display_cff($atts) {
     //Get show posts attribute. If not set then default to 25
     $show_posts = $atts['num'];
     if (empty($show_posts)) $show_posts = 25;
-    if ( $show_posts == 0 || $show_posts == undefined ) $show_posts = 25;
+    if ( $show_posts == 0 || $show_posts == 'undefined' ) $show_posts = 25;
     //Check whether the Access Token is present and valid
     if ($access_token == '') {
         echo 'Please enter a valid Access Token. You can do this in the Custom Facebook Feed plugin settings.<br /><br />';
@@ -353,9 +336,6 @@ function display_cff($atts) {
     $content .= '<div id="cff" rel="'.$title_limit.'" class="';
     if( !empty($cff_class) ) $content .= $cff_class . ' ';
     if ( !empty($cff_feed_height) ) $content .= 'cff-fixed-height ';
-    if ( $cff_thumb_layout ) $content .= 'cff-thumb-layout ';
-    // if ( $cff_media_medium ) $content .= 'medium-image ';
-    if ( $cff_half_layout ) $content .= 'cff-half-layout ';
     $content .= '" ' . $cff_feed_styles . '>';
     //Add like box to the inside of the top of feed
     if ($cff_like_box_position == 'top' && $cff_show_like_box && !$cff_like_box_outside) $content .= $like_box;
@@ -394,13 +374,11 @@ function display_cff($atts) {
             //Check the post type
             $cff_post_type = $news->type;
             if ($cff_post_type == 'link') {
-                $story = $news->story;
+                isset($news->story) ? $story = $news->story : $story = '';
                 //Check whether it's an event
-                $created_event = 'created an event.';
-                $shared_event = 'shared an event.';
-                $created_event = stripos($story, $created_event);
-                $shared_event = stripos($story, $shared_event);
-                if ( $created_event || $shared_event ) $cff_post_type = 'event';
+                $event_link_check = "facebook.com/events/";
+                $event_link_check = stripos($news->link, $event_link_check);
+                if ( $event_link_check ) $cff_post_type = 'event';
             }
             //Should we show this post or not?
             $cff_show_post = false;
@@ -428,8 +406,17 @@ function display_cff($atts) {
                     if ( $cff_show_status_type && !empty($news->message) ) $cff_show_post = true;
                     break;
             }
+
             //Is it a duplicate post?
-            if ( ($prev_post_message == $news->message) && ($prev_post_link == $news->link) && ($prev_post_description == $news->description) ) $cff_show_post = false;
+            if (!isset($prev_post_message)) $prev_post_message = '';
+            if (!isset($prev_post_link)) $prev_post_link = '';
+            if (!isset($prev_post_description)) $prev_post_description = '';
+            isset($news->message) ? $pm = $news->message : $pm = '';
+            isset($news->link) ? $pl = $news->link : $pl = '';
+            isset($news->description) ? $pd = $news->description : $pd = '';
+
+            if ( ($prev_post_message == $pm) && ($prev_post_link == $pl) && ($prev_post_description == $pd) ) $cff_show_post = false;
+
             //Check post type and display post if selected
             if ( $cff_show_post ) {
                 //If it isn't then create the post
@@ -440,10 +427,11 @@ function display_cff($atts) {
                 //***COMPILE SECTION VARIABLES***//
                 //********************************//
                 //Set the post link
-                $link = $news->link;
+                isset($news->link) ? $link = $news->link : $link = '';
                 //Is it a shared album?
                 $shared_album_string = 'shared an album:';
-                $shared_album = stripos($news->story, $shared_album_string);
+                isset($news->story) ? $story = $news->story : $story = '';
+                $shared_album = stripos($story, $shared_album_string);
                 if ( $shared_album ) {
                     $link = str_replace('photo.php?','media/set/?',$link);
                 }
@@ -516,15 +504,12 @@ function display_cff($atts) {
                     //Check for media
                     if ($cff_post_type == 'event') {
                         
-                        //Get the event object
-                        $eventID = $PostID[1];
-                        if ( $shared_event ) {
-                            //Get the event id from the event URL. eg: http://www.facebook.com/events/123451234512345/
-                            $event_url = parse_url($link);
-                            $url_parts = explode('/', $event_url['path']);
-                            //Get the id from the parts
-                            $eventID = $url_parts[count($url_parts)-2];
-                        }
+                        //Get the event id from the event URL. eg: http://www.facebook.com/events/123451234512345/
+                        $event_url = parse_url($link);
+                        $url_parts = explode('/', $event_url['path']);
+                        //Get the id from the parts
+                        $eventID = $url_parts[count($url_parts)-2];
+                        
                         //Get the contents of the event using the WP HTTP API
                         $event_json = cff_fetchUrl('https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token);
                         //Interpret data with JSON
@@ -582,13 +567,6 @@ function display_cff($atts) {
                 }
                 if ($cff_post_type == 'offer') $link_text = 'View Offer';
                 $cff_link = '<a class="' . $cff_viewpost_class . '" href="' . $link . '" title="' . $link_text . '" ' . $target . ' ' . $cff_link_styles . '>' . $link_text . '</a>';
-                //Compile the meta and link if included
-                if ($cff_show_meta) $cff_meta_total .= $cff_meta;
-                if ($cff_show_link) $cff_meta_total .= $cff_link;
-                $cff_meta_total .= '</div>';
-                $cff_comments = '';
-                //Compile comments if meta is included
-                if ($cff_show_meta) $cff_meta_total .= $cff_comments;
                 //**************************//
                 //***CREATE THE POST HTML***//
                 //**************************//
@@ -623,9 +601,11 @@ function display_cff($atts) {
                 //End the post item
                 $content .= '</div><div class="cff-clear"></div>';
             } // End post type check
-            $prev_post_message = $news->message;
-            $prev_post_link = $news->link;
-            $prev_post_description = $news->description;
+
+            if (isset($news->message)) $prev_post_message = $news->message;
+            if (isset($news->link))  $prev_post_link = $news->link;
+            if (isset($news->description))  $prev_post_description = $news->description;
+
         } // End the loop
     } // End ALL POSTS
     //Load more posts

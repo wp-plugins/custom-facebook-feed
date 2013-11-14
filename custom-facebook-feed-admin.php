@@ -376,8 +376,8 @@ function cff_style_page() {
         'cff_sep_size'              => '1'
     );
     //Save layout option in an array
-    add_option( 'cff_style_settings', $options );
     $options = wp_parse_args(get_option('cff_style_settings'), $defaults);
+    add_option( 'cff_style_settings', $options );
     //Set the page variables
     //Post types
     $cff_show_links_type = $options[ 'cff_show_links_type' ];
@@ -456,7 +456,6 @@ function cff_style_page() {
     $cff_like_box_faces = $options[ 'cff_like_box_faces' ];
 
     $cff_show_media = $options[ 'cff_show_media' ];
-    $cff_open_links = $options[ 'cff_open_links' ];
     $cff_bg_color = $options[ 'cff_bg_color' ];
     $cff_likebox_bg_color = $options[ 'cff_likebox_bg_color' ];
     $cff_video_height = $options[ 'cff_video_height' ];
