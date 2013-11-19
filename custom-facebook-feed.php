@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.6.6.3
+Version: 1.6.7
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -621,8 +621,11 @@ function display_cff($atts) {
 }
 //Get JSON object of feed data
 function cff_fetchUrl($url){
-    //Can we use cURL?
-    if(is_callable('curl_init')){
+    //Can we use file_get_contents?
+    if ( ini_get('allow_url_fopen') == 1 || ini_get('allow_url_fopen') === TRUE ) {
+        $feedData = @file_get_contents($url);
+    //If not then can we use cURL?
+    } elseif(is_callable('curl_init')){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -630,10 +633,7 @@ function cff_fetchUrl($url){
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $feedData = curl_exec($ch);
         curl_close($ch);
-    //If not then use file_get_contents
-    } elseif ( ini_get('allow_url_fopen') == 1 || ini_get('allow_url_fopen') === TRUE ) {
-        $feedData = @file_get_contents($url);
-    //Or else use the WP HTTP API
+    //Else use the WP HTTP API
     } else {
         if( !class_exists( 'WP_Http' ) ) include_once( ABSPATH . WPINC. '/class-http.php' );
         $request = new WP_Http;
@@ -734,40 +734,40 @@ function cff_getdate($original, $date_format, $custom_date) {
     switch ($date_format) {
         
         case '2':
-            $print = date('F jS, g:i a', $original);
+            $print = date_i18n('F jS, g:i a', $original);
             break;
         case '3':
-            $print = date('F jS', $original);
+            $print = date_i18n('F jS', $original);
             break;
         case '4':
-            $print = date('D F jS', $original);
+            $print = date_i18n('D F jS', $original);
             break;
         case '5':
-            $print = date('l F jS', $original);
+            $print = date_i18n('l F jS', $original);
             break;
         case '6':
-            $print = date('D M jS, Y', $original);
+            $print = date_i18n('D M jS, Y', $original);
             break;
         case '7':
-            $print = date('l F jS, Y', $original);
+            $print = date_i18n('l F jS, Y', $original);
             break;
         case '8':
-            $print = date('l F jS, Y - g:i a', $original);
+            $print = date_i18n('l F jS, Y - g:i a', $original);
             break;
         case '9':
-            $print = date("l M jS, 'y", $original);
+            $print = date_i18n("l M jS, 'y", $original);
             break;
         case '10':
-            $print = date('m.d.y', $original);
+            $print = date_i18n('m.d.y', $original);
             break;
         case '11':
-            $print = date('m/d/y', $original);
+            $print = date_i18n('m/d/y', $original);
             break;
         case '12':
-            $print = date('d.m.y', $original);
+            $print = date_i18n('d.m.y', $original);
             break;
         case '13':
-            $print = date('d/m/y', $original);
+            $print = date_i18n('d/m/y', $original);
             break;
         default:
             
@@ -797,7 +797,7 @@ function cff_getdate($original, $date_format, $custom_date) {
         
     }
     if ( !empty($custom_date) ){
-        $print = date($custom_date, $original);
+        $print = date_i18n($custom_date, $original);
     }
     return $print;
 }
@@ -805,47 +805,47 @@ function cff_eventdate($original, $date_format, $custom_date) {
     switch ($date_format) {
         
         case '2':
-            $print = date('F jS, g:ia', $original);
+            $print = date_i18n('F jS, g:ia', $original);
             break;
         case '3':
-            $print = date('g:ia - F jS', $original);
+            $print = date_i18n('g:ia - F jS', $original);
             break;
         case '4':
-            $print = date('g:ia, F jS', $original);
+            $print = date_i18n('g:ia, F jS', $original);
             break;
         case '5':
-            $print = date('l F jS - g:ia', $original);
+            $print = date_i18n('l F jS - g:ia', $original);
             break;
         case '6':
-            $print = date('D M jS, Y, g:iA', $original);
+            $print = date_i18n('D M jS, Y, g:iA', $original);
             break;
         case '7':
-            $print = date('l F jS, Y, g:iA', $original);
+            $print = date_i18n('l F jS, Y, g:iA', $original);
             break;
         case '8':
-            $print = date('l F jS, Y - g:ia', $original);
+            $print = date_i18n('l F jS, Y - g:ia', $original);
             break;
         case '9':
-            $print = date("l M jS, 'y", $original);
+            $print = date_i18n("l M jS, 'y", $original);
             break;
         case '10':
-            $print = date('m.d.y - g:iA', $original);
+            $print = date_i18n('m.d.y - g:iA', $original);
             break;
         case '11':
-            $print = date('m/d/y, g:ia', $original);
+            $print = date_i18n('m/d/y, g:ia', $original);
             break;
         case '12':
-            $print = date('d.m.y - g:iA', $original);
+            $print = date_i18n('d.m.y - g:iA', $original);
             break;
         case '13':
-            $print = date('d/m/y, g:ia', $original);
+            $print = date_i18n('d/m/y, g:ia', $original);
             break;
         default:
-            $print = date('F j, Y, g:ia', $original);
+            $print = date_i18n('F j, Y, g:ia', $original);
             break;
     }
     if ( !empty($custom_date) ){
-        $print = date($custom_date, $original);
+        $print = date_i18n($custom_date, $original);
     }
     return $print;
 }

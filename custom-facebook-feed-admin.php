@@ -115,7 +115,7 @@ function cff_settings_page() {
                             <!--<a href="#" id="verify-token" class="button-secondary"><?php _e('Verify Access Token'); ?></a>-->
                             &nbsp;<a class="tooltip-link" href="JavaScript:void(0);"><?php _e('How to get an Access Token'); ?></a>
                             <br /><i style="color: #666; font-size: 11px;">Eg. 1234567890123|ABC2fvp5h9tJe4-5-AbC123</i>
-                            <p class="tooltip"><?php _e("In order to use the plugin, Facebook requires you to obtain an access token to access their data.  Don't worry though, this is really easy to do.  Just follow the step-by-step instructions at the following link: <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>How to get a Facebook Access Token</a>"); ?>.</p>
+                            <p class="tooltip"><?php _e("In order to use the plugin, Facebook requires you to obtain an access token to access their data.  Don't worry though, this is really easy to do.  Just follow these <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>"); ?>.</p>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -124,7 +124,13 @@ function cff_settings_page() {
                             <input name="cff_page_id" type="text" value="<?php esc_attr_e( $page_id_val ); ?>" size="60" />
                             &nbsp;<a class="tooltip-link" href="JavaScript:void(0);"><?php _e('What\'s my Page ID?'); ?></a>
                             <br /><i style="color: #666; font-size: 11px;">Eg. 1234567890123 or smashballoon</i>
-                            <p class="tooltip"><?php _e('If you have a Facebook page with a URL like this:'); ?> <code>https://www.facebook.com/your_page_name</code> <?php _e('then the Page ID is just'); ?> <b>your_page_name</b>. <?php _e('If your page URL is structured like this:'); ?> <code>https://www.facebook.com/pages/your_page_name/123654123654123</code> <?php _e('then the Page ID is actually the number at the end, so in this case'); ?> <b>123654123654123</b>.</p>
+                            <div class="tooltip">
+                                <ul>
+                                    <li><?php _e('If you have a Facebook <b>page</b> with a URL like this: <code>https://www.facebook.com/your_page_name</code> then the Page ID is just <b>your_page_name</b>. If your page URL is structured like this: <code>https://www.facebook.com/pages/your_page_name/123654123654123</code> then the Page ID is actually the number at the end, so in this case <b>123654123654123</b>.</li>'); ?>
+                                    <li><?php _e('If you have a Facebook <b>group</b> then use <a href="http://lookup-id.com/" target="_blank" title="Find my ID">this tool</a> to find your ID.'); ?></li>
+                                    <li><?php _e('You can copy and paste your ID into the <a href="http://smashballoon.com/custom-facebook-feed/demo/" target="_blank">demo</a> to test it.'); ?></li>
+                                </ul>
+                            </div>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -139,11 +145,11 @@ function cff_settings_page() {
                         <td>
                             <input name="cff_post_limit" type="text" value="<?php esc_attr_e( $cff_post_limit_val ); ?>" size="4" />
                             <i style="color: #666; font-size: 11px;">Eg. 50</i> <a class="tooltip-link bump-left" href="JavaScript:void(0);"><?php _e('What does this mean?'); ?></a>
-                            <p class="tooltip"><?php _e('By default the Facebook API only returns your latest 25 posts. If you would like to retrieve more than 25 posts then you can increase the limit by specifying a higher value here. However, the more posts you request the slower the page load time may be when the plugin needs to check Facebook for new posts. Similarly, if you only intend to retrieve a few posts then you may wish to set a lower post limit here so that you aren\'t retrieving more posts than necessary.'); ?></p>
+                            <p class="tooltip"><?php _e('By default the Facebook API only returns your latest 25 posts. If you would like to retrieve more than 25 posts then you can increase the limit by specifying a higher value here. However, the more posts you request the slower the page load time may be when the plugin needs to check Facebook for new posts. Similarly, if you only intend to retrieve a few posts then you may wish to set a lower post limit here so that you aren\'t retrieving more posts than necessary. It\'s best to set this higher than the actual number of posts you want to display as some posts may be filtered out.'); ?></p>
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Show posts by others on my page'); ?><br /><i style="color: #666; font-size: 11px;"><?php _e('(Check this if using a group)'); ?></i></th>
+                        <th scope="row"><?php _e('Show posts by others on my page'); ?><br /><i style="color: #666; font-size: 11px;"><?php _e('(Check this if using a <b>group</b>)'); ?></i></th>
                         <td>
                             <input name="cff_show_others" type="checkbox" id="cff_show_others" <?php if($cff_show_others_val == true) echo "checked"; ?> />
                             <i style="color: #666; font-size: 11px;"><?php _e('By default only posts by the page owner will be shown. Check this box to also show posts by others.'); ?></i>
@@ -254,7 +260,7 @@ function cff_settings_page() {
             <?php submit_button(); ?>
         </form>
         <h3><?php _e('Support'); ?></h3>
-        <p>Having trouble getting the plugin to work? Try visiting the <a href="http://smashballoon.com/custom-facebook-feed/troubleshooting/" target="_blank" />Troubleshooting</a> page, <a href="http://smashballoon.com/custom-facebook-feed/faq/" target="_blank" />FAQ</a> page, or contact <a href="http://smashballoon.com/custom-facebook-feed/support" target="_blank">support</a>.<br />Smash Balloon is committed to making this plugin better. Please let us know if you have had any issues when using this plugin so that we can continue to improve it!</p>
+        <p>Having trouble getting the plugin to work? Try visiting the <a href="http://smashballoon.com/custom-facebook-feed/faq/" target="_blank" />Troubleshooting &amp; FAQ</a> page or contact <a href="http://smashballoon.com/custom-facebook-feed/support" target="_blank">support</a>.<br />Smash Balloon is committed to making this plugin better. Please let us know if you have had any issues when using this plugin so that we can continue to improve it!</p>
         <hr />
         <h3><?php _e('Displaying your Feed'); ?></h3>
         <p><?php _e('Copy and paste this shortcode directly into the page, post or widget where you\'d like the feed to show up:'); ?></p>

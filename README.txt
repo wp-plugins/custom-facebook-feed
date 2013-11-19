@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
 Requires at least: 3.0
 Tested up to: 3.7.1
-Stable tag: 1.6.6.3
+Stable tag: 1.6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,7 +38,7 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Use the shortcode options to style multiple Facebook feeds in completely different ways
 * Select the number of Facebook posts to display
 * Set a maximum character length for both the text and descriptions of your Facebook posts
-* Localization support
+* Localization/i18n support to allow every part of the feed to be displayed in your language
 
 To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options, post filtering by type or #hashtag/string and more then [upgrade to the Pro version](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). Try out the [Pro demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
 
@@ -52,19 +52,21 @@ To display photos, videos, the number of likes, shares and comments for each Fac
 
 == Frequently Asked Questions ==
 
-= How do I find the Page ID of my Facebook page? =
+= How do I find the Page ID of my Facebook page or group? =
 
-If you have a Facebook page with a URL like this: `https://www.facebook.com/Your_Page_Name` then the Page ID is just `Your_Page_Name`.  If your Facebook page URL is structured like this: `https://www.facebook.com/pages/Your_Page_Name/123654123654123` then the Page ID is actually the number at the end, so in this case `123654123654123`.
+If you have a Facebook **page** with a URL like this: `https://www.facebook.com/smashballoon` then the Page ID is just `smashballoon`. If your page URL is structured like this: `https://www.facebook.com/pages/smashballoon/123654123654123` then the Page ID is actually the number at the end, so in this case `123654123654123`.
 
-If you have a Facebook group with a URL like this: `https://www.facebook.com/groups/123654123654123`, then the Page ID is simply `123654123654123`.
+If you have a Facebook **group** then use [this tool](http://lookup-id.com/ "Look Up my ID") to find your Group ID.
 
-= Are there any limitations on which Facebook page feeds I can display? =
+Copy and paste the ID into the [Pro demo](http://smashballoon.com/custom-facebook-feed/demo/) to test it.
+
+= Are there any limitations on which Facebook page or group feeds I can display? =
 
 The Facebook feed you're trying to display has to be from a publicly accessible Facebook page or group. This means that you can't display the feed from your own personal Facebook profile or private Facebook group. This is to do with Facebook's privacy policies. You can't display a non-public Facebook feed publicly.
 
 If your Facebook page has any restrictions on it (age, for example) then it means that people have to be signed into Facebook in order to view your page. This isn't desirable for most Facebook pages as it means that it isn't accessible by people who don't have a Facebook account and that your Facebook page can't be crawled and indexed by search engines.
 
-An easy way to determine whether your Facebook page is set to public is to sign out of your Facebook account and try to visit your page. If Facebook forces you to sign in to view your page then it isn't public. You can change your Facebook page to public in your Facebook page settings simply by removing any restrictions you have on it, which will then allow the Custom Facebook Feed plugin to access and display your feed.
+An easy way to determine whether your Facebook page is set to public is to sign out of your Facebook account and try to visit your page. If Facebook forces you to sign in to view your page then it isn't public. You can change your Facebook page to public in your Facebook page settings simply by removing any age or location restrictions you have on it ([screenshot](http://smashballoon.com/wp-content/uploads/2013/06/facebook-page-restrictions.png)), which will then allow the Custom Facebook Feed plugin to access and display your feed.
 
 = What's an Access Token and why do I need one? =
 
@@ -72,12 +74,20 @@ An Access Token is required by Facebook in order to access their feeds.  Don't w
 
 = Can I display feeds from multiple Facebook pages or groups? =
 
-Yep. You set your default Facebook page ID in the plugin's settings but then you can define different Facebook page IDs in the shortcodes you use to show multiple feeds from different Facebook pages. Just use the id option in your shortcode like so: id=another_page_id.
+You can set your default Facebook Page ID on the Custom Facebook Feed settings page within the WordPress admin, you can then define different page IDs in the shortcodes you use to show multiple feeds from different Facebook pages. Just use the id option in your shortcode like so: [custom-facebook-feed id=another_page_id]. You can use as many shortcodes as you like with as many different IDs as you like.
 
 = Why isn't the feed from my group displaying? =
 
 Firstly, check that your group is public and not a private group.
 Secondly, be sure to check the 'Show posts by others on my page' option in the Custom Facebook Feed settings page.
+
+= Can I display the feed from a personal Facebook profile? =
+
+Due to Facebook's privacy policy you're not able to use the plugin to display all of your posts from a personal profile, only from a public page or group, as posts from a personal profile are protected for privacy reasons. You may have limited success in displaying certain posts from a personal profile but most posts are not able to be displayed.
+
+If you're using the profile to represent a business, organization, product, public figure or the like, then we'd advise converting your profile to a page per [Facebook's recommendation](http://www.facebook.com/help/175644189234902/), as there are many advantages to using pages over profiles.
+
+Once you've done so, the plugin will be able to retrieve and display all of your posts.
 
 = Can I show photos and videos in my Custom Facebook feed? =
 
@@ -85,7 +95,7 @@ This free plugin only allows you to display textual updates from your Facebook f
 
 = Can I show the comments associated with each Facebook post? =
 
-For this feature please upgrade to the [Pro version of the plugin](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro).
+For this feature please upgrade to the [Pro version of the plugin](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
 
 = Is the content of my Custom Facebook Feed crawlable by search engines? =
 
@@ -93,7 +103,9 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your Facebo
 
 = How do I embed the Custom Facebook Feed directly into a WordPress page template? =
 
-You can embed your Facebook feed directly into a template file by using the WordPress do_shortcode function: do_shortcode('[custom-facebook-feed]'');
+You can embed your Facebook feed directly into a template file by using the WordPress do_shortcode function: <?php do_shortcode('[custom-facebook-feed]'); ?>.
+
+**For more detailed FAQs and help with troubleshooting please visit the [FAQ & Troubleshooting](http://smashballoon.com/custom-facebook-feed/faq/) section of the Smash Balloon website**
 
 == Screenshots ==
 
@@ -108,6 +120,11 @@ You can embed your Facebook feed directly into a template file by using the Word
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 1.6.7 =
+* New: Your feed can now be completely displayed in any language - added i18n support for date translation
+* Tweak: Improved documentation within the plugin
+* Tweak: Changed order of methods used to retrieve feed data
 
 = 1.6.6.3 =
 * New: Added support for group events
