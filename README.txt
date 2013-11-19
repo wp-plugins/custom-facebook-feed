@@ -105,7 +105,7 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your Facebo
 
 = How do I embed the Custom Facebook Feed directly into a WordPress page template? =
 
-You can embed your Facebook feed directly into a template file by using the WordPress do_shortcode function: <?php do_shortcode('[custom-facebook-feed]'); ?>.
+You can embed your Facebook feed directly into a template file by using the WordPress do_shortcode function: `do_shortcode('[custom-facebook-feed]');`.
 
 == Screenshots ==
 
