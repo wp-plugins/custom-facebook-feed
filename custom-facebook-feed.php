@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.6.7
+Version: 1.6.7.1
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -621,11 +621,8 @@ function display_cff($atts) {
 }
 //Get JSON object of feed data
 function cff_fetchUrl($url){
-    //Can we use file_get_contents?
-    if ( ini_get('allow_url_fopen') == 1 || ini_get('allow_url_fopen') === TRUE ) {
-        $feedData = @file_get_contents($url);
-    //If not then can we use cURL?
-    } elseif(is_callable('curl_init')){
+    //Can we use cURL?
+    if(is_callable('curl_init')){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -633,7 +630,10 @@ function cff_fetchUrl($url){
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $feedData = curl_exec($ch);
         curl_close($ch);
-    //Else use the WP HTTP API
+    //If not then use file_get_contents
+    } elseif ( ini_get('allow_url_fopen') == 1 || ini_get('allow_url_fopen') === TRUE ) {
+        $feedData = @file_get_contents($url);
+    //Or else use the WP HTTP API
     } else {
         if( !class_exists( 'WP_Http' ) ) include_once( ABSPATH . WPINC. '/class-http.php' );
         $request = new WP_Http;
