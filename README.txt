@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
 Requires at least: 3.0
 Tested up to: 3.7.1
-Stable tag: 1.6.7.1
+Stable tag: 1.6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,21 @@ You can embed your Facebook feed directly into a template file by using the Word
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 1.6.8 =
+* New: Added option to remove border from the Like box when showing faces
+* New: Set "Like" box text color to either blue or white
+* Tweak: Moved descripion below video or link title and added link source
+* Tweak: Added ability to manually translate the '2 weeks ago' text
+* Tweak: Replaced 'View Link' with 'View on Facebook' so that shared links now link to the Facebook post
+* Tweak: "Like" box is now responsive
+* Tweak: Displays post caption if no description is available
+* Tweak: Vertically center multi-line author names rather than bumping them down below the avatar
+* Tweak: Checks whether the Access Token is inputted in the correct format
+* Fix: Fixed bug in the 'Show posts on my page by others' option
+* Fix: If displaying a group then automatically hides the "Like" box
+* Fix: 'others=false' shortcode option now working correctly
+* Fix: Strip any white space characters from beginning or end of Access Token and Page ID
 
 = 1.6.7.1 =
 * Fix: Fixed a bug in 1.6.7 which was causing an issue displaying the feed in some circumstances

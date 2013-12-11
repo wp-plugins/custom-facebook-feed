@@ -63,17 +63,18 @@
   clear: both;
   display: block;
   margin-bottom: 15px;
+  line-height: 1.2;
+
 }
 #cff .cff-author img{
   float: left;
   margin-right: 15px;
 }
-#cff .cff-author p{
-  float: left;
-  clear: none;
-  width: auto;
+#cff .cff-author span{
+  display: table-cell;
+  vertical-align: middle;
+  height: 50px;
   margin: 0;
-  padding-top: 15px;
   font-weight: bold;
 }
 #cff .cff-author a{
@@ -94,6 +95,11 @@
   font-weight: normal;
 }
 /*Link image*/
+#cff .cff-shared-link{
+  float: left;
+  clear: both;
+  width: 100%;
+}
 #cff .cff-link{
   float: left;
   clear: both;
@@ -110,6 +116,10 @@
   width: 72%;
   margin-left: 3%;
   padding: 5px 0 10px 0;
+}
+#cff .cff-link-caption{
+  font-size: 12px;
+  margin: 0;
 }
 #cff .cff-text-link.cff-no-image{
   width: 100%;
@@ -137,6 +147,12 @@
 #cff .cff-details .cff-when{
   /*font-weight: bold;*/
 }
+/* Video */
+#cff .cff-desc-wrap{
+  float: left;
+  width: 100%;
+}
+
 /* View on Facebook / View Link text */
 #cff .cff-viewpost-link,
 #cff .cff-viewpost-facebook{
@@ -145,22 +161,38 @@
   padding-top: 12px;
   font-size: 11px;
 }
+
 /* Like box */
-#cff .cff-likebox iframe{
-  margin: 0;
-}
-#cff .cff-likebox{
+.cff-likebox{
   float: left;
   width: 100%;
-  margin-left: -10px;
+  /*margin-left: -10px;*/
+
+  position: relative;
+}
+.cff-likebox .fb_iframe_widget{
+  width: 100%;
+}
+.cff-likebox .fb_iframe_widget span{
+  width: 100% !important;
+}
+.cff-likebox iframe{
+  margin: 0;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100%;
 }
 /*Like box is not inside of #cff*/
-.cff-likebox.cff-top.cff-outside{
+.cff-likebox.top.cff-outside{
   margin-bottom: 10px;
 }
-.cff-likebox.cff-bottom.cff-outside{
+.cff-likebox.bottom.cff-outside{
   margin-top: 10px;
 }
+
 /* Clear fix */
 .cff-clear:after {
     clear: both;
