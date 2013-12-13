@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
 Requires at least: 3.0
 Tested up to: 3.8
-Stable tag: 1.6.8.1
+Stable tag: 1.6.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,6 +120,9 @@ You can embed your Facebook feed directly into a template file by using the Word
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 1.6.8.2 =
+* Fix: Fixed a CSS bug in Firefox which was causing the page author name to bump down below the avatar
 
 = 1.6.8.1 =
 * Tweak: Moved 'View on Facebook' link up to be level with the date rather than on the line below it
