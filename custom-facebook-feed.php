@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.6.8
+Version: 1.6.8.1
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -125,6 +125,8 @@ function display_cff($atts) {
     /********** GENERAL **********/
     $cff_page_type = $atts[ 'pagetype' ];
     if ($cff_page_type == 'group') $cff_is_group = true;
+
+    $cff_post_limit = $atts[ 'limit' ];
 
     $cff_feed_width = $atts['width'];
     $cff_feed_height = $atts[ 'height' ];
@@ -520,6 +522,9 @@ function display_cff($atts) {
                         if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
                     }
                     $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_make_clickable($description_text) . '</span></p>';
+
+                    //If the post text and description/caption are the same then don't show the description
+                    if($post_text == $description_text) $cff_description = '';
 
                 }
 
@@ -1046,24 +1051,26 @@ if(!is_callable('stripos')){
 // remove_filter( 'the_content', 'wpautop' );
 // add_filter( 'the_content', 'wpautop', 99 );
 
+
+//Allows shortcodes in theme
+add_filter('widget_text', 'do_shortcode');
+
 //Enqueue stylesheet
 add_action( 'wp_enqueue_scripts', 'cff_add_my_stylesheet' );
 function cff_add_my_stylesheet() {
     // Respects SSL, Style.css is relative to the current file
-    wp_register_style( 'cff', plugins_url('css/cff-style.css?3', __FILE__) );
+    wp_register_style( 'cff', plugins_url('css/cff-style.css?4', __FILE__) );
     wp_enqueue_style( 'cff' );
 }
 //Enqueue scripts
 add_action( 'wp_enqueue_scripts', 'cff_scripts_method' );
 function cff_scripts_method() {
-    wp_enqueue_script(
-        'cffscripts',
-        plugins_url( '/js/cff-scripts.js?3' , __FILE__ ),
-        array( 'jquery' )
-    );
+    //Register the script to make it available
+    wp_register_script( 'cffscripts', plugins_url( '/js/cff-scripts.js?4' , __FILE__ ), array('jquery'), '1.8', true );
+    //Enqueue it to load it onto the page
+    wp_enqueue_script('cffscripts');
 }
-//Allows shortcodes in theme
-add_filter('widget_text', 'do_shortcode');
+
 function cff_activate() {
     $options = get_option('cff_style_settings');
     $options[ 'cff_show_links_type' ] = true;
@@ -1116,22 +1123,6 @@ function cff_custom_css() {
     echo $cff_custom_css;
     echo "\r\n";
     echo '</style>';
-    echo "\r\n";
-}
-add_action( 'wp_footer', 'cff_js' );
-function cff_js() {
-    // $path = site_url();
-    $url = site_url();
-    $path = urlencode(ABSPATH);
-    echo '<!-- Custom Facebook Feed JS -->';
-    echo "\r\n";
-    echo '<script type="text/javascript">';
-    echo "\r\n";
-    echo 'var siteURL = "' . $url . '";';
-    echo "\r\n";
-    echo 'var rootPath = "' . $path . '";';
-    echo "\r\n";
-    echo '</script>';
     echo "\r\n";
 }
 

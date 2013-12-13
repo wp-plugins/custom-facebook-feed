@@ -1,13 +1,22 @@
-#cff-admin .bump-left{
+#cff-admin th.bump-left,
+#cff-admin a.bump-left{
     padding-left: 10px;
 }
 #cff-admin .cff-tooltip{
 	display: none;
+	padding: 10px 0;
+}
+#cff-admin .cff-tooltip ul{
+	margin-top: 0;	
+	margin-bottom: 0;
+}
+#cff-admin .cff-tooltip li{
+	padding: 4px 0;
 }
 #cff-admin hr{
 	border: none;
 	margin: 25px 0;
-	border-bottom: 3px solid #eee;
+	border-bottom: 1px solid #ccc;
 }
 #cff-admin select{
 	width: 150px;
@@ -36,4 +45,10 @@
 	display: block;
 	float: left;
 	width: 60px;
+	margin-top: 5px;
+}
+#cff-admin .hndle{
+	/*background: #333;
+	color: #fff;*/
+	font-size: 16px;
 }

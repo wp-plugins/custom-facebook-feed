@@ -52,7 +52,7 @@
 /* Date */
 #cff .cff-date{
   float: left;
-  width: 100%;
+  width: auto;
   font-size: 11px;
 }
 /************/
@@ -158,7 +158,8 @@
 #cff .cff-viewpost-facebook{
   float: right;
   clear: none;
-  padding-top: 12px;
+  padding-top: 4px;
+  padding-left: 4px;
   font-size: 11px;
 }
 

@@ -4,8 +4,8 @@ jQuery(document).ready(function() {
 		var $self = jQuery(this);
 
 		//Wpautop fix
-		if( $self.find('.cff-viewpost').parent('p').length ){
-			$self.find('.cff-viewpost').unwrap('p');
+		if( $self.find('.cff-viewpost-facebook').parent('p').length ){
+			$self.find('.cff-viewpost-facebook').unwrap('p');
 		}
 		if( $self.find('.cff-author').parent('p').length ){
 			$self.find('.cff-author').eq(1).unwrap('p');

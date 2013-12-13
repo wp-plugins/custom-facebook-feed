@@ -829,27 +829,27 @@ function cff_style_page() {
                 <tbody>
                     <h3><?php _e('General'); ?></h3>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Feed Width'); ?></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Feed Width'); ?></label></th>
                         <td>
                             <input name="cff_feed_width" type="text" value="<?php esc_attr_e( $cff_feed_width ); ?>" size="6" />
                             <span>Eg. 500px, 50%, 10em.  <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Default is 100%'); ?></i></span>
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Feed Height'); ?></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Feed Height'); ?></label></th>
                         <td>
                             <input name="cff_feed_height" type="text" value="<?php esc_attr_e( $cff_feed_height ); ?>" size="6" />
                             <span>Eg. 500px, 50em. <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Leave empty to set no maximum height. If the feed exceeds this height then a scroll bar will be used.'); ?></i></span>
                         </td>
                     </tr>
-                        <th scope="row"><?php _e('Feed Padding'); ?></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Feed Padding'); ?></label></th>
                         <td>
                             <input name="cff_feed_padding" type="text" value="<?php esc_attr_e( $cff_feed_padding ); ?>" size="6" />
                             <span>Eg. 20px, 5%. <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('This is the amount of padding/spacing that goes around the feed. This is particularly useful if you intend to set a background color on the feed.'); ?></i></span>
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Feed Background Color'); ?></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Feed Background Color'); ?></label></th>
                         <td>
                             <label for="cff_bg_color">#</label>
                             <input name="cff_bg_color" type="text" value="<?php esc_attr_e( $cff_bg_color ); ?>" size="10" placeholder="Eg. ED9A00" />
@@ -857,7 +857,7 @@ function cff_style_page() {
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Show name and picture of author'); ?></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Show name and picture of author'); ?></label></th>
                         <td>
                             <input name="cff_show_author" type="checkbox" id="cff_show_author" <?php if($cff_show_author == true) echo "checked"; ?> />
                             <label for="cff_show_status_type">Yes</label>
@@ -866,7 +866,7 @@ function cff_style_page() {
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Add CSS class to feed'); ?></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Add CSS class to feed'); ?></label></th>
                         <td>
                             <input name="cff_class" type="text" value="<?php esc_attr_e( $cff_class ); ?>" size="25" />
                             <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('To add multiple classes separate each with a space, Eg. classone classtwo classthree'); ?></i>
@@ -953,7 +953,7 @@ function cff_style_page() {
                 <table class="form-table">
                     <tbody>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Include the following in posts:'); ?><br /><?php _e('(when applicable)'); ?>
+                        <th scope="row"><?php _e('Include the following in posts: <i style="font-size: 11px;">(when applicable)</i>'); ?>
                             <br /><i style="color: #666; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable all of these options'); ?></a></i></th>
                         <td>
                             <div>
@@ -990,7 +990,7 @@ function cff_style_page() {
                             </div>
                             <div>
                                 <input type="checkbox" name="cff_show_link" id="cff_show_link" <?php if($cff_show_link == true) echo 'checked="checked"' ?> />
-                                <label for="cff_show_link"><?php _e('View on Facebook/View Link'); ?></label>
+                                <label for="cff_show_link"><?php _e('View on Facebook'); ?></label>
                             </div>
                         </td>
                     </tr>
@@ -1244,53 +1244,53 @@ function cff_style_page() {
                                     <a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('Translate this'); ?></a>
                                     <div class="cff-tooltip">
                                         <div class="cff-tooltip-table">
-                                            <p><?php _e('Translate the text below into the language you would like to use:'); ?></p>
+                                            <p style="margin-bottom: 15px;"><?php _e('Translate the text below into the language you would like to use:'); ?></p>
 
 
                                             <label for="cff_translate_second"><?php _e("second"); ?></label>
-                                            <input name="cff_translate_second" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="30" />
+                                            <input name="cff_translate_second" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_seconds"><?php _e("seconds"); ?></label>
-                                            <input name="cff_translate_seconds" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="30" />
+                                            <input name="cff_translate_seconds" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_minute"><?php _e("minute"); ?></label>
-                                            <input name="cff_translate_minute" type="text" value="<?php esc_attr_e( $cff_translate_minute ); ?>" size="30" />
+                                            <input name="cff_translate_minute" type="text" value="<?php esc_attr_e( $cff_translate_minute ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_minutes"><?php _e("minutes"); ?></label>
-                                            <input name="cff_translate_minutes" type="text" value="<?php esc_attr_e( $cff_translate_minutes ); ?>" size="30" />
+                                            <input name="cff_translate_minutes" type="text" value="<?php esc_attr_e( $cff_translate_minutes ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_hour"><?php _e("hour"); ?></label>
-                                            <input name="cff_translate_hour" type="text" value="<?php esc_attr_e( $cff_translate_hour ); ?>" size="30" />
+                                            <input name="cff_translate_hour" type="text" value="<?php esc_attr_e( $cff_translate_hour ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_hours"><?php _e("hours"); ?></label>
-                                            <input name="cff_translate_hours" type="text" value="<?php esc_attr_e( $cff_translate_hours ); ?>" size="30" />
+                                            <input name="cff_translate_hours" type="text" value="<?php esc_attr_e( $cff_translate_hours ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_day"><?php _e("day"); ?></label>
-                                            <input name="cff_translate_day" type="text" value="<?php esc_attr_e( $cff_translate_day ); ?>" size="30" />
+                                            <input name="cff_translate_day" type="text" value="<?php esc_attr_e( $cff_translate_day ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_days"><?php _e("days"); ?></label>
-                                            <input name="cff_translate_days" type="text" value="<?php esc_attr_e( $cff_translate_days ); ?>" size="30" />
+                                            <input name="cff_translate_days" type="text" value="<?php esc_attr_e( $cff_translate_days ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_week"><?php _e("week"); ?></label>
-                                            <input name="cff_translate_week" type="text" value="<?php esc_attr_e( $cff_translate_week ); ?>" size="30" />
+                                            <input name="cff_translate_week" type="text" value="<?php esc_attr_e( $cff_translate_week ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_weeks"><?php _e("weeks"); ?></label>
-                                            <input name="cff_translate_weeks" type="text" value="<?php esc_attr_e( $cff_translate_weeks ); ?>" size="30" />
+                                            <input name="cff_translate_weeks" type="text" value="<?php esc_attr_e( $cff_translate_weeks ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_month"><?php _e("month"); ?></label>
-                                            <input name="cff_translate_month" type="text" value="<?php esc_attr_e( $cff_translate_month ); ?>" size="30" />
+                                            <input name="cff_translate_month" type="text" value="<?php esc_attr_e( $cff_translate_month ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_months"><?php _e("months"); ?></label>
-                                            <input name="cff_translate_months" type="text" value="<?php esc_attr_e( $cff_translate_months ); ?>" size="30" />
+                                            <input name="cff_translate_months" type="text" value="<?php esc_attr_e( $cff_translate_months ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_year"><?php _e("year"); ?></label>
-                                            <input name="cff_translate_year" type="text" value="<?php esc_attr_e( $cff_translate_year ); ?>" size="30" />
+                                            <input name="cff_translate_year" type="text" value="<?php esc_attr_e( $cff_translate_year ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_years"><?php _e("years"); ?></label>
-                                            <input name="cff_translate_years" type="text" value="<?php esc_attr_e( $cff_translate_years ); ?>" size="30" />
+                                            <input name="cff_translate_years" type="text" value="<?php esc_attr_e( $cff_translate_years ); ?>" size="20" />
                                             <br />
                                             <label for="cff_translate_ago"><?php _e("ago"); ?></label>
-                                            <input name="cff_translate_ago" type="text" value="<?php esc_attr_e( $cff_translate_ago ); ?>" size="30" />
+                                            <input name="cff_translate_ago" type="text" value="<?php esc_attr_e( $cff_translate_ago ); ?>" size="20" />
                                         </div>
                                     </div>
 
@@ -1300,7 +1300,7 @@ function cff_style_page() {
                                 <th><label for="cff_date_custom" class="bump-left"><?php _e('Custom format'); ?></label></th>
                                 <td>
                                     <input name="cff_date_custom" type="text" value="<?php esc_attr_e( $cff_date_custom ); ?>" size="10" placeholder="Eg. F j, Y" />
-                                    <i style="color: #666; font-size: 11px;">(<a href="http://smashballoon.com/custom-facebook-feed/docs/date/" target="_blank"><?php _e('Examples'); ?></a>)</i>
+                                    <a href="http://smashballoon.com/custom-facebook-feed/docs/date/" target="_blank"><?php _e('Examples'); ?></a>
                                 </td>
                             </tr>
                             <tr>
@@ -1467,7 +1467,7 @@ function cff_style_page() {
                                 <th><label for="cff_event_date_custom" class="bump-left"><?php _e('Custom event date format'); ?></label></th>
                                 <td>
                                     <input name="cff_event_date_custom" type="text" value="<?php esc_attr_e( $cff_event_date_custom ); ?>" size="10" placeholder="Eg. F j, Y - g:ia" />
-                                    <i style="color: #666; font-size: 11px;">(<a href="http://smashballoon.com/custom-facebook-feed/docs/date/" target="_blank"><?php _e('Examples'); ?></a>)</i>
+                                    <a href="http://smashballoon.com/custom-facebook-feed/docs/date/" target="_blank"><?php _e('Examples'); ?></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -1579,20 +1579,6 @@ function cff_style_page() {
                                     <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Use different text in place of the default "View on Facebook" link'); ?></i>
                                 </td>
                             </tr>
-                            <tr>
-                                <th><label for="cff_view_link_text" class="bump-left"><?php _e('Custom "View Link" text'); ?></label></th>
-                                <td>
-                                    <input name="cff_view_link_text" type="text" value="<?php esc_attr_e( $cff_view_link_text ); ?>" size="20" />
-                                    <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Use different text in place of the default "View on Facebook" link'); ?></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th><label for="cff_link_to_timeline" class="bump-left"><?php _e('Link statuses to your page'); ?></label></th>
-                                <td>
-                                    <input type="checkbox" name="cff_link_to_timeline" id="cff_link_to_timeline" <?php if($cff_link_to_timeline == true) echo 'checked="checked"' ?> />&nbsp;Yes
-                                    <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e("Check this if you'd like to link statuses to your Facebook timeline/page instead of to their individual posts on Facebook"); ?></i>
-                                </td>
-                            </tr>
                             
                         </tbody>
                     </table>
@@ -1628,18 +1614,17 @@ function cff_style_page() {
                 </tbody>
             </table>
             <hr />
-            <h3><?php _e('Misc'); ?></h3>
+            <h3><?php _e('Like Box'); ?></h3>
             <table class="form-table">
                 <tbody>
-                    <tr><td><b style="font-size: 14px;"><?php _e('Like Box'); ?></b></td></tr>
                     <tr valign="top">
-                        <th scope="row"><label class="bump-left"><?php _e('Show the Like Box'); ?></label></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Show the Like Box'); ?></label></th>
                         <td>
                             <input type="checkbox" name="cff_show_like_box" id="cff_show_like_box" <?php if($cff_show_like_box == true) echo 'checked="checked"' ?> />
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><label class="bump-left"><?php _e('Like Box Position'); ?></label></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Like Box Position'); ?></label></th>
                         <td>
                             <select name="cff_like_box_position">
                                 <option value="bottom" <?php if($cff_like_box_position == "bottom") echo 'selected="selected"' ?> ><?php _e('Bottom'); ?></option>
@@ -1648,14 +1633,14 @@ function cff_style_page() {
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><label class="bump-left"><?php _e('Display outside the scrollable area'); ?></label></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Display outside the scrollable area'); ?></label></th>
                         <td>
                             <input type="checkbox" name="cff_like_box_outside" id="cff_like_box_outside" <?php if($cff_like_box_outside == true) echo 'checked="checked"' ?> />
                             <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('(Only applicable if you have set a height on the feed)'); ?></i>
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><label class="bump-left"><?php _e('Like Box Background Color'); ?></label></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Like Box Background Color'); ?></label></th>
                         <td>
                             <label for="cff_likebox_bg_color">#</label>
                             <input name="cff_likebox_bg_color" type="text" value="<?php esc_attr_e( $cff_likebox_bg_color ); ?>" size="10" />
@@ -1663,7 +1648,7 @@ function cff_style_page() {
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><label class="bump-left"><?php _e('Color of page name'); ?></label></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Color of page name'); ?></label></th>
                         <td>
                             <select name="cff_like_box_text_color">
                                 <option value="blue" <?php if($cff_like_box_text_color == "blue") echo 'selected="selected"' ?> ><?php _e('Blue'); ?></option>
@@ -1674,30 +1659,34 @@ function cff_style_page() {
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><label for="cff_likebox_width" class="bump-left"><?php _e('Custom Like Box Width'); ?></label></th>
+                        <th class="bump-left" scope="row"><label for="cff_likebox_width"><?php _e('Custom Like Box Width'); ?></label></th>
                         <td>
                             <input name="cff_likebox_width" type="text" value="<?php esc_attr_e( $cff_likebox_width ); ?>" size="6" />
                             <span><span>Eg. 50%, 300px</span> <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Default is 100%'); ?></i></span>
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><label class="bump-left"><?php _e('Show faces of fans'); ?></label></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Show faces of fans'); ?></label></th>
                         <td>
                             <input type="checkbox" name="cff_like_box_faces" id="cff_like_box_faces" <?php if($cff_like_box_faces == true) echo 'checked="checked"' ?> />
                             <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Show thumbnail photos of fans who like your page'); ?></i>
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><label class="bump-left"><?php _e('Show the Like Box border'); ?></label></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Show the Like Box border'); ?></label></th>
                         <td>
                             <input type="checkbox" name="cff_like_box_border" id="cff_like_box_outside" <?php if($cff_like_box_border == true) echo 'checked="checked"' ?> />
                             <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Only applicable if you are showing faces of fans'); ?></i>
                         </td>
                     </tr>
-                    
-                    <tr><td><b style="font-size: 14px;"><?php _e('Separating Line'); ?></b></td></tr>
+                </tbody>
+            </table>
+            <hr />
+            <h3><?php _e('Separating Line'); ?></h3>
+            <table class="form-table">
+                <tbody>
                     <tr valign="top">
-                        <th scope="row"><label class="bump-left"><?php _e('Separating Line Color'); ?></label></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Separating Line Color'); ?></label></th>
                         <td>
                             <label for="cff_sep_color">#</label>
                             <input name="cff_sep_color" type="text" value="<?php esc_attr_e( $cff_sep_color ); ?>" size="10" />
@@ -1705,7 +1694,7 @@ function cff_style_page() {
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th scope="row"><label class="bump-left"><?php _e('Separating Line Thickness'); ?></label></th>
+                        <th class="bump-left" scope="row"><label><?php _e('Separating Line Thickness'); ?></label></th>
                         <td>
                             <input name="cff_sep_size" type="text" value="<?php esc_attr_e( $cff_sep_size ); ?>" size="1" /><span>px</span> <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('(Leave empty to hide)'); ?></i>
                         </td>
