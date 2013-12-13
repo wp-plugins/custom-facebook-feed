@@ -81,7 +81,7 @@ You can set your default Facebook Page ID on the Custom Facebook Feed settings p
 = Why isn't the feed from my group displaying? =
 
 Firstly, check that your group is public and not a private group.
-Secondly, be sure to check the 'Show posts by others on my page' option in the Custom Facebook Feed settings page.
+Secondly, be sure to set the 'Page Type' to 'Group' on the Custom Facebook Feed settings page.
 
 = Can I display the feed from a personal Facebook profile? =
 
