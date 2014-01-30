@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.6.8.2
+Version: 1.7.0
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //Include admin
 include dirname( __FILE__ ) .'/custom-facebook-feed-admin.php';
+
 // Add shortcodes
 add_shortcode('custom-facebook-feed', 'display_cff');
 function display_cff($atts) {
@@ -49,82 +50,102 @@ function display_cff($atts) {
         'pagetype' => get_option('cff_page_type'),
         'num' => get_option('cff_num_show'),
         'limit' => get_option('cff_post_limit'),
-        'others' => get_option('cff_show_others'),
+        'others' => '',
+        'showpostsby' => get_option('cff_show_others'),
         'cachetime' => get_option('cff_cache_time'),
         'cacheunit' => get_option('cff_cache_time_unit'),
         'locale' => get_option('cff_locale'),
-        'width' => $options[ 'cff_feed_width' ],
-        'height' => $options[ 'cff_feed_height' ],
-        'padding' => $options[ 'cff_feed_padding' ],
-        'bgcolor' => $options[ 'cff_bg_color' ],
-        'showauthor' => $options[ 'cff_show_author' ],
-        'class' => $options[ 'cff_class' ],
-        'layout' => $options[ 'cff_preset_layout' ],
+        'width' => isset($options[ 'cff_feed_width' ]) ? $options[ 'cff_feed_width' ] : '',
+        'height' => isset($options[ 'cff_feed_height' ]) ? $options[ 'cff_feed_height' ] : '',
+        'padding' => isset($options[ 'cff_feed_padding' ]) ? $options[ 'cff_feed_padding' ] : '',
+        'bgcolor' => isset($options[ 'cff_bg_color' ]) ? $options[ 'cff_bg_color' ] : '',
+        'showauthor' => isset($options[ 'cff_show_author' ]) ? $options[ 'cff_show_author' ] : '',
+        'class' => isset($options[ 'cff_class' ]) ? $options[ 'cff_class' ] : '',
+        'layout' => isset($options[ 'cff_preset_layout' ]) ? $options[ 'cff_preset_layout' ] : '',
         'include' => $include_string,
         //Typography
-        'seemoretext' => $options[ 'cff_see_more_text' ],
-        'seelesstext' => $options[ 'cff_see_less_text' ],
-        'textformat' => $options[ 'cff_title_format' ],
-        'textsize' => $options[ 'cff_title_size' ],
-        'textweight' => $options[ 'cff_title_weight' ],
-        'textcolor' => $options[ 'cff_title_color' ],
-        'textlink' => $options[ 'cff_title_link' ],
-        'descsize' => $options[ 'cff_body_size' ],
-        'descweight' => $options[ 'cff_body_weight' ],
-        'desccolor' => $options[ 'cff_body_color' ],
+        'textformat' => isset($options[ 'cff_title_format' ]) ? $options[ 'cff_title_format' ] : '',
+        'textsize' => isset($options[ 'cff_title_size' ]) ? $options[ 'cff_title_size' ] : '',
+        'textweight' => isset($options[ 'cff_title_weight' ]) ? $options[ 'cff_title_weight' ] : '',
+        'textcolor' => isset($options[ 'cff_title_color' ]) ? $options[ 'cff_title_color' ] : '',
+        'textlink' => isset($options[ 'cff_title_link' ]) ? $options[ 'cff_title_link' ] : '',
+        'descsize' => isset($options[ 'cff_body_size' ]) ? $options[ 'cff_body_size' ] : '',
+        'descweight' => isset($options[ 'cff_body_weight' ]) ? $options[ 'cff_body_weight' ] : '',
+        'desccolor' => isset($options[ 'cff_body_color' ]) ? $options[ 'cff_body_color' ] : '',
         //Event title
-        'eventtitleformat' => $options[ 'cff_event_title_format' ],
-        'eventtitlesize' => $options[ 'cff_event_title_size' ],
-        'eventtitleweight' => $options[ 'cff_event_title_weight' ],
-        'eventtitlecolor' => $options[ 'cff_event_title_color' ],
-        'eventtitlelink' => $options[ 'cff_event_title_link' ],
+        'eventtitleformat' => isset($options[ 'cff_event_title_format' ]) ? $options[ 'cff_event_title_format' ] : '',
+        'eventtitlesize' => isset($options[ 'cff_event_title_size' ]) ? $options[ 'cff_event_title_size' ] : '',
+        'eventtitleweight' => isset($options[ 'cff_event_title_weight' ]) ? $options[ 'cff_event_title_weight' ] : '',
+        'eventtitlecolor' => isset($options[ 'cff_event_title_color' ]) ? $options[ 'cff_event_title_color' ] : '',
+        'eventtitlelink' => isset($options[ 'cff_event_title_link' ]) ? $options[ 'cff_event_title_link' ] : '',
         //Event date
-        'eventdatesize' => $options[ 'cff_event_date_size' ],
-        'eventdateweight' => $options[ 'cff_event_date_weight' ],
-        'eventdatecolor' => $options[ 'cff_event_date_color' ],
-        'eventdatepos' => $options[ 'cff_event_date_position' ],
-        'eventdateformat' => $options[ 'cff_event_date_formatting' ],
-        'eventdatecustom' => $options[ 'cff_event_date_custom' ],
+        'eventdatesize' => isset($options[ 'cff_event_date_size' ]) ? $options[ 'cff_event_date_size' ] : '',
+        'eventdateweight' => isset($options[ 'cff_event_date_weight' ]) ? $options[ 'cff_event_date_weight' ] : '',
+        'eventdatecolor' => isset($options[ 'cff_event_date_color' ]) ? $options[ 'cff_event_date_color' ] : '',
+        'eventdatepos' => isset($options[ 'cff_event_date_position' ]) ? $options[ 'cff_event_date_position' ] : '',
+        'eventdateformat' => isset($options[ 'cff_event_date_formatting' ]) ? $options[ 'cff_event_date_formatting' ] : '',
+        'eventdatecustom' => isset($options[ 'cff_event_date_custom' ]) ? $options[ 'cff_event_date_custom' ] : '',
         //Event details
-        'eventdetailssize' => $options[ 'cff_event_details_size' ],
-        'eventdetailsweight' => $options[ 'cff_event_details_weight' ],
-        'eventdetailscolor' => $options[ 'cff_event_details_color' ],
+        'eventdetailssize' => isset($options[ 'cff_event_details_size' ]) ? $options[ 'cff_event_details_size' ] : '',
+        'eventdetailsweight' => isset($options[ 'cff_event_details_weight' ]) ? $options[ 'cff_event_details_weight' ] : '',
+        'eventdetailscolor' => isset($options[ 'cff_event_details_color' ]) ? $options[ 'cff_event_details_color' ] : '',
         //Date
-        'datepos' => $options[ 'cff_date_position' ],
-        'datesize' => $options[ 'cff_date_size' ],
-        'dateweight' => $options[ 'cff_date_weight' ],
-        'datecolor' => $options[ 'cff_date_color' ],
-        'dateformat' => $options[ 'cff_date_formatting' ],
-        'datecustom' => $options[ 'cff_date_custom' ],
-        'linksize' => $options[ 'cff_link_size' ],
-        'linkweight' => $options[ 'cff_link_weight' ],
-        'linkcolor' => $options[ 'cff_link_color' ],
-        'facebooklinktext' => $options[ 'cff_facebook_link_text' ],
-        'viewlinktext' => $options[ 'cff_view_link_text' ],
-        'linktotimeline' => $options[ 'cff_link_to_timeline' ],
+        'datepos' => isset($options[ 'cff_date_position' ]) ? $options[ 'cff_date_position' ] : '',
+        'datesize' => isset($options[ 'cff_date_size' ]) ? $options[ 'cff_date_size' ] : '',
+        'dateweight' => isset($options[ 'cff_date_weight' ]) ? $options[ 'cff_date_weight' ] : '',
+        'datecolor' => isset($options[ 'cff_date_color' ]) ? $options[ 'cff_date_color' ] : '',
+        'dateformat' => isset($options[ 'cff_date_formatting' ]) ? $options[ 'cff_date_formatting' ] : '',
+        'datecustom' => isset($options[ 'cff_date_custom' ]) ? $options[ 'cff_date_custom' ] : '',
+        'timezone' => isset($options[ 'cff_timezone' ]) ? $options[ 'cff_timezone' ] : 'America/Chicago',
+
+        //Link to Facebook
+        'linksize' => isset($options[ 'cff_link_size' ]) ? $options[ 'cff_link_size' ] : '',
+        'linkweight' => isset($options[ 'cff_link_weight' ]) ? $options[ 'cff_link_weight' ] : '',
+        'linkcolor' => isset($options[ 'cff_link_color' ]) ? $options[ 'cff_link_color' ] : '',
+        'viewlinktext' => isset($options[ 'cff_view_link_text' ]) ? $options[ 'cff_view_link_text' ] : '',
+        'linktotimeline' => isset($options[ 'cff_link_to_timeline' ]) ? $options[ 'cff_link_to_timeline' ] : '',
         //Social
-        'iconstyle' => $options[ 'cff_icon_style' ],
-        'socialtextcolor' => $options[ 'cff_meta_text_color' ],
-        'socialbgcolor' => $options[ 'cff_meta_bg_color' ],
+        'iconstyle' => isset($options[ 'cff_icon_style' ]) ? $options[ 'cff_icon_style' ] : '',
+        'socialtextcolor' => isset($options[ 'cff_meta_text_color' ]) ? $options[ 'cff_meta_text_color' ] : '',
+        'socialbgcolor' => isset($options[ 'cff_meta_bg_color' ]) ? $options[ 'cff_meta_bg_color' ] : '',
         //Misc
         'textlength' => get_option('cff_title_length'),
         'desclength' => get_option('cff_body_length'),
-        'likeboxpos' => $options[ 'cff_like_box_position' ],
-        'likeboxoutside' => $options[ 'cff_like_box_outside' ],
-        'likeboxcolor' => $options[ 'cff_likebox_bg_color' ],
-        'likeboxtextcolor' => $options[ 'cff_like_box_text_color' ],
-        'likeboxwidth' => $options[ 'cff_likebox_width' ],
-        'likeboxfaces' => $options[ 'cff_like_box_faces' ],
-        'likeboxborder' => $options[ 'cff_like_box_border' ], 
+        'likeboxpos' => isset($options[ 'cff_like_box_position' ]) ? $options[ 'cff_like_box_position' ] : '',
+        'likeboxoutside' => isset($options[ 'cff_like_box_outside' ]) ? $options[ 'cff_like_box_outside' ] : '',
+        'likeboxcolor' => isset($options[ 'cff_likebox_bg_color' ]) ? $options[ 'cff_likebox_bg_color' ] : '',
+        'likeboxtextcolor' => isset($options[ 'cff_like_box_text_color' ]) ? $options[ 'cff_like_box_text_color' ] : '',
+        'likeboxwidth' => isset($options[ 'cff_likebox_width' ]) ? $options[ 'cff_likebox_width' ] : '',
+        'likeboxfaces' => isset($options[ 'cff_like_box_faces' ]) ? $options[ 'cff_like_box_faces' ] : '',
+        'likeboxborder' => isset($options[ 'cff_like_box_border' ]) ? $options[ 'cff_like_box_border' ] : '',
 
-        'videoheight' => $options[ 'cff_video_height' ],
-        'videoaction' => $options[ 'cff_video_action' ],
-        'sepcolor' => $options[ 'cff_sep_color' ],
-        'sepsize' => $options[ 'cff_sep_size' ]
+        //Page Header
+        'showheader' => isset($options[ 'cff_show_header' ]) ? $options[ 'cff_show_header' ] : '',
+        'headeroutside' => isset($options[ 'cff_header_outside' ]) ? $options[ 'cff_header_outside' ] : '',
+        'headertext' => isset($options[ 'cff_header_text' ]) ? $options[ 'cff_header_text' ] : '',
+        'headerbg' => isset($options[ 'cff_header_bg_color' ]) ? $options[ 'cff_header_bg_color' ] : '',
+        'headerpadding' => isset($options[ 'cff_header_padding' ]) ? $options[ 'cff_header_padding' ] : '',
+        'headertextsize' => isset($options[ 'cff_header_text_size' ]) ? $options[ 'cff_header_text_size' ] : '',
+        'headertextweight' => isset($options[ 'cff_header_text_weight' ]) ? $options[ 'cff_header_text_weight' ] : '',
+        'headertextcolor' => isset($options[ 'cff_header_text_color' ]) ? $options[ 'cff_header_text_color' ] : '',
+        'headericon' => isset($options[ 'cff_header_icon' ]) ? $options[ 'cff_header_icon' ] : '',
+        'headericoncolor' => isset($options[ 'cff_header_icon_color' ]) ? $options[ 'cff_header_icon_color' ] : '',
+        'headericonsize' => isset($options[ 'cff_header_icon_size' ]) ? $options[ 'cff_header_icon_size' ] : '',
+
+        'videoheight' => isset($options[ 'cff_video_height' ]) ? $options[ 'cff_video_height' ] : '',
+        'videoaction' => isset($options[ 'cff_video_action' ]) ? $options[ 'cff_video_action' ] : '',
+        'sepcolor' => isset($options[ 'cff_sep_color' ]) ? $options[ 'cff_sep_color' ] : '',
+        'sepsize' => isset($options[ 'cff_sep_size' ]) ? $options[ 'cff_sep_size' ] : '',
+
+        //Translate
+        'seemoretext' => isset($options[ 'cff_see_more_text' ]) ? $options[ 'cff_see_more_text' ] : '',
+        'seelesstext' => isset($options[ 'cff_see_less_text' ]) ? $options[ 'cff_see_less_text' ] : '',
+        'facebooklinktext' => isset($options[ 'cff_facebook_link_text' ]) ? $options[ 'cff_facebook_link_text' ] : '',
+        'photostext' => isset($options[ 'cff_translate_photos_text' ]) ? $options[ 'cff_translate_photos_text' ] : ''
     ), $atts);
     /********** GENERAL **********/
     $cff_page_type = $atts[ 'pagetype' ];
-    if ($cff_page_type == 'group') $cff_is_group = true;
+    ($cff_page_type == 'group') ? $cff_is_group = true : $cff_is_group = false;
 
     $cff_post_limit = $atts[ 'limit' ];
 
@@ -163,6 +184,16 @@ function display_cff($atts) {
     /********** LAYOUT **********/
     $cff_includes = $atts[ 'include' ];
     //Look for non-plural version of string in the types string in case user specifies singular in shortcode
+    $cff_show_text = false;
+    $cff_show_desc = false;
+    $cff_show_shared_links = false;
+    $cff_show_date = false;
+    $cff_show_media = false;
+    $cff_show_event_title = false;
+    $cff_show_event_details = false;
+    $cff_show_meta = false;
+    $cff_show_link = false;
+    $cff_show_like_box = false;
     if ( stripos($cff_includes, 'text') !== false ) $cff_show_text = true;
     if ( stripos($cff_includes, 'desc') !== false ) $cff_show_desc = true;
     if ( stripos($cff_includes, 'sharedlink') !== false ) $cff_show_shared_links = true;
@@ -183,8 +214,8 @@ function display_cff($atts) {
     if ( !empty($cff_meta_text_color) ) $cff_meta_styles .= 'color:#' . $cff_meta_text_color . ';';
     if ( !empty($cff_meta_bg_color) ) $cff_meta_styles .= 'background-color:#' . $cff_meta_bg_color . ';';
     $cff_meta_styles .= '"';
-    $cff_nocomments_text = $options[ 'cff_nocomments_text' ];
-    $cff_hide_comments = $options[ 'cff_hide_comments' ];
+    $cff_nocomments_text = isset($options[ 'cff_nocomments_text' ]) ? $options[ 'cff_nocomments_text' ] : '';
+    $cff_hide_comments = isset($options[ 'cff_hide_comments' ]) ? $options[ 'cff_hide_comments' ] : '';
     if (!isset($cff_nocomments_text) || empty($cff_nocomments_text)) $cff_hide_comments = true;
     /********** TYPOGRAPHY **********/
     //See More text
@@ -256,8 +287,11 @@ function display_cff($atts) {
     if ( !empty($cff_date_weight) && $cff_date_weight != 'inherit' ) $cff_date_styles .= 'font-weight:' . $cff_date_weight . '; ';
     if ( !empty($cff_date_color) ) $cff_date_styles .= 'color:#' . $cff_date_color . ';';
     $cff_date_styles .= '"';
-    $cff_date_before = $options[ 'cff_date_before' ];
-    $cff_date_after = $options[ 'cff_date_after' ];
+    $cff_date_before = isset($options[ 'cff_date_before' ]) ? $options[ 'cff_date_before' ] : '';
+    $cff_date_after = isset($options[ 'cff_date_after' ]) ? $options[ 'cff_date_after' ] : '';
+    //Set user's timezone based on setting
+    $cff_timezone = $atts['timezone'];
+    date_default_timezone_set($cff_timezone);
     //Link to Facebook
     $cff_link_size = $atts[ 'linksize' ];
     $cff_link_weight = $atts[ 'linkweight' ];
@@ -298,6 +332,22 @@ function display_cff($atts) {
     if ( empty($cff_likebox_bg_color) && $cff_like_box_faces == 'false' ) $cff_likebox_styles .= ' margin-left: -10px;';
     $cff_likebox_styles .= '"';
 
+    //Get feed header settings
+    $cff_header_bg_color = $atts['headerbg'];
+    $cff_header_padding = $atts['headerpadding'];
+    $cff_header_text_size = $atts['headertextsize'];
+    $cff_header_text_weight = $atts['headertextweight'];
+    $cff_header_text_color = $atts['headertextcolor'];
+
+    //Compile feed header styles
+    $cff_header_styles = 'style="';
+    if ( !empty($cff_header_bg_color) ) $cff_header_styles .= 'background-color: #' . $cff_header_bg_color . ';';
+    if ( !empty($cff_header_padding) ) $cff_header_styles .= ' padding: ' . $cff_header_padding . ';';
+    if ( !empty($cff_header_text_size) ) $cff_header_styles .= ' font-size: ' . $cff_header_text_size . 'px;';
+    if ( !empty($cff_header_text_weight) ) $cff_header_styles .= ' font-weight: ' . $cff_header_text_weight . ';';
+    if ( !empty($cff_header_text_color) ) $cff_header_styles .= ' color: #' . $cff_header_text_color . ';';
+    $cff_header_styles .= '"';
+
     //Video
     //Dimensions
     $cff_video_width = 640;
@@ -336,11 +386,43 @@ function display_cff($atts) {
         echo "Please enter the Page ID of the Facebook feed you'd like to display.  You can do this in either the Custom Facebook Feed plugin settings or in the shortcode itself. For example [custom_facebook_feed id=<b>YOUR_PAGE_ID</b>].<br /><br />";
         return false;
     }
+
+
+    //Is it SSL?
+    $cff_ssl = '';
+    if (is_ssl()) $cff_ssl = '&return_ssl_resources=true';
+
     //Use posts? or feed?
+    $old_others_option = get_option('cff_show_others'); //Use this to help depreciate the old option
     $show_others = $atts['others'];
+    $show_posts_by = $atts['showpostsby'];
     $graph_query = 'posts';
-    if ( $show_others == 'on' || $show_others == 'true' || $show_others == true || $cff_is_group ) $graph_query = 'feed';
-    if ( $show_others == 'false' ) $graph_query = 'posts';
+    $cff_show_only_others = false;
+
+    //If 'others' shortcode option is used then it overrides any other option
+    if ($show_others || $old_others_option == 'on') {
+        //Show posts by everyone
+        if ( $old_others_option == 'on' || $show_others == 'on' || $show_others == 'true' || $show_others == true || $cff_is_group ) $graph_query = 'feed';
+
+        //Only show posts by me
+        if ( $show_others == 'false' ) $graph_query = 'posts';
+
+    } else {
+    //Else use the settings page option or the 'showpostsby' shortcode option
+
+        //Only show posts by me
+        if ( $show_posts_by == 'me' ) $graph_query = 'posts';
+
+        //Show posts by everyone
+        if ( $show_posts_by == 'others' || $cff_is_group ) $graph_query = 'feed';
+
+        //Show posts ONLY by others
+        if ( $show_posts_by == 'onlyothers' && !$cff_is_group ) {
+            $graph_query = 'feed';
+            $cff_show_only_others = true;
+        }
+
+    }
 
 
     //Calculate the cache time in seconds
@@ -359,21 +441,52 @@ function display_cff($atts) {
     $like_box = '<div class="cff-likebox';
     if ($cff_like_box_outside) $like_box .= ' cff-outside';
     $like_box .= ($cff_like_box_position == 'top') ? ' top' : ' bottom';
-    $like_box .= '"' . $cff_likebox_styles . '><script src="http://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" show_faces="'.$cff_like_box_faces.'" stream="false" header="false" colorscheme="'. $cff_like_box_colorscheme .'" show_border="'. $cff_like_box_border .'"></fb:like-box></div>';
+    $like_box .= '" ' . $cff_likebox_styles . '><script src="http://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" show_faces="'.$cff_like_box_faces.'" stream="false" header="false" colorscheme="'. $cff_like_box_colorscheme .'" show_border="'. $cff_like_box_border .'"></fb:like-box></div>';
     //Don't show like box if it's a group
     if($cff_is_group) $like_box = '';
 
+
+    //Feed header
+    $cff_show_header = $atts['showheader'];
+    $cff_header_outside = $atts['headeroutside'];
+    $cff_header_text = $atts['headertext'];
+    $cff_header_icon = $atts['headericon'];
+    $cff_header_icon_color = $atts['headericoncolor'];
+    $cff_header_icon_size = $atts['headericonsize'];
+
+    $cff_header = '<h3 class="cff-header';
+    if ($cff_header_outside) $cff_header .= ' cff-outside';
+    $cff_header .= '"' . $cff_header_styles . '>';
+    $cff_header .= '<i class="fa fa-' . $cff_header_icon . '"';
+    if(!empty($cff_header_icon_color) || !empty($cff_header_icon_size)) $cff_header .= ' style="';
+    if(!empty($cff_header_icon_color)) $cff_header .= 'color: #' . $cff_header_icon_color . ';';
+    if(!empty($cff_header_icon_size)) $cff_header .= ' font-size: ' . $cff_header_icon_size . 'px;';
+    if(!empty($cff_header_icon_color) || !empty($cff_header_icon_size))$cff_header .= '"';
+    $cff_header .= '></i>';
+    $cff_header .= $cff_header_text;
+    $cff_header .= '</h3>';
+
+
     //***START FEED***
-    $content = '';
+    $cff_content = '';
+
+    //Add the page header to the outside of the top of feed
+    if ($cff_show_header && $cff_header_outside) $cff_content .= $cff_header;
+
     //Add like box to the outside of the top of feed
-    if ($cff_like_box_position == 'top' && $cff_show_like_box && $cff_like_box_outside) $content .= $like_box;
+    if ($cff_like_box_position == 'top' && $cff_show_like_box && $cff_like_box_outside) $cff_content .= $like_box;
+
     //Create CFF container HTML
-    $content .= '<div id="cff" rel="'.$title_limit.'" class="';
-    if( !empty($cff_class) ) $content .= $cff_class . ' ';
-    if ( !empty($cff_feed_height) ) $content .= 'cff-fixed-height ';
-    $content .= '" ' . $cff_feed_styles . '>';
+    $cff_content .= '<div id="cff" rel="'.$title_limit.'" class="';
+    if( !empty($cff_class) ) $cff_content .= $cff_class . ' ';
+    if ( !empty($cff_feed_height) ) $cff_content .= 'cff-fixed-height ';
+    $cff_content .= '" ' . $cff_feed_styles . '>';
+
+    //Add the page header to the inside of the top of feed
+    if ($cff_show_header && !$cff_header_outside) $cff_content .= $cff_header;
+
     //Add like box to the inside of the top of feed
-    if ($cff_like_box_position == 'top' && $cff_show_like_box && !$cff_like_box_outside) $content .= $like_box;
+    if ($cff_like_box_position == 'top' && $cff_show_like_box && !$cff_like_box_outside) $cff_content .= $like_box;
     //Limit var
     $i = 0;
     
@@ -381,7 +494,7 @@ function display_cff($atts) {
     //ALL POSTS
     if (!$cff_events_only){
 
-        $cff_posts_json_url = 'https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token . '&limit=' . $cff_post_limit . '&locale=' . $cff_locale;
+        $cff_posts_json_url = 'https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token . '&limit=' . $cff_post_limit . '&locale=' . $cff_locale . $cff_ssl;
 
         //Don't use caching if the cache time is set to zero
         if ($cff_cache_time != 0){
@@ -398,6 +511,8 @@ function display_cff($atts) {
         } else {
             $posts_json = cff_fetchUrl($cff_posts_json_url);
         }
+
+
         
         //Interpret data with JSON
         $FBdata = json_decode($posts_json);
@@ -442,6 +557,19 @@ function display_cff($atts) {
                     break;
             }
 
+
+            //ONLY show posts by others
+            if ( $cff_show_only_others ) {
+                //Get the numeric ID of the page
+                $page_object = cff_fetchUrl('https://graph.facebook.com/' . $page_id);
+                $page_object = json_decode($page_object);
+                $numeric_page_id = $page_object->id;
+
+                //If the post author's ID is the same as the page ID then don't show the post
+                if ( $numeric_page_id == $news->from->id ) $cff_show_post = false;
+            }
+
+
             //Is it a duplicate post?
             if (!isset($prev_post_message)) $prev_post_message = '';
             if (!isset($prev_post_link)) $prev_post_link = '';
@@ -471,6 +599,24 @@ function display_cff($atts) {
                     $link = str_replace('photo.php?','media/set/?',$link);
                 }
 
+                //Is it an album?
+                $cff_album = false;
+                $album_string = 'relevant_count=';
+                $relevant_count = stripos($link, $album_string);
+
+                if ( $relevant_count ) {
+                    //If relevant_count is larger than 1 then there are multiple photos
+                    $relevant_count = explode('relevant_count=', $link);
+                    $num_photos = intval($relevant_count[1]);
+                    if ( $num_photos > 1 ) {
+                        $cff_album = true;
+                    
+                        //Link to the album instead of the photo
+                        $album_link = str_replace('photo.php?','media/set/?',$link);
+                        $link = "https://www.facebook.com/" . $page_id . "/posts/" . $PostID[1];
+                    }
+                }
+
                 //If there's no link provided then link to either the Facebook page or the individual status
                 if (empty($news->link)) {
                     if ($cff_link_to_timeline == true){
@@ -489,19 +635,30 @@ function display_cff($atts) {
                 $cff_author .= '</a>';
 
                 //POST TEXT
+                $cff_translate_photos_text = $atts['photostext'];
+                if (!isset($cff_translate_photos_text) || empty($cff_translate_photos_text)) $cff_translate_photos_text = 'photos';
                 $cff_post_text = '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
+                //__ shared __'s photo
+                // if ($news->type == 'photo' && !empty($news->story) ) $cff_post_text .= '<span class="cff-byline" '.$cff_body_styles.'>' . $news->story . '</span>';
+                // $cff_post_text = '<div class="cff-post-text" ' . $cff_title_styles . '>';
                 $cff_post_text .= '<span class="cff-text">';
-                if ($cff_title_link) $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
+                if ($cff_title_link == 'true') $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
                 if (!empty($news->story)) $post_text = $news->story;
                 if (!empty($news->message)) $post_text = $news->message;
-                //Use the name if neither the story or message are available, or if the post type is an offer
-                if ( (!empty($news->name) && empty($news->story) && empty($news->message)) || $cff_post_type == 'offer') $post_text = $news->name;
+                if (!empty($news->name) && empty($news->story) && empty($news->message)) $post_text = $news->name;
+                if ($cff_album) {
+                    if (!empty($news->name)) $post_text = $news->name;
+                    if (!empty($news->message) && empty($news->name)) $post_text = $news->message;
+                    $post_text .= ' (' . $num_photos . ' '.$cff_translate_photos_text.')';
+                }
+
+
                 //If the text is wrapped in a link then don't hyperlink any text within
                 if ($cff_title_link) {
                     //Wrap links in a span so we can break the text if it's too long
-                    $cff_post_text .= cff_wrap_span($post_text) . ' ';
+                    $cff_post_text .= cff_wrap_span( htmlspecialchars($post_text) ) . ' ';
                 } else {
-                    $cff_post_text .= cff_make_clickable($post_text) . ' ';
+                    $cff_post_text .= cff_make_clickable( htmlspecialchars($post_text) ) . ' ';
                 }
                 
                 if ($cff_title_link) $cff_post_text .= '</a>';
@@ -515,13 +672,13 @@ function display_cff($atts) {
                 //Use the description if it's available and the post type isn't set to offer (offer description isn't useful)
                 if ( ( !empty($news->description)  || !empty($news->caption) ) && $cff_post_type != 'offer') {
 
-                    $description_text = $news->description;
+                    isset($news->description) ? $description_text = $news->description : $description_text = '';
                     if (!isset($description_text)) $description_text = $news->caption;
 
                     if (!empty($body_limit)) {
                         if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
                     }
-                    $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_make_clickable($description_text) . '</span></p>';
+                    $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_make_clickable( htmlspecialchars($description_text) )  . '</span></p>';
 
                     //If the post text and description/caption are the same then don't show the description
                     if($post_text == $description_text) $cff_description = '';
@@ -537,7 +694,7 @@ function display_cff($atts) {
                     //Display link name and description
                     if (!empty($news->description)) {
                         $cff_shared_link .= '<div class="cff-text-link ';
-                        if (!$cff_link_image) $cff_shared_link .= 'cff-no-image';
+                        $cff_shared_link .= 'cff-no-image';
                         $cff_shared_link .= '"><a class="cff-link-title" href="'.$link.'" '.$target.'>'. '<b>' . $news->name . '</b></a>';
                         if(!empty($news->caption)) $cff_shared_link .= '<p class="cff-link-caption">'.$news->caption.'</p>';
                         $cff_shared_link .= $cff_description;
@@ -564,11 +721,11 @@ function display_cff($atts) {
                         $eventID = $url_parts[count($url_parts)-2];
                         
                         //Get the contents of the event using the WP HTTP API
-                        $event_json = cff_fetchUrl('https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token);
+                        $event_json = cff_fetchUrl('https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token . $cff_ssl);
                         //Interpret data with JSON
                         $event_object = json_decode($event_json);
                         //Event date
-                        $event_time = $event_object->start_time;
+                        isset( $event_object->start_time ) ? $event_time = $event_object->start_time : $event_time = '';
                         //If timezone migration is enabled then remove last 5 characters
                         if ( strlen($event_time) == 24 ) $event_time = substr($event_time, 0, -5);
                         if (!empty($event_time)) $cff_event_date = '<p class="cff-date" '.$cff_event_date_styles.'>' . cff_eventdate(strtotime($event_time), $cff_event_date_formatting, $cff_event_date_custom) . '</p>';
@@ -610,10 +767,12 @@ function display_cff($atts) {
                     $cff_is_video_embed = true;
                     //Add the name to the description if it's a video embed
                     if($cff_is_video_embed) {
+                        isset($news->name) ? $video_name = $news->name : $video_name = $link;
+                        isset($news->description) ? $description_text = $news->description : $description_text = '';
                         $cff_description = '<div class="cff-desc-wrap ';
                         if (empty($picture)) $cff_description .= 'cff-no-image';
-                        $cff_description .= '"><a class="cff-link-title" href="'.$link.'" '.$target.'>'. '<b>' . $news->name . '</b></a>';
-                        $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_make_clickable($description_text) . '</span></p></div>';
+                        $cff_description .= '"><a class="cff-link-title" href="'.$link.'" '.$target.'>'. '<b>' . $video_name . '</b></a>';
+                        $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_make_clickable( htmlspecialchars($description_text) ) . '</span></p></div>';
                     }
                 }
 
@@ -636,35 +795,36 @@ function display_cff($atts) {
                 //***CREATE THE POST HTML***//
                 //**************************//
                 //Start the container
-                $content .= '<div class="cff-item ';
-                if ($cff_post_type == 'link') $content .= 'cff-link-item';
-                if ($cff_post_type == 'event') $content .= 'cff-timeline-event';
-                if ($cff_post_type == 'photo') $content .= 'cff-photo-post';
-                if ($cff_post_type == 'video') $content .= 'cff-video-post';
-                if ($cff_post_type == 'swf') $content .= 'cff-swf-post';
-                if ($cff_post_type == 'status') $content .= 'cff-status-post';
-                if ($cff_post_type == 'offer') $content .= 'cff-offer-post';
-                $content .=  '" id="'. $news->id .'" ' . $cff_item_styles . '>';
+                $cff_content .= '<div class="cff-item ';
+                if ($cff_post_type == 'link') $cff_content .= 'cff-link-item';
+                if ($cff_post_type == 'event') $cff_content .= 'cff-timeline-event';
+                if ($cff_post_type == 'photo') $cff_content .= 'cff-photo-post';
+                if ($cff_post_type == 'video') $cff_content .= 'cff-video-post';
+                if ($cff_post_type == 'swf') $cff_content .= 'cff-swf-post';
+                if ($cff_post_type == 'status') $cff_content .= 'cff-status-post';
+                if ($cff_post_type == 'offer') $cff_content .= 'cff-offer-post';
+                if ($cff_album) $cff_content .= ' cff-album';
+                $cff_content .=  '" id="'. $news->id .'" ' . $cff_item_styles . '>';
                 
                     //POST AUTHOR
-                    if($cff_show_author) $content .= $cff_author;
+                    if($cff_show_author) $cff_content .= $cff_author;
                     //DATE ABOVE
-                    if ($cff_show_date && $cff_date_position == 'above') $content .= $cff_date;
+                    if ($cff_show_date && $cff_date_position == 'above') $cff_content .= $cff_date;
                     //POST TEXT
-                    if($cff_show_text) $content .= $cff_post_text;
+                    if($cff_show_text) $cff_content .= $cff_post_text;
                     //DESCRIPTION
-                    if($cff_show_desc && $cff_post_type != 'offer' && $cff_post_type != 'link') $content .= $cff_description;
+                    if($cff_show_desc && $cff_post_type != 'offer' && $cff_post_type != 'link') $cff_content .= $cff_description;
                     //LINK
-                    if($cff_show_shared_links) $content .= $cff_shared_link;
+                    if($cff_show_shared_links) $cff_content .= $cff_shared_link;
                     //DATE BELOW
-                    if ($cff_show_date && $cff_date_position == 'below') $content .= $cff_date;
+                    if ($cff_show_date && $cff_date_position == 'below') $cff_content .= $cff_date;
                     //EVENT
-                    if($cff_show_event_title || $cff_show_event_details) $content .= $cff_event;
+                    if($cff_show_event_title || $cff_show_event_details) $cff_content .= $cff_event;
                     //VIEW ON FACEBOOK LINK
-                    if($cff_show_link) $content .= $cff_link;
+                    if($cff_show_link) $cff_content .= $cff_link;
                 
                 //End the post item
-                $content .= '</div><div class="cff-clear"></div>';
+                $cff_content .= '</div><div class="cff-clear"></div>';
             } // End post type check
 
             if (isset($news->message)) $prev_post_message = $news->message;
@@ -674,15 +834,15 @@ function display_cff($atts) {
         } // End the loop
     } // End ALL POSTS
     //Load more posts
-    // $content .= '<button class="loadmore">Load More Posts</button>';
+    // $cff_content .= '<button class="loadmore">Load More Posts</button>';
     //Add the Like Box inside
-    if ($cff_like_box_position == 'bottom' && $cff_show_like_box && !$cff_like_box_outside) $content .= $like_box;
+    if ($cff_like_box_position == 'bottom' && $cff_show_like_box && !$cff_like_box_outside) $cff_content .= $like_box;
     //End the feed
-    $content .= '</div><div class="cff-clear"></div>';
+    $cff_content .= '</div><div class="cff-clear"></div>';
     //Add the Like Box outside
-    if ($cff_like_box_position == 'bottom' && $cff_show_like_box && $cff_like_box_outside) $content .= $like_box;
+    if ($cff_like_box_position == 'bottom' && $cff_show_like_box && $cff_like_box_outside) $cff_content .= $like_box;
     //Return our feed HTML to display
-    return $content;
+    return $cff_content;
 }
 //Get JSON object of feed data
 function cff_fetchUrl($url){
@@ -749,7 +909,8 @@ function cff_auto_link_text_callback($matches) {
     } else {
         $url_short = $url_full;
     }
-    return "<a class='cff-break-word' rel=\"nofollow\" href=\"$url_full\">$url_full</a>";
+    if( substr( $url_full, 0, 4 ) !== "http" ) $url_full = 'http://' . $url_full;
+    return "<a class='cff-break-word' rel=\"nofollow\" href=\"$url_full\" " . $target . ">$url_full</a>";
 }
 //Make links into span instead when the post text is made clickable
 function cff_wrap_span($text) {
@@ -838,49 +999,49 @@ function cff_getdate($original, $date_format, $custom_date) {
             
             $options = get_option('cff_style_settings');
 
-            $cff_second = $options['cff_translate_second'];
+            $cff_second = isset($options['cff_translate_second']) ? $options['cff_translate_second'] : '';
             if ( empty($cff_second) ) $cff_second = 'second';
 
-            $cff_seconds = $options['cff_translate_seconds'];
+            $cff_seconds = isset($options['cff_translate_seconds']) ? $options['cff_translate_seconds'] : '';
             if ( empty($cff_seconds) ) $cff_seconds = 'seconds';
 
-            $cff_minute = $options['cff_translate_minute'];
+            $cff_minute = isset($options['cff_translate_minute']) ? $options['cff_translate_minute'] : '';
             if ( empty($cff_minute) ) $cff_minute = 'minute';
 
-            $cff_minutes = $options['cff_translate_minutes'];
+            $cff_minutes = isset($options['cff_translate_minutes']) ? $options['cff_translate_minutes'] : '';
             if ( empty($cff_minutes) ) $cff_minutes = 'minutes';
 
-            $cff_hour = $options['cff_translate_hour'];
+            $cff_hour = isset($options['cff_translate_hour']) ? $options['cff_translate_hour'] : '';
             if ( empty($cff_hour) ) $cff_hour = 'hour';
 
-            $cff_hours = $options['cff_translate_hours'];
+            $cff_hours = isset($options['cff_translate_hours']) ? $options['cff_translate_hours'] : '';
             if ( empty($cff_hours) ) $cff_hours = 'hours';
 
-            $cff_day = $options['cff_translate_day'];
+            $cff_day = isset($options['cff_translate_day']) ? $options['cff_translate_day'] : '';
             if ( empty($cff_day) ) $cff_day = 'day';
 
-            $cff_days = $options['cff_translate_days'];
+            $cff_days = isset($options['cff_translate_days']) ? $options['cff_translate_days'] : '';
             if ( empty($cff_days) ) $cff_days = 'days';
 
-            $cff_week = $options['cff_translate_week'];
+            $cff_week = isset($options['cff_translate_week']) ? $options['cff_translate_week'] : '';
             if ( empty($cff_week) ) $cff_week = 'week';
 
-            $cff_weeks = $options['cff_translate_weeks'];
+            $cff_weeks = isset($options['cff_translate_weeks']) ? $options['cff_translate_weeks'] : '';
             if ( empty($cff_weeks) ) $cff_weeks = 'weeks';
 
-            $cff_month = $options['cff_translate_month'];
+            $cff_month = isset($options['cff_translate_month']) ? $options['cff_translate_month'] : '';
             if ( empty($cff_month) ) $cff_month = 'month';
 
-            $cff_months = $options['cff_translate_months'];
+            $cff_months = isset($options['cff_translate_months']) ? $options['cff_translate_months'] : '';
             if ( empty($cff_months) ) $cff_months = 'months';
 
-            $cff_year = $options['cff_translate_year'];
+            $cff_year = isset($options['cff_translate_year']) ? $options['cff_translate_year'] : '';
             if ( empty($cff_year) ) $cff_year = 'year';
 
-            $cff_years = $options['cff_translate_years'];
+            $cff_years = isset($options['cff_translate_years']) ? $options['cff_translate_years'] : '';
             if ( empty($cff_years) ) $cff_years = 'years';
 
-            $cff_ago = $options['cff_translate_ago'];
+            $cff_ago = isset($options['cff_translate_ago']) ? $options['cff_translate_ago'] : '';
             if ( empty($cff_ago) ) $cff_ago = 'ago';
 
             
@@ -908,12 +1069,14 @@ function cff_getdate($original, $date_format, $custom_date) {
                 $periods[$j] = $periods_plural[$j];
             }
             $print = "$difference $periods[$j] {$tense}";
+
             break;
         
     }
     if ( !empty($custom_date) ){
         $print = date_i18n($custom_date, $original);
     }
+
     return $print;
 }
 function cff_eventdate($original, $date_format, $custom_date) {
@@ -969,49 +1132,49 @@ function cff_timesince($original) {
             
     $options = get_option('cff_style_settings');
 
-    $cff_second = $options['cff_translate_second'];
+    $cff_second = isset($options['cff_translate_second']) ? $options['cff_translate_second'] : '';
     if ( empty($cff_second) ) $cff_second = 'second';
 
-    $cff_seconds = $options['cff_translate_seconds'];
+    $cff_seconds = isset($options['cff_translate_seconds']) ? $options['cff_translate_seconds'] : '';
     if ( empty($cff_seconds) ) $cff_seconds = 'seconds';
 
-    $cff_minute = $options['cff_translate_minute'];
+    $cff_minute = isset($options['cff_translate_minute']) ? $options['cff_translate_minute'] : '';
     if ( empty($cff_minute) ) $cff_minute = 'minute';
 
-    $cff_minutes = $options['cff_translate_minutes'];
+    $cff_minutes = isset($options['cff_translate_minutes']) ? $options['cff_translate_minutes'] : '';
     if ( empty($cff_minutes) ) $cff_minutes = 'minutes';
 
-    $cff_hour = $options['cff_translate_hour'];
+    $cff_hour = isset($options['cff_translate_hour']) ? $options['cff_translate_hour'] : '';
     if ( empty($cff_hour) ) $cff_hour = 'hour';
 
-    $cff_hours = $options['cff_translate_hours'];
+    $cff_hours = isset($options['cff_translate_hours']) ? $options['cff_translate_hours'] : '';
     if ( empty($cff_hours) ) $cff_hours = 'hours';
 
-    $cff_day = $options['cff_translate_day'];
+    $cff_day = isset($options['cff_translate_day']) ? $options['cff_translate_day'] : '';
     if ( empty($cff_day) ) $cff_day = 'day';
 
-    $cff_days = $options['cff_translate_days'];
+    $cff_days = isset($options['cff_translate_days']) ? $options['cff_translate_days'] : '';
     if ( empty($cff_days) ) $cff_days = 'days';
 
-    $cff_week = $options['cff_translate_week'];
+    $cff_week = isset($options['cff_translate_week']) ? $options['cff_translate_week'] : '';
     if ( empty($cff_week) ) $cff_week = 'week';
 
-    $cff_weeks = $options['cff_translate_weeks'];
+    $cff_weeks = isset($options['cff_translate_weeks']) ? $options['cff_translate_weeks'] : '';
     if ( empty($cff_weeks) ) $cff_weeks = 'weeks';
 
-    $cff_month = $options['cff_translate_month'];
+    $cff_month = isset($options['cff_translate_month']) ? $options['cff_translate_month'] : '';
     if ( empty($cff_month) ) $cff_month = 'month';
 
-    $cff_months = $options['cff_translate_months'];
+    $cff_months = isset($options['cff_translate_months']) ? $options['cff_translate_months'] : '';
     if ( empty($cff_months) ) $cff_months = 'months';
 
-    $cff_year = $options['cff_translate_year'];
+    $cff_year = isset($options['cff_translate_year']) ? $options['cff_translate_year'] : '';
     if ( empty($cff_year) ) $cff_year = 'year';
 
-    $cff_years = $options['cff_translate_years'];
+    $cff_years = isset($options['cff_translate_years']) ? $options['cff_translate_years'] : '';
     if ( empty($cff_years) ) $cff_years = 'years';
 
-    $cff_ago = $options['cff_translate_ago'];
+    $cff_ago = isset($options['cff_translate_ago']) ? $options['cff_translate_ago'] : '';
     if ( empty($cff_ago) ) $cff_ago = 'ago';
 
     
@@ -1024,7 +1187,7 @@ function cff_timesince($original) {
     // is it future date or past date
     if($now > $original) {    
         $difference = $now - $original;
-        $tense = $cff_ago;;
+        $tense = $cff_ago;
     } else {
         $difference = $original - $now;
         $tense = $cff_ago;
@@ -1059,14 +1222,15 @@ add_filter('widget_text', 'do_shortcode');
 add_action( 'wp_enqueue_scripts', 'cff_add_my_stylesheet' );
 function cff_add_my_stylesheet() {
     // Respects SSL, Style.css is relative to the current file
-    wp_register_style( 'cff', plugins_url('css/cff-style.css?4', __FILE__) );
+    wp_register_style( 'cff', plugins_url('css/cff-style.css?5', __FILE__) );
     wp_enqueue_style( 'cff' );
+    wp_enqueue_style( 'cff-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), '4.0.3' );
 }
 //Enqueue scripts
 add_action( 'wp_enqueue_scripts', 'cff_scripts_method' );
 function cff_scripts_method() {
     //Register the script to make it available
-    wp_register_script( 'cffscripts', plugins_url( '/js/cff-scripts.js?4' , __FILE__ ), array('jquery'), '1.8', true );
+    wp_register_script( 'cffscripts', plugins_url( '/js/cff-scripts.js?5' , __FILE__ ), array('jquery'), '1.8', true );
     //Enqueue it to load it onto the page
     wp_enqueue_script('cffscripts');
 }
@@ -1079,6 +1243,7 @@ function cff_activate() {
     $options[ 'cff_show_photos_type' ] = true;
     $options[ 'cff_show_status_type' ] = true;
     // Show all parts of the feed by default on activation
+    $options[ 'cff_show_author' ] = true;
     $options[ 'cff_show_text' ] = true;
     $options[ 'cff_show_desc' ] = true;
     $options[ 'cff_show_shared_links' ] = true;
@@ -1115,7 +1280,8 @@ register_uninstall_hook( __FILE__, 'cff_uninstall' );
 add_action( 'wp_head', 'cff_custom_css' );
 function cff_custom_css() {
     $options = get_option('cff_style_settings');
-    $cff_custom_css = $options[ 'cff_custom_css' ];
+    isset($options[ 'cff_custom_css' ]) ? $cff_custom_css = $options[ 'cff_custom_css' ] : $cff_custom_css = '';
+    echo "\r\n";
     echo '<!-- Custom Facebook Feed Custom CSS -->';
     echo "\r\n";
     echo '<style type="text/css">';
@@ -1123,6 +1289,25 @@ function cff_custom_css() {
     echo $cff_custom_css;
     echo "\r\n";
     echo '</style>';
+    echo "\r\n";
+}
+add_action( 'wp_footer', 'cff_js' );
+function cff_js() {
+    $options = get_option('cff_style_settings');
+    $cff_custom_js = isset($options[ 'cff_custom_js' ]) ? $options[ 'cff_custom_js' ] : '';
+
+    echo "\r\n";
+    echo '<!-- Custom Facebook Feed JS -->';
+    echo "\r\n";
+    echo '<script type="text/javascript">';
+    echo "\r\n";
+    echo "jQuery( document ).ready(function($) {";
+    echo "\r\n";
+    echo stripslashes($cff_custom_js);
+    echo "\r\n";
+    echo "});";
+    echo "\r\n";
+    echo '</script>';
     echo "\r\n";
 }
 

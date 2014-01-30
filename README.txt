@@ -2,8 +2,8 @@
 Contributors: smashballoon
 Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
 Requires at least: 3.0
-Tested up to: 3.8
-Stable tag: 1.6.8.2
+Tested up to: 3.8.1
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,9 +15,9 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 
 *"The perfect plugin with amazing support! What else do you want? Get it!"* - [JoeJeffries](http://wordpress.org/support/topic/you-dont-already-have-this)
 
-*"Loving the Facebook feed plugin from @smashballoon. It's gonna transform my work's website! Great customer service too :)"* - [Grace Snow](https://twitter.com/GraceSnow/statuses/365915197149429760)
+*"I honestly cannot recommend this plugin enough. The plugin itself is gorgeous and super customizable, and if you run into trouble...support will get you out of it. Five Stars across the board."* - [pamsavoybarnett](http://wordpress.org/support/topic/love-this-plugin-w-awesome-support?replies=2)
 
-*"I tried a few other Facebook plugins but this was by far the simplest and easiest to use. The others were quite confusing or didn't let you change even the simplest things. This plugin lets you change literally every part of it. Didn't have any issues setting it up at all and it's working great. Keep up the good work!"* - [Ben Donald](http://wordpress.org/support/topic/simple-to-set-up-and-looks-great)
+*"The positive reviews here say it all. John and SmashBalloon are delivering top-notch products and service -- something us website developers value greatly. If I could give them 10 Stars across the board I wouldn't hesitate. Cheers!"* - [AME Network](http://wordpress.org/support/topic/excellent-plugin-superior-support?replies=1)
 
 = Features =
 
@@ -30,7 +30,7 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * **Caching** means that your Facebook posts load lightning fast. Set your own caching time - check for new posts on Facebook every few seconds, minutes, hours or days. You decide.
 * Show and hide certain parts of each Facebook post
 * Choose to show the Facebook profile picture and name above each post
-* Select whether to display Facebook posts by just the page owner, or everyone who posts on your Facebook page
+* Display Facebook posts by just the page owner, everyone who posts on your Facebook page, or only other people
 * Control the width, height, padding and background color of your Facebook feed
 * Customize the size, weight and color of text
 * Select from a range of date formats or enter your own
@@ -38,6 +38,7 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Use the shortcode options to style multiple Facebook feeds in completely different ways
 * Select the number of Facebook posts to display
 * Set a maximum character length for both the text and descriptions of your Facebook posts
+* Create a customizable header for your Custom Facebook Feed
 * Localization/i18n support to allow every part of the feed to be displayed in your language
 
 To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options, post filtering by type or #hashtag/string and more then [upgrade to the Pro version](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). Try out the [Pro demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
@@ -81,7 +82,7 @@ You can set your default Facebook Page ID on the Custom Facebook Feed settings p
 = Why isn't the feed from my group displaying? =
 
 Firstly, check that your group is public and not a private group.
-Secondly, be sure to set the 'Page Type' to 'Group' on the Custom Facebook Feed settings page.
+Secondly, be sure to check the 'Show posts by others on my page' option in the Custom Facebook Feed settings page.
 
 = Can I display the feed from a personal Facebook profile? =
 
@@ -93,9 +94,9 @@ Once you've done so, the plugin will be able to retrieve and display all of your
 
 = Can I show photos and videos in my Custom Facebook feed? =
 
-This free plugin only allows you to display textual updates from your Facebook feed. To display photos and videos in your feed you need to upgrade to the Pro version of the plugin. Try out a demo of the Pro version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the Pro version [here](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
+This free plugin only allows you to display text from your Facebook posts. To display photos and videos in your feed you need to upgrade to the Pro version of the plugin. Try out a demo of the Pro version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the Pro version [here](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
 
-= Can I show the comments associated with each Facebook post? =
+= Can I show the comments, shares and likes associated with each Facebook post? =
 
 For this feature please upgrade to the [Pro version of the plugin](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
 
@@ -105,7 +106,7 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your Facebo
 
 = How do I embed the Custom Facebook Feed directly into a WordPress page template? =
 
-You can embed your Facebook feed directly into a template file by using the WordPress do_shortcode function: `do_shortcode('[custom-facebook-feed]');`.
+You can embed your Facebook feed directly into a template file by using the WordPress [do_shortcode](http://codex.wordpress.org/Function_Reference/do_shortcode "WordPress.org do_shortcode reference") function: `<?php echo do_shortcode('[custom-facebook-feed]'); ?>`.
 
 == Screenshots ==
 
@@ -120,6 +121,21 @@ You can embed your Facebook feed directly into a template file by using the Word
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 1.7.0 =
+* New: Added ability to add a customizable header to your feed
+* New: Added a Custom JavaScript section to allow you to add your own JS or jQuery functionality to the feed
+* New: Added a 'Custom Text / Translate' tab to house all customizable text
+* New: You can now choose to show posts only by other people on your page
+* New: Set your timezone so that dates/times are displayed in your local time
+* New: When a post contains a link to multiple images it now states the number of photos after the post text and links to the album
+* Tweak: Plugin now detects whether the page is using SSL and pulls https resources
+* Tweak: Added a button to test the connection to Facebook's API for easier troubleshooting
+* Fix: Now using HTML encoding to parse any raw HTML tags in the post text or descriptions
+* Fix: Added a protocol to the beginning of links which don't include one
+* Fix: Fixed date width issue in IE7
+* Fix: Removed stray PHP notices
+* Fix: Added a space between the Like Box attributes
 
 = 1.6.8.2 =
 * Fix: Fixed a CSS bug in Firefox which was causing the page author name to bump down below the avatar

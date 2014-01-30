@@ -21,6 +21,15 @@
 #cff .cff-item:first-child{
   padding-top: 0;
 }
+/* Feed Header */
+.cff-header{
+  width: 100%;
+  margin: 0 0 15px 0;
+  line-height: 1;
+}
+.cff-header .fa{
+  margin-right: 10px;
+}
 /******************/
 /*** TYPOGRAPHY ***/
 /******************/
@@ -52,6 +61,7 @@
 /* Date */
 #cff .cff-date{
   float: left;
+  min-width: 50px;
   width: auto;
   font-size: 11px;
 }

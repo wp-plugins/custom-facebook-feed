@@ -45,7 +45,7 @@ function cff_settings_page() {
     // Read in existing option value from database
     $access_token_val = get_option( $access_token );
     $page_id_val = get_option( $page_id );
-    $cff_page_type_val = get_option( $cff_page_type );
+    $cff_page_type_val = get_option( $cff_page_type, 'page' );
     $num_show_val = get_option( $num_show, '5' );
     $cff_post_limit_val = get_option( $cff_post_limit );
     $cff_show_others_val = get_option( $cff_show_others );
@@ -106,6 +106,7 @@ function cff_settings_page() {
         <div id="header">
             <h1><?php _e('Custom Facebook Feed Settings'); ?></h1>
         </div>
+
         <form name="form1" method="post" action="">
             <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
             <br />
@@ -132,7 +133,7 @@ function cff_settings_page() {
                     <tr valign="top">
                         <th scope="row"><?php _e('Facebook Page ID (or slug)'); ?><br /><i style="color: #666; font-size: 11px;"><?php _e('(This can usually be found in your <a class="cff-tooltip-link" href="JavaScript:void(0);">Facebook page URL</a>)</i>'); ?></th>
                         <td>
-                            <input name="cff_page_id" type="text" value="<?php esc_attr_e( $page_id_val ); ?>" size="60" />
+                            <input name="cff_page_id" id="cff_page_id" type="text" value="<?php esc_attr_e( $page_id_val ); ?>" size="60" />
                             &nbsp;<a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('What\'s my Page ID?'); ?></a>
                             <br /><i style="color: #666; font-size: 11px;">Eg. 1234567890123 or smashballoon</i>
                             <div class="cff-tooltip">
@@ -158,11 +159,18 @@ function cff_settings_page() {
                             </div>
                         </td>
                     </tr>
+
                     <tr valign="top" class="cff-page-options">
-                        <th scope="row"><?php _e('Show posts on my page by others'); ?></th>
+                        <th scope="row"><?php _e('Show posts on my page by:'); ?></th>
                         <td>
-                            <input name="cff_show_others" type="checkbox" id="cff_show_others" <?php if($cff_show_others_val == true) echo "checked"; ?> />
-                            <i style="color: #666; font-size: 11px;"><?php _e('Check this box to also show posts by others on your page. By default only posts by the page owner will be shown.'); ?></i>
+                            <select name="cff_show_others" id="cff_show_others" style="width: 250px;">
+                                <option value="me" <?php if($cff_show_others_val == 'me') echo 'selected="selected"' ?> ><?php _e('Only the page owner (me)'); ?></option>
+                                <option value="others" <?php if($cff_show_others_val == 'others' || $cff_show_others_val == 'on') echo 'selected="selected"' ?> ><?php _e('Page owner + other people'); ?></option>
+                                <option value="onlyothers" <?php if($cff_show_others_val == 'onlyothers') echo 'selected="selected"' ?> ><?php _e('Only other people'); ?></option>
+                            </select>
+
+                            <p id="cff-others-only" style="font-size: 12px;"><b>Note:</b> Only displaying posts by other people works by retrieving your posts from Facebook and then filtering out the posts by the page owner. If this option doesn't display many posts then you can retrieve more by setting the post limit option (below) to a higher number.</p>
+
                         </td>
                     </tr>
 
@@ -285,6 +293,9 @@ function cff_settings_page() {
             </table>
             <?php submit_button(); ?>
         </form>
+
+        <p class="admin-notice"><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank">Users of this free plugin can now get <b><u>10% off</u></b> The Custom Facebook Feed Pro. Just use the coupon code <b><u>FREEUSER</u></b></a></p>
+        
         <hr />
         <h3><?php _e('Displaying your Feed'); ?></h3>
         <p><?php _e('Copy and paste this shortcode directly into the page, post or widget where you\'d like the feed to show up:'); ?></p>
@@ -317,8 +328,12 @@ function cff_settings_page() {
         <p>PHP cURL:             <b><?php echo is_callable('curl_init') ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>" ?></b></p>
         <p>JSON:                 <b><?php echo function_exists("json_decode") ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>" ?></b></p>
         
-
-
+        <button class="button secondary-button" id="cff-api-test">Test connection to Facebook API</button>
+        
+        <div id="cff-api-test-result">
+            <div class="cff-loader"></div>
+            <textarea readonly="readonly" onclick="this.focus();this.select()" title="To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac)."></textarea>
+        </div>
         
         
 <?php 
@@ -331,6 +346,7 @@ function cff_style_page() {
     $style_post_layout_hidden_field_name    = 'cff_style_post_layout_submit_hidden';
     $style_typography_hidden_field_name     = 'cff_style_typography_submit_hidden';
     $style_misc_hidden_field_name           = 'cff_style_misc_submit_hidden';
+    $style_custom_text_hidden_field_name    = 'cff_style_custom_text_submit_hidden';
     $defaults = array(
         //Post types
         'cff_show_links_type'       => true,
@@ -352,8 +368,6 @@ function cff_style_page() {
         'cff_show_link'             => true,
         'cff_show_like_box'         => true,
         //Typography
-        'cff_see_more_text'         => 'See More',
-        'cff_see_less_text'         => 'See Less',
         'cff_title_format'          => 'p',
         'cff_title_size'            => 'inherit',
         'cff_title_weight'          => 'inherit',
@@ -386,22 +400,7 @@ function cff_style_page() {
         'cff_date_custom'           => '',
         'cff_date_before'           => '',
         'cff_date_after'            => '',
-        //Date - translation
-        'cff_translate_second'      => '',
-        'cff_translate_seconds'     => '',
-        'cff_translate_minute'      => '',
-        'cff_translate_minutes'     => '',
-        'cff_translate_hour'        => '',
-        'cff_translate_hours'       => '',
-        'cff_translate_day'         => '',
-        'cff_translate_days'        => '',
-        'cff_translate_week'        => '',
-        'cff_translate_weeks'       => '',
-        'cff_translate_month'       => '',
-        'cff_translate_months'      => '',
-        'cff_translate_year'        => '',
-        'cff_translate_years'       => '',
-        'cff_translate_ago'         => '',
+        'cff_timezone'              => 'America/Chicago',
 
         //Link to Facebook
         'cff_link_size'             => 'inherit',
@@ -430,19 +429,59 @@ function cff_style_page() {
         'cff_likebox_bg_color'      => '',
         'cff_like_box_text_color'   => 'blue',
         'cff_video_height'          => '',
-        'cff_show_author'           => false,
+        'cff_show_author'           => true,
         'cff_class'                 => '',
+        'cff_open_links'            => true,
         //New
         'cff_custom_css'            => '',
+        'cff_custom_js'             => '',
         'cff_title_link'            => false,
         'cff_event_title_link'      => false,
         'cff_video_action'          => 'file',
         'cff_sep_color'             => '',
-        'cff_sep_size'              => '1'
+        'cff_sep_size'              => '1',
+
+        //Feed Header
+        'cff_show_header'           => '',
+        'cff_header_outside'        => false,
+        'cff_header_text'           => '',
+        'cff_header_bg_color'       => '',
+        'cff_header_padding'        => '',
+        'cff_header_text_size'      => '',
+        'cff_header_text_weight'    => '',
+        'cff_header_text_color'     => '',
+        'cff_header_icon'           => '',
+        'cff_header_icon_color'     => '',
+        'cff_header_icon_size'      => '28',
+
+        //Translate - general
+        'cff_see_more_text'         => 'See More',
+        'cff_see_less_text'         => 'See Less',
+        'cff_facebook_link_text'    => 'View on Facebook',
+
+        'cff_translate_photos_text' => 'photos',
+
+        //Translate - date
+        'cff_translate_second'      => 'second',
+        'cff_translate_seconds'     => 'seconds',
+        'cff_translate_minute'      => 'minute',
+        'cff_translate_minutes'     => 'minutes',
+        'cff_translate_hour'        => 'hour',
+        'cff_translate_hours'       => 'hours',
+        'cff_translate_day'         => 'day',
+        'cff_translate_days'        => 'days',
+        'cff_translate_week'        => 'week',
+        'cff_translate_weeks'       => 'weeks',
+        'cff_translate_month'       => 'month',
+        'cff_translate_months'      => 'months',
+        'cff_translate_year'        => 'year',
+        'cff_translate_years'       => 'years',
+        'cff_translate_ago'         => 'ago'
     );
     //Save layout option in an array
     $options = wp_parse_args(get_option('cff_style_settings'), $defaults);
     add_option( 'cff_style_settings', $options );
+
     //Set the page variables
     //Post types
     $cff_show_links_type = $options[ 'cff_show_links_type' ];
@@ -498,6 +537,8 @@ function cff_style_page() {
     $cff_date_custom = $options[ 'cff_date_custom' ];
     $cff_date_before = $options[ 'cff_date_before' ];
     $cff_date_after = $options[ 'cff_date_after' ];
+    $cff_timezone = $options[ 'cff_timezone' ];
+
     //Date translate
     $cff_translate_second = $options[ 'cff_translate_second' ];
     $cff_translate_seconds = $options[ 'cff_translate_seconds' ];
@@ -514,6 +555,8 @@ function cff_style_page() {
     $cff_translate_year = $options[ 'cff_translate_year' ];
     $cff_translate_years = $options[ 'cff_translate_years' ];
     $cff_translate_ago = $options[ 'cff_translate_ago' ];
+    //Photos translate
+    $cff_translate_photos_text = $options[ 'cff_translate_photos_text' ];
 
     //View on Facebook link
     $cff_link_size = $options[ 'cff_link_size' ];
@@ -545,9 +588,24 @@ function cff_style_page() {
     $cff_video_height = $options[ 'cff_video_height' ];
     $cff_show_author = $options[ 'cff_show_author' ];
     $cff_class = $options[ 'cff_class' ];
+    $cff_open_links = $options[ 'cff_open_links' ];
+
+    //Page Header
+    $cff_show_header = $options[ 'cff_show_header' ];
+    $cff_header_outside = $options[ 'cff_header_outside' ];
+    $cff_header_text = $options[ 'cff_header_text' ];
+    $cff_header_bg_color = $options[ 'cff_header_bg_color' ];
+    $cff_header_padding = $options[ 'cff_header_padding' ];
+    $cff_header_text_size = $options[ 'cff_header_text_size' ];
+    $cff_header_text_weight = $options[ 'cff_header_text_weight' ];
+    $cff_header_text_color = $options[ 'cff_header_text_color' ];
+    $cff_header_icon = $options[ 'cff_header_icon' ];
+    $cff_header_icon_color = $options[ 'cff_header_icon_color' ];
+    $cff_header_icon_size = $options[ 'cff_header_icon_size' ];
 
     //New
     $cff_custom_css = $options[ 'cff_custom_css' ];
+    $cff_custom_js = $options[ 'cff_custom_js' ];
     $cff_title_link = $options[ 'cff_title_link' ];
     $cff_event_title_link = $options[ 'cff_event_title_link' ];
     $cff_video_action = $options[ 'cff_video_action' ];
@@ -565,18 +623,18 @@ function cff_style_page() {
         //Update the General options
         if( isset($_POST[ $style_general_hidden_field_name ]) && $_POST[ $style_general_hidden_field_name ] == 'Y' ) {
             //General
-            $cff_feed_width = $_POST[ 'cff_feed_width' ];
-            $cff_feed_height = $_POST[ 'cff_feed_height' ];
-            $cff_feed_padding = $_POST[ 'cff_feed_padding' ];
-            $cff_bg_color = $_POST[ 'cff_bg_color' ];
-            $cff_show_author = $_POST[ 'cff_show_author' ];
-            $cff_class = $_POST[ 'cff_class' ];
+            if (isset($_POST[ 'cff_feed_width' ]) ) $cff_feed_width = $_POST[ 'cff_feed_width' ];
+            if (isset($_POST[ 'cff_feed_height' ]) ) $cff_feed_height = $_POST[ 'cff_feed_height' ];
+            if (isset($_POST[ 'cff_feed_padding' ]) ) $cff_feed_padding = $_POST[ 'cff_feed_padding' ];
+            if (isset($_POST[ 'cff_bg_color' ]) ) $cff_bg_color = $_POST[ 'cff_bg_color' ];
+            (isset($_POST[ 'cff_show_author' ]) ) ? $cff_show_author = $_POST[ 'cff_show_author' ] : $cff_show_author = '';
+            if (isset($_POST[ 'cff_class' ]) ) $cff_class = $_POST[ 'cff_class' ];
             //Post types
-            $cff_show_links_type = $_POST[ 'cff_show_links_type' ];
-            $cff_show_event_type = $_POST[ 'cff_show_event_type' ];
-            $cff_show_video_type = $_POST[ 'cff_show_video_type' ];
-            $cff_show_photos_type = $_POST[ 'cff_show_photos_type' ];
-            $cff_show_status_type = $_POST[ 'cff_show_status_type' ];
+            if (isset($_POST[ 'cff_show_links_type' ]) ) $cff_show_links_type = $_POST[ 'cff_show_links_type' ];
+            if (isset($_POST[ 'cff_show_event_type' ]) ) $cff_show_event_type = $_POST[ 'cff_show_event_type' ];
+            if (isset($_POST[ 'cff_show_video_type' ]) ) $cff_show_video_type = $_POST[ 'cff_show_video_type' ];
+            if (isset($_POST[ 'cff_show_photos_type' ]) ) $cff_show_photos_type = $_POST[ 'cff_show_photos_type' ];
+            if (isset($_POST[ 'cff_show_status_type' ]) ) $cff_show_status_type = $_POST[ 'cff_show_status_type' ];
             //General
             $options[ 'cff_feed_width' ] = $cff_feed_width;
             $options[ 'cff_feed_height' ] = $cff_feed_height;
@@ -584,7 +642,7 @@ function cff_style_page() {
             $options[ 'cff_bg_color' ] = $cff_bg_color;
             $options[ 'cff_show_author' ] = $cff_show_author;
             $options[ 'cff_class' ] = $cff_class;
-             //Post types
+            //Post types
             $options[ 'cff_show_links_type' ] = $cff_show_links_type;
             $options[ 'cff_show_event_type' ] = $cff_show_event_type;
             $options[ 'cff_show_video_type' ] = $cff_show_video_type;
@@ -594,17 +652,17 @@ function cff_style_page() {
         //Update the Post Layout options
         if( isset($_POST[ $style_post_layout_hidden_field_name ]) && $_POST[ $style_post_layout_hidden_field_name ] == 'Y' ) {
             //Layout
-            $cff_preset_layout = $_POST[ 'cff_preset_layout' ];
+            if (isset($_POST[ 'cff_preset_layout' ]) ) $cff_preset_layout = $_POST[ 'cff_preset_layout' ];
             //Include
-            $cff_show_text = $_POST[ 'cff_show_text' ];
-            $cff_show_desc = $_POST[ 'cff_show_desc' ];
-            $cff_show_shared_links = $_POST[ 'cff_show_shared_links' ];
-            $cff_show_date = $_POST[ 'cff_show_date' ];
-            $cff_show_media = $_POST[ 'cff_show_media' ];
-            $cff_show_event_title = $_POST[ 'cff_show_event_title' ];
-            $cff_show_event_details = $_POST[ 'cff_show_event_details' ];
-            $cff_show_meta = $_POST[ 'cff_show_meta' ];
-            $cff_show_link = $_POST[ 'cff_show_link' ];
+            (isset($_POST[ 'cff_show_text' ]) ) ? $cff_show_text = $_POST[ 'cff_show_text' ] : $cff_show_text = '';
+            (isset($_POST[ 'cff_show_desc' ]) ) ? $cff_show_desc = $_POST[ 'cff_show_desc' ] : $cff_show_desc = '';
+            (isset($_POST[ 'cff_show_shared_links' ]) ) ? $cff_show_shared_links = $_POST[ 'cff_show_shared_links' ] : $cff_show_shared_links = '';
+            (isset($_POST[ 'cff_show_date' ]) ) ? $cff_show_date = $_POST[ 'cff_show_date' ] : $cff_show_date = '';
+            (isset($_POST[ 'cff_show_media' ]) ) ? $cff_show_media = $_POST[ 'cff_show_media' ] : $cff_show_media = '';
+            (isset($_POST[ 'cff_show_event_title' ]) ) ? $cff_show_event_title = $_POST[ 'cff_show_event_title' ] : $cff_show_event_title = '';
+            (isset($_POST[ 'cff_show_event_details' ]) ) ? $cff_show_event_details = $_POST[ 'cff_show_event_details' ] : $cff_show_event_details = '';
+            (isset($_POST[ 'cff_show_meta' ]) ) ? $cff_show_meta = $_POST[ 'cff_show_meta' ] : $cff_show_meta = '';
+            (isset($_POST[ 'cff_show_link' ]) ) ? $cff_show_link = $_POST[ 'cff_show_link' ] : $cff_show_link = '';
             //Layout
             $options[ 'cff_preset_layout' ] = $cff_preset_layout;
             //Include
@@ -621,74 +679,72 @@ function cff_style_page() {
         //Update the Typography options
         if( isset($_POST[ $style_typography_hidden_field_name ]) && $_POST[ $style_typography_hidden_field_name ] == 'Y' ) {
             //Character limits
-            $cff_title_length_val = $_POST[ $cff_title_length ];
-            $cff_body_length_val = $_POST[ $cff_body_length ];
-            $cff_see_more_text = $_POST[ 'cff_see_more_text' ];
-            $cff_see_less_text = $_POST[ 'cff_see_less_text' ];
+            if (isset($_POST[ 'cff_title_length' ]) ) $cff_title_length_val = $_POST[ $cff_title_length ];
+            if (isset($_POST[ 'cff_body_length' ]) ) $cff_body_length_val = $_POST[ $cff_body_length ];
             //Typography
-            $cff_title_format = $_POST[ 'cff_title_format' ];
-            $cff_title_size = $_POST[ 'cff_title_size' ];
-            $cff_title_weight = $_POST[ 'cff_title_weight' ];
-            $cff_title_color = $_POST[ 'cff_title_color' ];
-            $cff_title_link = $_POST[ 'cff_title_link' ];
+            if (isset($_POST[ 'cff_title_format' ]) ) $cff_title_format = $_POST[ 'cff_title_format' ];
+            if (isset($_POST[ 'cff_title_size' ]) ) $cff_title_size = $_POST[ 'cff_title_size' ];
+            if (isset($_POST[ 'cff_title_weight' ]) ) $cff_title_weight = $_POST[ 'cff_title_weight' ];
+            if (isset($_POST[ 'cff_title_color' ]) ) $cff_title_color = $_POST[ 'cff_title_color' ];
+            (isset($_POST[ 'cff_title_link' ]) ) ? $cff_title_link = $_POST[ 'cff_title_link' ] : $cff_title_link = '';
             $cff_body_size = $_POST[ 'cff_body_size' ];
-            $cff_body_weight = $_POST[ 'cff_body_weight' ];
-            $cff_body_color = $_POST[ 'cff_body_color' ];
+            if (isset($_POST[ 'cff_body_weight' ]) ) $cff_body_weight = $_POST[ 'cff_body_weight' ];
+            if (isset($_POST[ 'cff_body_color' ]) ) $cff_body_color = $_POST[ 'cff_body_color' ];
             //Event title
-            $cff_event_title_format = $_POST[ 'cff_event_title_format' ];
-            $cff_event_title_size = $_POST[ 'cff_event_title_size' ];
-            $cff_event_title_weight = $_POST[ 'cff_event_title_weight' ];
-            $cff_event_title_color = $_POST[ 'cff_event_title_color' ];
-            $cff_event_title_link = $_POST[ 'cff_event_title_link' ];
+            if (isset($_POST[ 'cff_event_title_format' ]) ) $cff_event_title_format = $_POST[ 'cff_event_title_format' ];
+            if (isset($_POST[ 'cff_event_title_size' ]) ) $cff_event_title_size = $_POST[ 'cff_event_title_size' ];
+            if (isset($_POST[ 'cff_event_title_weight' ]) ) $cff_event_title_weight = $_POST[ 'cff_event_title_weight' ];
+            if (isset($_POST[ 'cff_event_title_color' ]) ) $cff_event_title_color = $_POST[ 'cff_event_title_color' ];
+            (isset($_POST[ 'cff_event_title_link' ]) ) ? $cff_event_title_link = $_POST[ 'cff_event_title_link' ] : $cff_event_title_link = '';
             //Event date
-            $cff_event_date_size = $_POST[ 'cff_event_date_size' ];
-            $cff_event_date_weight = $_POST[ 'cff_event_date_weight' ];
-            $cff_event_date_color = $_POST[ 'cff_event_date_color' ];
-            $cff_event_date_position = $_POST[ 'cff_event_date_position' ];
-            $cff_event_date_formatting = $_POST[ 'cff_event_date_formatting' ];
-            $cff_event_date_custom = $_POST[ 'cff_event_date_custom' ];
+            if (isset($_POST[ 'cff_event_date_size' ]) ) $cff_event_date_size = $_POST[ 'cff_event_date_size' ];
+            if (isset($_POST[ 'cff_event_date_weight' ]) ) $cff_event_date_weight = $_POST[ 'cff_event_date_weight' ];
+            if (isset($_POST[ 'cff_event_date_color' ]) ) $cff_event_date_color = $_POST[ 'cff_event_date_color' ];
+            if (isset($_POST[ 'cff_event_date_position' ]) ) $cff_event_date_position = $_POST[ 'cff_event_date_position' ];
+            if (isset($_POST[ 'cff_event_date_formatting' ]) ) $cff_event_date_formatting = $_POST[ 'cff_event_date_formatting' ];
+            if (isset($_POST[ 'cff_event_date_custom' ]) ) $cff_event_date_custom = $_POST[ 'cff_event_date_custom' ];
             //Event details
-            $cff_event_details_size = $_POST[ 'cff_event_details_size' ];
-            $cff_event_details_weight = $_POST[ 'cff_event_details_weight' ];
-            $cff_event_details_color = $_POST[ 'cff_event_details_color' ];
+            if (isset($_POST[ 'cff_event_details_size' ]) ) $cff_event_details_size = $_POST[ 'cff_event_details_size' ];
+            if (isset($_POST[ 'cff_event_details_weight' ]) ) $cff_event_details_weight = $_POST[ 'cff_event_details_weight' ];
+            if (isset($_POST[ 'cff_event_details_color' ]) ) $cff_event_details_color = $_POST[ 'cff_event_details_color' ];
             //Date
-            $cff_date_position = $_POST[ 'cff_date_position' ];
-            $cff_date_size = $_POST[ 'cff_date_size' ];
-            $cff_date_weight = $_POST[ 'cff_date_weight' ];
-            $cff_date_color = $_POST[ 'cff_date_color' ];
-            $cff_date_formatting = $_POST[ 'cff_date_formatting' ];
-            $cff_date_custom = $_POST[ 'cff_date_custom' ];
-            $cff_date_before = $_POST[ 'cff_date_before' ];
-            $cff_date_after = $_POST[ 'cff_date_after' ];
+            if (isset($_POST[ 'cff_date_position' ]) ) $cff_date_position = $_POST[ 'cff_date_position' ];
+            if (isset($_POST[ 'cff_date_size' ]) ) $cff_date_size = $_POST[ 'cff_date_size' ];
+            if (isset($_POST[ 'cff_date_weight' ]) ) $cff_date_weight = $_POST[ 'cff_date_weight' ];
+            if (isset($_POST[ 'cff_date_color' ]) ) $cff_date_color = $_POST[ 'cff_date_color' ];
+            if (isset($_POST[ 'cff_date_formatting' ]) ) $cff_date_formatting = $_POST[ 'cff_date_formatting' ];
+            if (isset($_POST[ 'cff_date_custom' ]) ) $cff_date_custom = $_POST[ 'cff_date_custom' ];
+            if (isset($_POST[ 'cff_date_before' ]) ) $cff_date_before = $_POST[ 'cff_date_before' ];
+            if (isset($_POST[ 'cff_date_after' ]) ) $cff_date_after = $_POST[ 'cff_date_after' ];
+            if (isset($_POST[ 'cff_timezone' ]) ) $cff_timezone = $_POST[ 'cff_timezone' ];
+
             //Date translate
-            $cff_translate_second = $_POST[ 'cff_translate_second' ];
-            $cff_translate_seconds = $_POST[ 'cff_translate_seconds' ];
-            $cff_translate_minute = $_POST[ 'cff_translate_minute' ];
-            $cff_translate_minutes = $_POST[ 'cff_translate_minutes' ];
-            $cff_translate_hour = $_POST[ 'cff_translate_hour' ];
-            $cff_translate_hours = $_POST[ 'cff_translate_hours' ];
-            $cff_translate_day = $_POST[ 'cff_translate_day' ];
-            $cff_translate_days = $_POST[ 'cff_translate_days' ];
-            $cff_translate_week = $_POST[ 'cff_translate_week' ];
-            $cff_translate_weeks = $_POST[ 'cff_translate_weeks' ];
-            $cff_translate_month = $_POST[ 'cff_translate_month' ];
-            $cff_translate_months = $_POST[ 'cff_translate_months' ];
-            $cff_translate_year = $_POST[ 'cff_translate_year' ];
-            $cff_translate_years = $_POST[ 'cff_translate_years' ];
-            $cff_translate_ago = $_POST[ 'cff_translate_ago' ];
+            if (isset($_POST[ 'cff_translate_second' ]) ) $cff_translate_second = $_POST[ 'cff_translate_second' ];
+            if (isset($_POST[ 'cff_translate_seconds' ]) ) $cff_translate_seconds = $_POST[ 'cff_translate_seconds' ];
+            if (isset($_POST[ 'cff_translate_minute' ]) ) $cff_translate_minute = $_POST[ 'cff_translate_minute' ];
+            if (isset($_POST[ 'cff_translate_minutes' ]) ) $cff_translate_minutes = $_POST[ 'cff_translate_minutes' ];
+            if (isset($_POST[ 'cff_translate_hour' ]) ) $cff_translate_hour = $_POST[ 'cff_translate_hour' ];
+            if (isset($_POST[ 'cff_translate_hours' ]) ) $cff_translate_hours = $_POST[ 'cff_translate_hours' ];
+            if (isset($_POST[ 'cff_translate_day' ]) ) $cff_translate_day = $_POST[ 'cff_translate_day' ];
+            if (isset($_POST[ 'cff_translate_days' ]) ) $cff_translate_days = $_POST[ 'cff_translate_days' ];
+            if (isset($_POST[ 'cff_translate_week' ]) ) $cff_translate_week = $_POST[ 'cff_translate_week' ];
+            if (isset($_POST[ 'cff_translate_weeks' ]) ) $cff_translate_weeks = $_POST[ 'cff_translate_weeks' ];
+            if (isset($_POST[ 'cff_translate_month' ]) ) $cff_translate_month = $_POST[ 'cff_translate_month' ];
+            if (isset($_POST[ 'cff_translate_months' ]) ) $cff_translate_months = $_POST[ 'cff_translate_months' ];
+            if (isset($_POST[ 'cff_translate_year' ]) ) $cff_translate_year = $_POST[ 'cff_translate_year' ];
+            if (isset($_POST[ 'cff_translate_years' ]) ) $cff_translate_years = $_POST[ 'cff_translate_years' ];
+            if (isset($_POST[ 'cff_translate_ago' ]) ) $cff_translate_ago = $_POST[ 'cff_translate_ago' ];
 
             //View on Facebook link
-            $cff_link_size = $_POST[ 'cff_link_size' ];
-            $cff_link_weight = $_POST[ 'cff_link_weight' ];
-            $cff_link_color = $_POST[ 'cff_link_color' ];
-            $cff_facebook_link_text = $_POST[ 'cff_facebook_link_text' ];
-            $cff_view_link_text = $_POST[ 'cff_view_link_text' ];
-            $cff_link_to_timeline = $_POST[ 'cff_link_to_timeline' ];
+            if (isset($_POST[ 'cff_link_size' ]) ) $cff_link_size = $_POST[ 'cff_link_size' ];
+            if (isset($_POST[ 'cff_link_weight' ]) ) $cff_link_weight = $_POST[ 'cff_link_weight' ];
+            if (isset($_POST[ 'cff_link_color' ]) ) $cff_link_color = $_POST[ 'cff_link_color' ];
+            if (isset($_POST[ 'cff_facebook_link_text' ]) ) $cff_facebook_link_text = $_POST[ 'cff_facebook_link_text' ];
+            if (isset($_POST[ 'cff_view_link_text' ]) ) $cff_view_link_text = $_POST[ 'cff_view_link_text' ];
+            if (isset($_POST[ 'cff_link_to_timeline' ]) ) $cff_link_to_timeline = $_POST[ 'cff_link_to_timeline' ];
             //Character limits
             update_option( $cff_title_length, $cff_title_length_val );
             update_option( $cff_body_length, $cff_body_length_val );
-            $options[ 'cff_see_more_text' ] = $cff_see_more_text;
-            $options[ 'cff_see_less_text' ] = $cff_see_less_text;
             //Typography
             $options[ 'cff_title_format' ] = $cff_title_format;
             $options[ 'cff_title_size' ] = $cff_title_size;
@@ -724,6 +780,8 @@ function cff_style_page() {
             $options[ 'cff_date_custom' ] = $cff_date_custom;
             $options[ 'cff_date_before' ] = $cff_date_before;
             $options[ 'cff_date_after' ] = $cff_date_after;
+            $options[ 'cff_timezone' ] = $cff_timezone;
+
             //Date translate
             $options[ 'cff_translate_second' ] = $cff_translate_second;
             $options[ 'cff_translate_seconds' ] = $cff_translate_seconds;
@@ -752,29 +810,43 @@ function cff_style_page() {
         //Update the Misc options
         if( isset($_POST[ $style_misc_hidden_field_name ]) && $_POST[ $style_misc_hidden_field_name ] == 'Y' ) {
             //Meta
-            $cff_icon_style = $_POST[ 'cff_icon_style' ];
-            $cff_meta_text_color = $_POST[ 'cff_meta_text_color' ];
-            $cff_meta_bg_color = $_POST[ 'cff_meta_bg_color' ];
-            $cff_nocomments_text = $_POST[ 'cff_nocomments_text' ];
-            $cff_hide_comments = $_POST[ 'cff_hide_comments' ];
+            if (isset($_POST[ 'cff_icon_style' ])) $cff_icon_style = $_POST[ 'cff_icon_style' ];
+            if (isset($_POST[ 'cff_meta_text_color' ])) $cff_meta_text_color = $_POST[ 'cff_meta_text_color' ];
+            if (isset($_POST[ 'cff_meta_bg_color' ])) $cff_meta_bg_color = $_POST[ 'cff_meta_bg_color' ];
+            if (isset($_POST[ 'cff_nocomments_text' ])) $cff_nocomments_text = $_POST[ 'cff_nocomments_text' ];
+            if (isset($_POST[ 'cff_hide_comments' ])) $cff_hide_comments = $_POST[ 'cff_hide_comments' ];
             //Custom CSS
-            $cff_custom_css = $_POST[ 'cff_custom_css' ];
+            if (isset($_POST[ 'cff_custom_css' ])) $cff_custom_css = $_POST[ 'cff_custom_css' ];
+            if (isset($_POST[ 'cff_custom_js' ])) $cff_custom_js = $_POST[ 'cff_custom_js' ];
             //Misc
-            $cff_show_like_box = $_POST[ 'cff_show_like_box' ];
-            $cff_like_box_position = $_POST[ 'cff_like_box_position' ];
-            $cff_like_box_outside = $_POST[ 'cff_like_box_outside' ];
-            $cff_likebox_bg_color = $_POST[ 'cff_likebox_bg_color' ];
-            $cff_like_box_text_color = $_POST[ 'cff_like_box_text_color' ];
+            (isset($_POST[ 'cff_show_like_box' ])) ? $cff_show_like_box = $_POST[ 'cff_show_like_box' ] : $cff_show_like_box = '';
+            if (isset($_POST[ 'cff_like_box_position' ])) $cff_like_box_position = $_POST[ 'cff_like_box_position' ];
+            (isset($_POST[ 'cff_like_box_outside' ])) ? $cff_like_box_outside = $_POST[ 'cff_like_box_outside' ] : $cff_like_box_outside = '';
+            if (isset($_POST[ 'cff_likebox_bg_color' ])) $cff_likebox_bg_color = $_POST[ 'cff_likebox_bg_color' ];
+            if (isset($_POST[ 'cff_like_box_text_color' ])) $cff_like_box_text_color = $_POST[ 'cff_like_box_text_color' ];
 
-            $cff_likebox_width = $_POST[ 'cff_likebox_width' ];
-            $cff_like_box_faces = $_POST[ 'cff_like_box_faces' ];
-            $cff_like_box_border = $_POST[ 'cff_like_box_border' ];
+            if (isset($_POST[ 'cff_likebox_width' ])) $cff_likebox_width = $_POST[ 'cff_likebox_width' ];
+            (isset($_POST[ 'cff_like_box_faces' ])) ? $cff_like_box_faces = $_POST[ 'cff_like_box_faces' ] : $cff_like_box_faces = '';
+            (isset($_POST[ 'cff_like_box_border' ])) ? $cff_like_box_border = $_POST[ 'cff_like_box_border' ] : $cff_like_box_border = '';
 
-            $cff_video_height = $_POST[ 'cff_video_height' ];
-            $cff_video_action = $_POST[ 'cff_video_action' ];
-            $cff_sep_color = $_POST[ 'cff_sep_color' ];
-            $cff_sep_size = $_POST[ 'cff_sep_size' ];
-            $cff_open_links = $_POST[ 'cff_open_links' ];
+            //Page Header
+            (isset($_POST[ 'cff_show_header' ])) ? $cff_show_header = $_POST[ 'cff_show_header' ] : $cff_show_header = '';
+            (isset($_POST[ 'cff_header_outside' ])) ? $cff_header_outside = $_POST[ 'cff_header_outside' ] : $cff_header_outside = '';
+            if (isset($_POST[ 'cff_header_text' ])) $cff_header_text = $_POST[ 'cff_header_text' ];
+            if (isset($_POST[ 'cff_header_bg_color' ])) $cff_header_bg_color = $_POST[ 'cff_header_bg_color' ];
+            if (isset($_POST[ 'cff_header_padding' ])) $cff_header_padding = $_POST[ 'cff_header_padding' ];
+            if (isset($_POST[ 'cff_header_text_size' ])) $cff_header_text_size = $_POST[ 'cff_header_text_size' ];
+            if (isset($_POST[ 'cff_header_text_weight' ])) $cff_header_text_weight = $_POST[ 'cff_header_text_weight' ];
+            if (isset($_POST[ 'cff_header_text_color' ])) $cff_header_text_color = $_POST[ 'cff_header_text_color' ];
+            if (isset($_POST[ 'cff_header_icon' ])) $cff_header_icon = $_POST[ 'cff_header_icon' ];
+            if (isset($_POST[ 'cff_header_icon_color' ])) $cff_header_icon_color = $_POST[ 'cff_header_icon_color' ];
+            if (isset($_POST[ 'cff_header_icon_size' ])) $cff_header_icon_size = $_POST[ 'cff_header_icon_size' ];
+
+            if (isset($_POST[ 'cff_video_height' ])) $cff_video_height = $_POST[ 'cff_video_height' ];
+            if (isset($_POST[ 'cff_video_action' ])) $cff_video_action = $_POST[ 'cff_video_action' ];
+            if (isset($_POST[ 'cff_sep_color' ])) $cff_sep_color = $_POST[ 'cff_sep_color' ];
+            if (isset($_POST[ 'cff_sep_size' ])) $cff_sep_size = $_POST[ 'cff_sep_size' ];
+            if (isset($_POST[ 'cff_open_links' ])) $cff_open_links = $_POST[ 'cff_open_links' ];
             //Meta
             $options[ 'cff_icon_style' ] = $cff_icon_style;
             $options[ 'cff_meta_text_color' ] = $cff_meta_text_color;
@@ -783,6 +855,7 @@ function cff_style_page() {
             $options[ 'cff_hide_comments' ] = $cff_hide_comments;
             //Custom CSS
             $options[ 'cff_custom_css' ] = $cff_custom_css;
+            $options[ 'cff_custom_js' ] = $cff_custom_js;
             //Misc
             $options[ 'cff_show_like_box' ] = $cff_show_like_box;
             $options[ 'cff_like_box_position' ] = $cff_like_box_position;
@@ -794,11 +867,77 @@ function cff_style_page() {
             $options[ 'cff_like_box_faces' ] = $cff_like_box_faces;
             $options[ 'cff_like_box_border' ] = $cff_like_box_border;
             
+            //Page Header
+            $options[ 'cff_show_header' ] = $cff_show_header;
+            $options[ 'cff_header_outside' ] = $cff_header_outside;
+            $options[ 'cff_header_text' ] = $cff_header_text;
+            $options[ 'cff_header_bg_color' ] = $cff_header_bg_color;
+            $options[ 'cff_header_padding' ] = $cff_header_padding;
+            $options[ 'cff_header_text_size' ] = $cff_header_text_size;
+            $options[ 'cff_header_text_weight' ] = $cff_header_text_weight;
+            $options[ 'cff_header_text_color' ] = $cff_header_text_color;
+            $options[ 'cff_header_icon' ] = $cff_header_icon;
+            $options[ 'cff_header_icon_color' ] = $cff_header_icon_color;
+            $options[ 'cff_header_icon_size' ] = $cff_header_icon_size;
+
             $options[ 'cff_video_height' ] = $cff_video_height;
             $options[ 'cff_video_action' ] = $cff_video_action;
             $options[ 'cff_sep_color' ] = $cff_sep_color;
             $options[ 'cff_sep_size' ] = $cff_sep_size;
             $options[ 'cff_open_links' ] = $cff_open_links;
+        }
+        //Update the Custom Text / Translate options
+        if( isset($_POST[ $style_custom_text_hidden_field_name ]) && $_POST[ $style_custom_text_hidden_field_name ] == 'Y' ) {
+
+            //Translate
+            if (isset($_POST[ 'cff_see_more_text' ])) $cff_see_more_text = $_POST[ 'cff_see_more_text' ];
+            if (isset($_POST[ 'cff_see_less_text' ])) $cff_see_less_text = $_POST[ 'cff_see_less_text' ];
+            if (isset($_POST[ 'cff_facebook_link_text' ])) $cff_facebook_link_text = $_POST[ 'cff_facebook_link_text' ];
+
+            //Social translate
+            if (isset($_POST[ 'cff_translate_photos_text' ])) $cff_translate_photos_text = $_POST[ 'cff_translate_photos_text' ];
+
+            //Date translate
+            if (isset($_POST[ 'cff_translate_second' ])) $cff_translate_second = $_POST[ 'cff_translate_second' ];
+            if (isset($_POST[ 'cff_translate_seconds' ])) $cff_translate_seconds = $_POST[ 'cff_translate_seconds' ];
+            if (isset($_POST[ 'cff_translate_minute' ])) $cff_translate_minute = $_POST[ 'cff_translate_minute' ];
+            if (isset($_POST[ 'cff_translate_minutes' ])) $cff_translate_minutes = $_POST[ 'cff_translate_minutes' ];
+            if (isset($_POST[ 'cff_translate_hour' ])) $cff_translate_hour = $_POST[ 'cff_translate_hour' ];
+            if (isset($_POST[ 'cff_translate_hours' ])) $cff_translate_hours = $_POST[ 'cff_translate_hours' ];
+            if (isset($_POST[ 'cff_translate_day' ])) $cff_translate_day = $_POST[ 'cff_translate_day' ];
+            if (isset($_POST[ 'cff_translate_days' ])) $cff_translate_days = $_POST[ 'cff_translate_days' ];
+            if (isset($_POST[ 'cff_translate_week' ])) $cff_translate_week = $_POST[ 'cff_translate_week' ];
+            if (isset($_POST[ 'cff_translate_weeks' ])) $cff_translate_weeks = $_POST[ 'cff_translate_weeks' ];
+            if (isset($_POST[ 'cff_translate_month' ])) $cff_translate_month = $_POST[ 'cff_translate_month' ];
+            if (isset($_POST[ 'cff_translate_months' ])) $cff_translate_months = $_POST[ 'cff_translate_months' ];
+            if (isset($_POST[ 'cff_translate_year' ])) $cff_translate_year = $_POST[ 'cff_translate_year' ];
+            if (isset($_POST[ 'cff_translate_years' ])) $cff_translate_years = $_POST[ 'cff_translate_years' ];
+            if (isset($_POST[ 'cff_translate_ago' ])) $cff_translate_ago = $_POST[ 'cff_translate_ago' ];
+
+            //Translate
+            $options[ 'cff_see_more_text' ] = $cff_see_more_text;
+            $options[ 'cff_see_less_text' ] = $cff_see_less_text;
+            $options[ 'cff_facebook_link_text' ] = $cff_facebook_link_text;
+            //Social translate
+            $options[ 'cff_translate_photos_text' ] = $cff_translate_photos_text;
+
+            //Date translate
+            $options[ 'cff_translate_second' ] = $cff_translate_second;
+            $options[ 'cff_translate_seconds' ] = $cff_translate_seconds;
+            $options[ 'cff_translate_minute' ] = $cff_translate_minute;
+            $options[ 'cff_translate_minutes' ] = $cff_translate_minutes;
+            $options[ 'cff_translate_hour' ] = $cff_translate_hour;
+            $options[ 'cff_translate_hours' ] = $cff_translate_hours;
+            $options[ 'cff_translate_day' ] = $cff_translate_day;
+            $options[ 'cff_translate_days' ] = $cff_translate_days;
+            $options[ 'cff_translate_week' ] = $cff_translate_week;
+            $options[ 'cff_translate_weeks' ] = $cff_translate_weeks;
+            $options[ 'cff_translate_month' ] = $cff_translate_month;
+            $options[ 'cff_translate_months' ] = $cff_translate_months;
+            $options[ 'cff_translate_year' ] = $cff_translate_year;
+            $options[ 'cff_translate_years' ] = $cff_translate_years;
+            $options[ 'cff_translate_ago' ] = $cff_translate_ago;
+
         }
         //Update the array
         update_option( 'cff_style_settings', $options );
@@ -821,6 +960,7 @@ function cff_style_page() {
                 <a href="?page=cff-style&tab=post_layout" class="nav-tab <?php echo $active_tab == 'post_layout' ? 'nav-tab-active' : ''; ?>"><?php _e('Post Layout'); ?></a>
                 <a href="?page=cff-style&tab=typography" class="nav-tab <?php echo $active_tab == 'typography' ? 'nav-tab-active' : ''; ?>"><?php _e('Typography'); ?></a>
                 <a href="?page=cff-style&tab=misc" class="nav-tab <?php echo $active_tab == 'misc' ? 'nav-tab-active' : ''; ?>"><?php _e('Misc'); ?></a>
+                <a href="?page=cff-style&tab=custom_text" class="nav-tab <?php echo $active_tab == 'custom_text' ? 'nav-tab-active' : ''; ?>"><?php _e('Custom Text / Translate'); ?></a>
             </h2>
             <?php if( $active_tab == 'general' ) { //Start General tab ?>
             <input type="hidden" name="<?php echo $style_general_hidden_field_name; ?>" value="Y">
@@ -1025,20 +1165,6 @@ function cff_style_page() {
                                         <input name="cff_body_length" type="text" value="<?php esc_attr_e( $cff_body_length_val ); ?>" size="4" /> <span><?php _e('Characters.'); ?></span> <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Leave empty to set no maximum length'); ?></i>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th><label for="cff_see_more_text" class="bump-left"><?php _e('Custom "See More" text'); ?></label></th>
-                                    <td>
-                                        <input name="cff_see_more_text" type="text" value="<?php esc_attr_e( $cff_see_more_text ); ?>" size="20" />
-                                        <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Use different text in place of the default "See More" text'); ?></i>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th><label for="cff_see_less_text" class="bump-left"><?php _e('Custom "See Less" text'); ?></label></th>
-                                    <td>
-                                        <input name="cff_see_less_text" type="text" value="<?php esc_attr_e( $cff_see_less_text ); ?>" size="20" />
-                                        <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Use different text in place of the default "See Less" text'); ?></i>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1224,7 +1350,7 @@ function cff_style_page() {
                             <tr>
                                 <th><label for="cff_date_formatting" class="bump-left"><?php _e('Date formatting'); ?></label></th>
                                 <td>
-                                    <select name="cff_date_formatting">
+                                    <select name="cff_date_formatting" id="cff-date-formatting">
                                         <?php $original = strtotime('2013-07-25T17:30:00+0000'); ?>
                                         <option value="1" <?php if($cff_date_formatting == "1") echo 'selected="selected"' ?> ><?php _e('2 days ago'); ?></option>
                                         <option value="2" <?php if($cff_date_formatting == "2") echo 'selected="selected"' ?> ><?php echo date('F jS, g:i a', $original); ?></option>
@@ -1241,7 +1367,7 @@ function cff_style_page() {
                                         <option value="13" <?php if($cff_date_formatting == "13") echo 'selected="selected"' ?> ><?php echo date('d/m/y', $original); ?></option>
                                     </select>
 
-                                    <a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('Translate this'); ?></a>
+                                    <a class="cff-tooltip-link" href="JavaScript:void(0);" id="cff-translate-date"><?php _e('Translate this'); ?></a>
                                     <div class="cff-tooltip">
                                         <div class="cff-tooltip-table">
                                             <p style="margin-bottom: 15px;"><?php _e('Translate the text below into the language you would like to use:'); ?></p>
@@ -1296,6 +1422,105 @@ function cff_style_page() {
 
                                 </td>
                             </tr>
+
+                            <tr>
+                                <th><label for="cff_timezone" class="bump-left"><?php _e('Timezone'); ?></label></th>
+                                <td>
+                                    <select name="cff_timezone" style="width: 300px;">
+                                        <option value="Pacific/Midway" <?php if($cff_timezone == "Pacific/Midway") echo 'selected="selected"' ?> ><?php _e('(GMT-11:00) Midway Island, Samoa'); ?></option>
+                                        <option value="America/Adak" <?php if($cff_timezone == "America/Adak") echo 'selected="selected"' ?> ><?php _e('(GMT-10:00) Hawaii-Aleutian'); ?></option>
+                                        <option value="Etc/GMT+10" <?php if($cff_timezone == "Etc/GMT+10") echo 'selected="selected"' ?> ><?php _e('(GMT-10:00) Hawaii'); ?></option>
+                                        <option value="Pacific/Marquesas" <?php if($cff_timezone == "Pacific/Marquesas") echo 'selected="selected"' ?> ><?php _e('(GMT-09:30) Marquesas Islands'); ?></option>
+                                        <option value="Pacific/Gambier" <?php if($cff_timezone == "Pacific/Gambier") echo 'selected="selected"' ?> ><?php _e('(GMT-09:00) Gambier Islands'); ?></option>
+                                        <option value="America/Anchorage" <?php if($cff_timezone == "America/Anchorage") echo 'selected="selected"' ?> ><?php _e('(GMT-09:00) Alaska'); ?></option>
+                                        <option value="America/Ensenada" <?php if($cff_timezone == "America/Ensenada") echo 'selected="selected"' ?> ><?php _e('(GMT-08:00) Tijuana, Baja California'); ?></option>
+                                        <option value="Etc/GMT+8" <?php if($cff_timezone == "Etc/GMT+8") echo 'selected="selected"' ?> ><?php _e('(GMT-08:00) Pitcairn Islands'); ?></option>
+                                        <option value="America/Los_Angeles" <?php if($cff_timezone == "America/Los_Angeles") echo 'selected="selected"' ?> ><?php _e('(GMT-08:00) Pacific Time (US & Canada)'); ?></option>
+                                        <option value="America/Denver" <?php if($cff_timezone == "America/Denver") echo 'selected="selected"' ?> ><?php _e('(GMT-07:00) Mountain Time (US & Canada)'); ?></option>
+                                        <option value="America/Chihuahua" <?php if($cff_timezone == "America/Chihuahua") echo 'selected="selected"' ?> ><?php _e('(GMT-07:00) Chihuahua, La Paz, Mazatlan'); ?></option>
+                                        <option value="America/Dawson_Creek" <?php if($cff_timezone == "America/Dawson_Creek") echo 'selected="selected"' ?> ><?php _e('(GMT-07:00) Arizona'); ?></option>
+                                        <option value="America/Belize" <?php if($cff_timezone == "America/Belize") echo 'selected="selected"' ?> ><?php _e('(GMT-06:00) Saskatchewan, Central America'); ?></option>
+                                        <option value="America/Cancun" <?php if($cff_timezone == "America/Cancun") echo 'selected="selected"' ?> ><?php _e('(GMT-06:00) Guadalajara, Mexico City, Monterrey'); ?></option>
+                                        <option value="Chile/EasterIsland" <?php if($cff_timezone == "Chile/EasterIsland") echo 'selected="selected"' ?> ><?php _e('(GMT-06:00) Easter Island'); ?></option>
+                                        <option value="America/Chicago" <?php if($cff_timezone == "America/Chicago") echo 'selected="selected"' ?> ><?php _e('(GMT-06:00) Central Time (US & Canada)'); ?></option>
+                                        <option value="America/New_York" <?php if($cff_timezone == "America/New_York") echo 'selected="selected"' ?> ><?php _e('(GMT-05:00) Eastern Time (US & Canada)'); ?></option>
+                                        <option value="America/Havana" <?php if($cff_timezone == "America/Havana") echo 'selected="selected"' ?> ><?php _e('(GMT-05:00) Cuba'); ?></option>
+                                        <option value="America/Bogota" <?php if($cff_timezone == "America/Bogota") echo 'selected="selected"' ?> ><?php _e('(GMT-05:00) Bogota, Lima, Quito, Rio Branco'); ?></option>
+                                        <option value="America/Caracas" <?php if($cff_timezone == "America/Caracas") echo 'selected="selected"' ?> ><?php _e('(GMT-04:30) Caracas'); ?></option>
+                                        <option value="America/Santiago" <?php if($cff_timezone == "America/Santiago") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) Santiago'); ?></option>
+                                        <option value="America/La_Paz" <?php if($cff_timezone == "America/La_Paz") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) La Paz'); ?></option>
+                                        <option value="Atlantic/Stanley" <?php if($cff_timezone == "Atlantic/Stanley") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) Faukland Islands'); ?></option>
+                                        <option value="America/Campo_Grande" <?php if($cff_timezone == "America/Campo_Grande") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) Brazil'); ?></option>
+                                        <option value="America/Goose_Bay" <?php if($cff_timezone == "America/Goose_Bay") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) Atlantic Time (Goose Bay)'); ?></option>
+                                        <option value="America/Glace_Bay" <?php if($cff_timezone == "America/Glace_Bay") echo 'selected="selected"' ?> ><?php _e('(GMT-04:00) Atlantic Time (Canada)'); ?></option>
+                                        <option value="America/St_Johns" <?php if($cff_timezone == "America/St_Johns") echo 'selected="selected"' ?> ><?php _e('(GMT-03:30) Newfoundland'); ?></option>
+                                        <option value="America/Araguaina" <?php if($cff_timezone == "America/Araguaina") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) UTC-3'); ?></option>
+                                        <option value="America/Montevideo" <?php if($cff_timezone == "America/Montevideo") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) Montevideo'); ?></option>
+                                        <option value="America/Miquelon" <?php if($cff_timezone == "America/Miquelon") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) Miquelon, St. Pierre'); ?></option>
+                                        <option value="America/Godthab" <?php if($cff_timezone == "America/Godthab") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) Greenland'); ?></option>
+                                        <option value="America/Argentina/Buenos_Aires" <?php if($cff_timezone == "America/Argentina/Buenos_Aires") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) Buenos Aires'); ?></option>
+                                        <option value="America/Sao_Paulo" <?php if($cff_timezone == "America/Sao_Paulo") echo 'selected="selected"' ?> ><?php _e('(GMT-03:00) Brasilia'); ?></option>
+                                        <option value="America/Noronha" <?php if($cff_timezone == "America/Noronha") echo 'selected="selected"' ?> ><?php _e('(GMT-02:00) Mid-Atlantic'); ?></option>
+                                        <option value="Atlantic/Cape_Verde" <?php if($cff_timezone == "Atlantic/Cape_Verde") echo 'selected="selected"' ?> ><?php _e('(GMT-01:00) Cape Verde Is.'); ?></option>
+                                        <option value="Atlantic/Azores" <?php if($cff_timezone == "Atlantic/Azores") echo 'selected="selected"' ?> ><?php _e('(GMT-01:00) Azores'); ?></option>
+                                        <option value="Europe/Belfast" <?php if($cff_timezone == "Europe/Belfast") echo 'selected="selected"' ?> ><?php _e('(GMT) Greenwich Mean Time : Belfast'); ?></option>
+                                        <option value="Europe/Dublin" <?php if($cff_timezone == "Europe/Dublin") echo 'selected="selected"' ?> ><?php _e('(GMT) Greenwich Mean Time : Dublin'); ?></option>
+                                        <option value="Europe/Lisbon" <?php if($cff_timezone == "Europe/Lisbon") echo 'selected="selected"' ?> ><?php _e('(GMT) Greenwich Mean Time : Lisbon'); ?></option>
+                                        <option value="Europe/London" <?php if($cff_timezone == "Europe/London") echo 'selected="selected"' ?> ><?php _e('(GMT) Greenwich Mean Time : London'); ?></option>
+                                        <option value="Africa/Abidjan" <?php if($cff_timezone == "Africa/Abidjan") echo 'selected="selected"' ?> ><?php _e('(GMT) Monrovia, Reykjavik'); ?></option>
+                                        <option value="Europe/Amsterdam" <?php if($cff_timezone == "Europe/Amsterdam") echo 'selected="selected"' ?> ><?php _e('(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'); ?></option>
+                                        <option value="Europe/Belgrade" <?php if($cff_timezone == "Europe/Belgrade") echo 'selected="selected"' ?> ><?php _e('(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague'); ?></option>
+                                        <option value="Europe/Brussels" <?php if($cff_timezone == "Europe/Brussels") echo 'selected="selected"' ?> ><?php _e('(GMT+01:00) Brussels, Copenhagen, Madrid, Paris'); ?></option>
+                                        <option value="Africa/Algiers" <?php if($cff_timezone == "Africa/Algiers") echo 'selected="selected"' ?> ><?php _e('(GMT+01:00) West Central Africa'); ?></option>
+                                        <option value="Africa/Windhoek" <?php if($cff_timezone == "Africa/Windhoek") echo 'selected="selected"' ?> ><?php _e('(GMT+01:00) Windhoek'); ?></option>
+                                        <option value="Asia/Beirut" <?php if($cff_timezone == "Asia/Beirut") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Beirut'); ?></option>
+                                        <option value="Africa/Cairo" <?php if($cff_timezone == "Africa/Cairo") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Cairo'); ?></option>
+                                        <option value="Asia/Gaza" <?php if($cff_timezone == "Asia/Gaza") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Gaza'); ?></option>
+                                        <option value="Africa/Blantyre" <?php if($cff_timezone == "Africa/Blantyre") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Harare, Pretoria'); ?></option>
+                                        <option value="Asia/Jerusalem" <?php if($cff_timezone == "Asia/Jerusalem") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Jerusalem'); ?></option>
+                                        <option value="Europe/Minsk" <?php if($cff_timezone == "Europe/Minsk") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Minsk'); ?></option>
+                                        <option value="Asia/Damascus" <?php if($cff_timezone == "Asia/Damascus") echo 'selected="selected"' ?> ><?php _e('(GMT+02:00) Syria'); ?></option>
+                                        <option value="Europe/Moscow" <?php if($cff_timezone == "Europe/Moscow") echo 'selected="selected"' ?> ><?php _e('(GMT+03:00) Moscow, St. Petersburg, Volgograd'); ?></option>
+                                        <option value="Africa/Addis_Ababa" <?php if($cff_timezone == "Africa/Addis_Ababa") echo 'selected="selected"' ?> ><?php _e('(GMT+03:00) Nairobi'); ?></option>
+                                        <option value="Asia/Tehran" <?php if($cff_timezone == "Asia/Tehran") echo 'selected="selected"' ?> ><?php _e('(GMT+03:30) Tehran'); ?></option>
+                                        <option value="Asia/Dubai" <?php if($cff_timezone == "Asia/Dubai") echo 'selected="selected"' ?> ><?php _e('(GMT+04:00) Abu Dhabi, Muscat'); ?></option>
+                                        <option value="Asia/Yerevan" <?php if($cff_timezone == "Asia/Yerevan") echo 'selected="selected"' ?> ><?php _e('(GMT+04:00) Yerevan'); ?></option>
+                                        <option value="Asia/Kabul" <?php if($cff_timezone == "Asia/Kabul") echo 'selected="selected"' ?> ><?php _e('(GMT+04:30) Kabul'); ?></option>
+                                        <option value="Asia/Yekaterinburg" <?php if($cff_timezone == "Asia/Yekaterinburg") echo 'selected="selected"' ?> ><?php _e('(GMT+05:00) Ekaterinburg'); ?></option>
+                                        <option value="Asia/Tashkent" <?php if($cff_timezone == "Asia/Tashkent") echo 'selected="selected"' ?> ><?php _e('(GMT+05:00) Tashkent'); ?></option>
+                                        <option value="Asia/Kolkata" <?php if($cff_timezone == "Asia/Kolkata") echo 'selected="selected"' ?> ><?php _e('(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi'); ?></option>
+                                        <option value="Asia/Katmandu" <?php if($cff_timezone == "Asia/Katmandu") echo 'selected="selected"' ?> ><?php _e('(GMT+05:45) Kathmandu'); ?></option>
+                                        <option value="Asia/Dhaka" <?php if($cff_timezone == "Asia/Dhaka") echo 'selected="selected"' ?> ><?php _e('(GMT+06:00) Astana, Dhaka'); ?></option>
+                                        <option value="Asia/Novosibirsk" <?php if($cff_timezone == "Asia/Novosibirsk") echo 'selected="selected"' ?> ><?php _e('(GMT+06:00) Novosibirsk'); ?></option>
+                                        <option value="Asia/Rangoon" <?php if($cff_timezone == "Asia/Rangoon") echo 'selected="selected"' ?> ><?php _e('(GMT+06:30) Yangon (Rangoon)'); ?></option>
+                                        <option value="Asia/Bangkok" <?php if($cff_timezone == "Asia/Bangkok") echo 'selected="selected"' ?> ><?php _e('(GMT+07:00) Bangkok, Hanoi, Jakarta'); ?></option>
+                                        <option value="Asia/Krasnoyarsk" <?php if($cff_timezone == "Asia/Krasnoyarsk") echo 'selected="selected"' ?> ><?php _e('(GMT+07:00) Krasnoyarsk'); ?></option>
+                                        <option value="Asia/Hong_Kong" <?php if($cff_timezone == "Asia/Hong_Kong") echo 'selected="selected"' ?> ><?php _e('(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi'); ?></option>
+                                        <option value="Asia/Irkutsk" <?php if($cff_timezone == "Asia/Irkutsk") echo 'selected="selected"' ?> ><?php _e('(GMT+08:00) Irkutsk, Ulaan Bataar'); ?></option>
+                                        <option value="Australia/Perth" <?php if($cff_timezone == "Australia/Perth") echo 'selected="selected"' ?> ><?php _e('(GMT+08:00) Perth'); ?></option>
+                                        <option value="Australia/Eucla" <?php if($cff_timezone == "Australia/Eucla") echo 'selected="selected"' ?> ><?php _e('(GMT+08:45) Eucla'); ?></option>
+                                        <option value="Asia/Tokyo" <?php if($cff_timezone == "Asia/Tokyo") echo 'selected="selected"' ?> ><?php _e('(GMT+09:00) Osaka, Sapporo, Tokyo'); ?></option>
+                                        <option value="Asia/Seoul" <?php if($cff_timezone == "Asia/Seoul") echo 'selected="selected"' ?> ><?php _e('(GMT+09:00) Seoul'); ?></option>
+                                        <option value="Asia/Yakutsk" <?php if($cff_timezone == "Asia/Yakutsk") echo 'selected="selected"' ?> ><?php _e('(GMT+09:00) Yakutsk'); ?></option>
+                                        <option value="Australia/Adelaide" <?php if($cff_timezone == "Australia/Adelaide") echo 'selected="selected"' ?> ><?php _e('(GMT+09:30) Adelaide'); ?></option>
+                                        <option value="Australia/Darwin" <?php if($cff_timezone == "Australia/Darwin") echo 'selected="selected"' ?> ><?php _e('(GMT+09:30) Darwin'); ?></option>
+                                        <option value="Australia/Brisbane" <?php if($cff_timezone == "Australia/Brisbane") echo 'selected="selected"' ?> ><?php _e('(GMT+10:00) Brisbane'); ?></option>
+                                        <option value="Australia/Hobart" <?php if($cff_timezone == "Australia/Hobart") echo 'selected="selected"' ?> ><?php _e('(GMT+10:00) Hobart'); ?></option>
+                                        <option value="Asia/Vladivostok" <?php if($cff_timezone == "Asia/Vladivostok") echo 'selected="selected"' ?> ><?php _e('(GMT+10:00) Vladivostok'); ?></option>
+                                        <option value="Australia/Lord_Howe" <?php if($cff_timezone == "Australia/Lord_Howe") echo 'selected="selected"' ?> ><?php _e('(GMT+10:30) Lord Howe Island'); ?></option>
+                                        <option value="Etc/GMT-11" <?php if($cff_timezone == "Etc/GMT-11") echo 'selected="selected"' ?> ><?php _e('(GMT+11:00) Solomon Is., New Caledonia'); ?></option>
+                                        <option value="Asia/Magadan" <?php if($cff_timezone == "Asia/Magadan") echo 'selected="selected"' ?> ><?php _e('(GMT+11:00) Magadan'); ?></option>
+                                        <option value="Pacific/Norfolk" <?php if($cff_timezone == "Pacific/Norfolk") echo 'selected="selected"' ?> ><?php _e('(GMT+11:30) Norfolk Island'); ?></option>
+                                        <option value="Asia/Anadyr" <?php if($cff_timezone == "Asia/Anadyr") echo 'selected="selected"' ?> ><?php _e('(GMT+12:00) Anadyr, Kamchatka'); ?></option>
+                                        <option value="Pacific/Auckland" <?php if($cff_timezone == "Pacific/Auckland") echo 'selected="selected"' ?> ><?php _e('(GMT+12:00) Auckland, Wellington'); ?></option>
+                                        <option value="Etc/GMT-12" <?php if($cff_timezone == "Etc/GMT-12") echo 'selected="selected"' ?> ><?php _e('(GMT+12:00) Fiji, Kamchatka, Marshall Is.'); ?></option>
+                                        <option value="Pacific/Chatham" <?php if($cff_timezone == "Pacific/Chatham") echo 'selected="selected"' ?> ><?php _e('(GMT+12:45) Chatham Islands'); ?></option>
+                                        <option value="Pacific/Tongatapu" <?php if($cff_timezone == "Pacific/Tongatapu") echo 'selected="selected"' ?> ><?php _e('(GMT+13:00) Nuku\'alofa'); ?></option>
+                                        <option value="Pacific/Kiritimati" <?php if($cff_timezone == "Pacific/Kiritimati") echo 'selected="selected"' ?> ><?php _e('(GMT+14:00) Kiritimati'); ?></option>
+                                    </select>
+                                </td>
+                            </tr>
+
                             <tr>
                                 <th><label for="cff_date_custom" class="bump-left"><?php _e('Custom format'); ?></label></th>
                                 <td>
@@ -1613,6 +1838,22 @@ function cff_style_page() {
                     </tr>
                 </tbody>
             </table>
+            <h3><?php _e('Custom JavaScript'); ?></h3>
+            <table class="form-table">
+                <tbody>
+                    <tr valign="top">
+                        <td>
+                        <?php _e('Enter your own custom JavaScript/jQuery in the box below'); ?>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td>
+                            <textarea name="cff_custom_js" id="cff_custom_js" style="width: 70%;" rows="7"><?php esc_attr_e( stripslashes($cff_custom_js) ); ?></textarea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <?php submit_button(); ?>
             <hr />
             <h3><?php _e('Like Box'); ?></h3>
             <table class="form-table">
@@ -1681,6 +1922,150 @@ function cff_style_page() {
                     </tr>
                 </tbody>
             </table>
+
+
+            <hr />
+            <h3 id="cff-header"><?php _e('Feed Header'); ?></h3>
+            <table class="form-table">
+                <tbody>
+                    <tr valign="top">
+                        <th class="bump-left" scope="row"><label><?php _e('Show Feed Header'); ?></label></th>
+                        <td>
+                            <input type="checkbox" name="cff_show_header" id="cff_show_header" <?php if($cff_show_header == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('This will show a header at the top of your feed'); ?></i>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th class="bump-left" scope="row"><label><?php _e('Display outside the scrollable area'); ?></label></th>
+                        <td>
+                            <input type="checkbox" name="cff_header_outside" id="cff_header_outside" <?php if($cff_header_outside == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Only applicable if you have set a height on the feed'); ?></i>
+                        </td>
+                    </tr>
+                    </tr>
+                        <th class="bump-left" scope="row"><label><?php _e('Text'); ?></label></th>
+                        <td>
+                            <input name="cff_header_text" type="text" value="<?php esc_attr_e( $cff_header_text ); ?>" size="30" />
+                            <span>Eg. Facebook Feed, Events, News..</span>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th class="bump-left" scope="row"><label><?php _e('Background Color'); ?></label></th>
+                        <td>
+                            <label for="cff_header_bg_color">#</label>
+                            <input name="cff_header_bg_color" type="text" value="<?php esc_attr_e( $cff_header_bg_color ); ?>" size="10" />
+                            <span>Eg. ED9A00</span>&nbsp;&nbsp;<a href="http://www.colorpicker.com/" target="_blank"><?php _e('Color Picker'); ?></a>
+                        </td>
+                    </tr>
+                    </tr>
+                        <th class="bump-left" scope="row"><label><?php _e('Padding'); ?></label></th>
+                        <td>
+                            <input name="cff_header_padding" type="text" value="<?php esc_attr_e( $cff_header_padding ); ?>" size="6" />
+                            <span>Eg. 20px, 5%. <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('This is the amount of padding/spacing that goes around the header.'); ?></i></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="bump-left" scope="row"><label><?php _e('Text Size'); ?></label></th>
+                        <td>
+                            <select name="cff_header_text_size">
+                                <option value="inherit" <?php if($cff_header_text_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
+                                <option value="10" <?php if($cff_header_text_size == "10") echo 'selected="selected"' ?> >10px</option>
+                                <option value="11" <?php if($cff_header_text_size == "11") echo 'selected="selected"' ?> >11px</option>
+                                <option value="12" <?php if($cff_header_text_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                <option value="14" <?php if($cff_header_text_size == "14") echo 'selected="selected"' ?> >14px</option>
+                                <option value="16" <?php if($cff_header_text_size == "16") echo 'selected="selected"' ?> >16px</option>
+                                <option value="18" <?php if($cff_header_text_size == "18") echo 'selected="selected"' ?> >18px</option>
+                                <option value="20" <?php if($cff_header_text_size == "20") echo 'selected="selected"' ?> >20px</option>
+                                <option value="24" <?php if($cff_header_text_size == "24") echo 'selected="selected"' ?> >24px</option>
+                                <option value="28" <?php if($cff_header_text_size == "28") echo 'selected="selected"' ?> >28px</option>
+                                <option value="32" <?php if($cff_header_text_size == "32") echo 'selected="selected"' ?> >32px</option>
+                                <option value="36" <?php if($cff_header_text_size == "36") echo 'selected="selected"' ?> >36px</option>
+                                <option value="42" <?php if($cff_header_text_size == "42") echo 'selected="selected"' ?> >42px</option>
+                                <option value="48" <?php if($cff_header_text_size == "48") echo 'selected="selected"' ?> >48px</option>
+                                <option value="54" <?php if($cff_header_text_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                <option value="60" <?php if($cff_header_text_size == "60") echo 'selected="selected"' ?> >60px</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="bump-left" scope="row"><label><?php _e('Text Weight'); ?></label></th>
+                        <td>
+                            <select name="cff_header_text_weight">
+                                <option value="inherit" <?php if($cff_header_text_weight == "inherit") echo 'selected="selected"' ?> >Inherit</option>
+                                <option value="normal" <?php if($cff_header_text_weight == "normal") echo 'selected="selected"' ?> >Normal</option>
+                                <option value="bold" <?php if($cff_header_text_weight == "bold") echo 'selected="selected"' ?> >Bold</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="bump-left" scope="row"><label><?php _e('Text Color'); ?></label></th>
+                        <td>
+                            #<input name="cff_header_text_color" type="text" value="<?php esc_attr_e( $cff_header_text_color ); ?>" size="10" placeholder="Eg. ED9A00" />
+                            <span><a href="http://www.colorpicker.com/" target="_blank"><?php _e('Color Picker'); ?></a></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="bump-left" scope="row"><label><?php _e('Icon Type'); ?></label></th>
+                        <td>
+                            <select name="cff_header_icon" id="cff-header-icon">
+                                <option value="facebook-square" <?php if($cff_header_icon == "facebook-square") echo 'selected="selected"' ?> >Facebook 1</option>
+                                <option value="facebook" <?php if($cff_header_icon == "facebook") echo 'selected="selected"' ?> >Facebook 2</option>
+                                <option value="calendar" <?php if($cff_header_icon == "calendar") echo 'selected="selected"' ?> >Events 1</option>
+                                <option value="calendar-o" <?php if($cff_header_icon == "calendar-o") echo 'selected="selected"' ?> >Events 2</option>
+                                <option value="picture-o" <?php if($cff_header_icon == "picture-o") echo 'selected="selected"' ?> >Photos</option>
+                                <option value="users" <?php if($cff_header_icon == "users") echo 'selected="selected"' ?> >People</option>
+                                <option value="thumbs-o-up" <?php if($cff_header_icon == "thumbs-o-up") echo 'selected="selected"' ?> >Thumbs Up 1</option>
+                                <option value="thumbs-up" <?php if($cff_header_icon == "thumbs-up") echo 'selected="selected"' ?> >Thumbs Up 2</option>
+                                <option value="comment-o" <?php if($cff_header_icon == "comment-o") echo 'selected="selected"' ?> >Speech Bubble 1</option>
+                                <option value="comment" <?php if($cff_header_icon == "comment") echo 'selected="selected"' ?> >Speech Bubble 2</option>
+                                <option value="ticket" <?php if($cff_header_icon == "ticket") echo 'selected="selected"' ?> >Ticket</option>
+                                <option value="list-alt" <?php if($cff_header_icon == "list-alt") echo 'selected="selected"' ?> >News List</option>
+                                <option value="file" <?php if($cff_header_icon == "file") echo 'selected="selected"' ?> >File 1</option>
+                                <option value="file-o" <?php if($cff_header_icon == "file-o") echo 'selected="selected"' ?> >File 2</option>
+                                <option value="file-text" <?php if($cff_header_icon == "file-text") echo 'selected="selected"' ?> >File 3</option>
+                                <option value="file-text-o" <?php if($cff_header_icon == "file-text-o") echo 'selected="selected"' ?> >File 4</option>
+                                <option value="youtube-play" <?php if($cff_header_icon == "youtube-play") echo 'selected="selected"' ?> >Video</option>
+                                <option value="youtube" <?php if($cff_header_icon == "youtube") echo 'selected="selected"' ?> >YouTube</option>
+                                <option value="vimeo-square" <?php if($cff_header_icon == "vimeo-square") echo 'selected="selected"' ?> >Vimeo</option>
+                            </select>
+
+                            <i id="cff-header-icon-example" class="fa fa-facebook-square"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="bump-left" scope="row"><label><?php _e('Icon Color'); ?></label></th>
+                        <td>
+                            #<input name="cff_header_icon_color" id="cff-header-icon-color" type="text" value="<?php esc_attr_e( $cff_header_icon_color ); ?>" size="10" placeholder="Eg. ED9A00" />
+                            <span><a href="http://www.colorpicker.com/" target="_blank"><?php _e('Color Picker'); ?></a></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="bump-left" scope="row"><label><?php _e('Icon Size'); ?></label></th>
+                        <td>
+                            <select name="cff_header_icon_size" id="cff-header-icon-size">
+                                <option value="10" <?php if($cff_header_icon_size == "10") echo 'selected="selected"' ?> >10px</option>
+                                <option value="11" <?php if($cff_header_icon_size == "11") echo 'selected="selected"' ?> >11px</option>
+                                <option value="12" <?php if($cff_header_icon_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                <option value="14" <?php if($cff_header_icon_size == "14") echo 'selected="selected"' ?> >14px</option>
+                                <option value="16" <?php if($cff_header_icon_size == "16") echo 'selected="selected"' ?> >16px</option>
+                                <option value="18" <?php if($cff_header_icon_size == "18") echo 'selected="selected"' ?> >18px</option>
+                                <option value="20" <?php if($cff_header_icon_size == "20") echo 'selected="selected"' ?> >20px</option>
+                                <option value="24" <?php if($cff_header_icon_size == "24") echo 'selected="selected"' ?> >24px</option>
+                                <option value="28" <?php if($cff_header_icon_size == "28") echo 'selected="selected"' ?> >28px</option>
+                                <option value="32" <?php if($cff_header_icon_size == "32") echo 'selected="selected"' ?> >32px</option>
+                                <option value="36" <?php if($cff_header_icon_size == "36") echo 'selected="selected"' ?> >36px</option>
+                                <option value="42" <?php if($cff_header_icon_size == "42") echo 'selected="selected"' ?> >42px</option>
+                                <option value="48" <?php if($cff_header_icon_size == "48") echo 'selected="selected"' ?> >48px</option>
+                                <option value="54" <?php if($cff_header_icon_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                <option value="60" <?php if($cff_header_icon_size == "60") echo 'selected="selected"' ?> >60px</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+
             <hr />
             <h3><?php _e('Separating Line'); ?></h3>
             <table class="form-table">
@@ -1704,6 +2089,110 @@ function cff_style_page() {
             <?php submit_button(); ?>
             <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
             <?php } //End Misc tab ?>
+
+
+            <?php if( $active_tab == 'custom_text' ) { //Start Post Layout tab ?>
+            <input type="hidden" name="<?php echo $style_custom_text_hidden_field_name; ?>" value="Y">
+            <br />
+            <h3><?php _e('Custom Text / Translate'); ?></h3>
+            <p><?php _e('Enter custom text for the words below, or translate it into the language you would like to use.'); ?></p>
+            <table class="form-table cff-translate-table" style="width: 100%; max-width: 940px;">
+                <tbody>
+
+                    <thead>
+                        <tr>
+                            <th><?php _e('Original Text'); ?></th>
+                            <th><?php _e('Custom Text / Translation'); ?></th>
+                            <th><?php _e('Context'); ?></th>
+                        </tr>
+                    </thead>
+
+                    <tr class="cff-table-header"><th colspan="3"><?php _e('Post Text'); ?></th></tr>
+                    <tr>
+                        <td><label for="cff_see_more_text" class="bump-left"><?php _e('See More'); ?></label></td>
+                        <td><input name="cff_see_more_text" type="text" value="<?php esc_attr_e( $cff_see_more_text ); ?>" /></td>
+                        <td class="cff-context"><?php _e('Used when truncating the post text'); ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="cff_see_less_text" class="bump-left"><?php _e('See Less'); ?></label></td>
+                        <td><input name="cff_see_less_text" type="text" value="<?php esc_attr_e( $cff_see_less_text ); ?>" /></td>
+                        <td class="cff-context"><?php _e('Used when truncating the post text'); ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="cff_translate_photos_text" class="bump-left"><?php _e('photos'); ?></label></td>
+                        <td><input name="cff_translate_photos_text" type="text" value="<?php esc_attr_e( $cff_translate_photos_text ); ?>" /></td>
+                        <td class="cff-context"><?php _e('Added to the end of an album name. Eg. (6 photos)'); ?></td>
+                    </tr>
+
+                    <tr class="cff-table-header"><th colspan="3"><?php _e('Link to Facebook'); ?></th></tr>
+                    <tr>
+                        <td><label for="cff_facebook_link_text" class="bump-left"><?php _e('View on Facebook'); ?></label></td>
+                        <td><input name="cff_facebook_link_text" type="text" value="<?php esc_attr_e( $cff_facebook_link_text ); ?>" /></td>
+                        <td class="cff-context"><?php _e('Links to the post on Facebook'); ?></td>
+                    </tr>
+
+                    
+                    <tr class="cff-table-header"><th colspan="3"><?php _e('Date'); ?></th></tr>
+                    <tr>
+                        <td><label for="cff_photos_text" class="bump-left"><?php _e('"Posted _ hours ago" text'); ?></label></td>
+                        <td class="cff-translate-date">
+
+                            <label for="cff_translate_second"><?php _e("second"); ?></label>
+                            <input name="cff_translate_second" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_seconds"><?php _e("seconds"); ?></label>
+                            <input name="cff_translate_seconds" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_minute"><?php _e("minute"); ?></label>
+                            <input name="cff_translate_minute" type="text" value="<?php esc_attr_e( $cff_translate_minute ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_minutes"><?php _e("minutes"); ?></label>
+                            <input name="cff_translate_minutes" type="text" value="<?php esc_attr_e( $cff_translate_minutes ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_hour"><?php _e("hour"); ?></label>
+                            <input name="cff_translate_hour" type="text" value="<?php esc_attr_e( $cff_translate_hour ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_hours"><?php _e("hours"); ?></label>
+                            <input name="cff_translate_hours" type="text" value="<?php esc_attr_e( $cff_translate_hours ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_day"><?php _e("day"); ?></label>
+                            <input name="cff_translate_day" type="text" value="<?php esc_attr_e( $cff_translate_day ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_days"><?php _e("days"); ?></label>
+                            <input name="cff_translate_days" type="text" value="<?php esc_attr_e( $cff_translate_days ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_week"><?php _e("week"); ?></label>
+                            <input name="cff_translate_week" type="text" value="<?php esc_attr_e( $cff_translate_week ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_weeks"><?php _e("weeks"); ?></label>
+                            <input name="cff_translate_weeks" type="text" value="<?php esc_attr_e( $cff_translate_weeks ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_month"><?php _e("month"); ?></label>
+                            <input name="cff_translate_month" type="text" value="<?php esc_attr_e( $cff_translate_month ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_months"><?php _e("months"); ?></label>
+                            <input name="cff_translate_months" type="text" value="<?php esc_attr_e( $cff_translate_months ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_year"><?php _e("year"); ?></label>
+                            <input name="cff_translate_year" type="text" value="<?php esc_attr_e( $cff_translate_year ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_years"><?php _e("years"); ?></label>
+                            <input name="cff_translate_years" type="text" value="<?php esc_attr_e( $cff_translate_years ); ?>" size="20" />
+                            <br />
+                            <label for="cff_translate_ago"><?php _e("ago"); ?></label>
+                            <input name="cff_translate_ago" type="text" value="<?php esc_attr_e( $cff_translate_ago ); ?>" size="20" />
+                        </td>
+                        <td class="cff-context"><?php _e('Used to translate the "Posted _ days ago" date text'); ?></td>
+                    </tr>
+
+                </tbody>
+            </table>
+            
+            <?php submit_button(); ?>
+            <?php } //End Post Layout tab ?>
+
         </form>
 <?php 
 } //End Style_Page
@@ -1711,6 +2200,7 @@ function cff_style_page() {
 function cff_admin_style() {
         wp_register_style( 'custom_wp_admin_css', plugin_dir_url( __FILE__ ) . 'css/cff-admin-style.css', false, '1.0.0' );
         wp_enqueue_style( 'custom_wp_admin_css' );
+        wp_enqueue_style( 'cff-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), '4.0.3' );
 }
 add_action( 'admin_enqueue_scripts', 'cff_admin_style' );
 //Enqueue admin scripts
