@@ -21,8 +21,8 @@ add_action('admin_menu', 'cff_menu');
 function cff_styling_menu() {
     add_submenu_page(
         'cff-top',
-        'Layout & Style',
-        'Layout & Style',
+        'Layout &amp; Style',
+        'Layout &amp; Style',
         'manage_options',
         'cff-style',
         'cff_style_page'
@@ -627,7 +627,6 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_feed_height' ]) ) $cff_feed_height = $_POST[ 'cff_feed_height' ];
             if (isset($_POST[ 'cff_feed_padding' ]) ) $cff_feed_padding = $_POST[ 'cff_feed_padding' ];
             if (isset($_POST[ 'cff_bg_color' ]) ) $cff_bg_color = $_POST[ 'cff_bg_color' ];
-            (isset($_POST[ 'cff_show_author' ]) ) ? $cff_show_author = $_POST[ 'cff_show_author' ] : $cff_show_author = '';
             if (isset($_POST[ 'cff_class' ]) ) $cff_class = $_POST[ 'cff_class' ];
             //Post types
             if (isset($_POST[ 'cff_show_links_type' ]) ) $cff_show_links_type = $_POST[ 'cff_show_links_type' ];
@@ -640,7 +639,6 @@ function cff_style_page() {
             $options[ 'cff_feed_height' ] = $cff_feed_height;
             $options[ 'cff_feed_padding' ] = $cff_feed_padding;
             $options[ 'cff_bg_color' ] = $cff_bg_color;
-            $options[ 'cff_show_author' ] = $cff_show_author;
             $options[ 'cff_class' ] = $cff_class;
             //Post types
             $options[ 'cff_show_links_type' ] = $cff_show_links_type;
@@ -654,6 +652,7 @@ function cff_style_page() {
             //Layout
             if (isset($_POST[ 'cff_preset_layout' ]) ) $cff_preset_layout = $_POST[ 'cff_preset_layout' ];
             //Include
+            (isset($_POST[ 'cff_show_author' ]) ) ? $cff_show_author = $_POST[ 'cff_show_author' ] : $cff_show_author = '';
             (isset($_POST[ 'cff_show_text' ]) ) ? $cff_show_text = $_POST[ 'cff_show_text' ] : $cff_show_text = '';
             (isset($_POST[ 'cff_show_desc' ]) ) ? $cff_show_desc = $_POST[ 'cff_show_desc' ] : $cff_show_desc = '';
             (isset($_POST[ 'cff_show_shared_links' ]) ) ? $cff_show_shared_links = $_POST[ 'cff_show_shared_links' ] : $cff_show_shared_links = '';
@@ -666,6 +665,7 @@ function cff_style_page() {
             //Layout
             $options[ 'cff_preset_layout' ] = $cff_preset_layout;
             //Include
+            $options[ 'cff_show_author' ] = $cff_show_author;
             $options[ 'cff_show_text' ] = $cff_show_text;
             $options[ 'cff_show_desc' ] = $cff_show_desc;
             $options[ 'cff_show_shared_links' ] = $cff_show_shared_links;
@@ -948,7 +948,7 @@ function cff_style_page() {
  
     <div id="cff-admin" class="wrap">
         <div id="header">
-            <h1><?php _e('Layout & Style'); ?></h1>
+            <h1><?php _e('Layout &amp; Style'); ?></h1>
         </div>
         <form name="form1" method="post" action="">
             <input type="hidden" name="<?php echo $style_hidden_field_name; ?>" value="Y">
@@ -994,15 +994,6 @@ function cff_style_page() {
                             <label for="cff_bg_color">#</label>
                             <input name="cff_bg_color" type="text" value="<?php esc_attr_e( $cff_bg_color ); ?>" size="10" placeholder="Eg. ED9A00" />
                             <span><a href="http://www.colorpicker.com/" target="_blank"><?php _e('Color Picker'); ?></a></span>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th class="bump-left" scope="row"><label><?php _e('Show name and picture of author'); ?></label></th>
-                        <td>
-                            <input name="cff_show_author" type="checkbox" id="cff_show_author" <?php if($cff_show_author == true) echo "checked"; ?> />
-                            <label for="cff_show_status_type">Yes</label>
-                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('This will show the thumbnail picture and name of the post author at the top of each post'); ?></i>
-                            
                         </td>
                     </tr>
                     <tr valign="top">
@@ -1096,6 +1087,10 @@ function cff_style_page() {
                         <th scope="row"><?php _e('Include the following in posts: <i style="font-size: 11px;">(when applicable)</i>'); ?>
                             <br /><i style="color: #666; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable all of these options'); ?></a></i></th>
                         <td>
+                            <div>
+                                <input name="cff_show_author" type="checkbox" id="cff_show_author" <?php if($cff_show_author == true) echo "checked"; ?> />
+                                <label for="cff_show_author"><?php _e('Author name and avatar'); ?></label>
+                            </div>
                             <div>
                                 <input name="cff_show_text" type="checkbox" id="cff_show_text" <?php if($cff_show_text == true) echo "checked"; ?> />
                                 <label for="cff_show_text"><?php _e('Post text'); ?></label>

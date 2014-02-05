@@ -1,11 +1,12 @@
 === Custom Facebook Feed ===
 Contributors: smashballoon
-Tags: facebook, custom, customizable, feed, events, seo, search engine, responsive, mobile, shortcode, social, status, posts
+Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H5XFD33R3FHMG
 
 The Custom Facebook Feed allows you to display a completely customizable Facebook feed of any public Facebook page or group on your website
 
@@ -38,10 +39,23 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Use the shortcode options to style multiple Facebook feeds in completely different ways
 * Select the number of Facebook posts to display
 * Set a maximum character length for both the text and descriptions of your Facebook posts
-* Create a customizable header for your Custom Facebook Feed
+* Create a customizable header with a range of icons for your Custom Facebook Feed
 * Localization/i18n support to allow every part of the feed to be displayed in your language
 
 To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options, post filtering by type or #hashtag/string and more then [upgrade to the Pro version](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). Try out the [Pro demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
+
+= Benefits =
+
+* **Save time** by using the Custom Facebook Feed instead to generate dynamic, search engine crawlable content on your website
+* **Increase social engagement** between you and your users, customers, fans or group members
+* **Get more likes** by displaying your Facebook content directly on your site
+* **Improve your SEO** as all of that quality keyword-rich Facebook content from posts and comments is directly embedded into your website
+* Display your Facebook content your way to perfectly match your website's style
+* The plugin is **updated regularly** with new features, bug-fixes and Facebook API changes
+* Support is quick and effective
+* We're dedicated to providing the **most customizable**, **robust** and **well supported** Facebook feed plugin in the world!
+
+[View the reviews](http://wordpress.org/support/view/plugin-reviews/custom-facebook-feed) to see what other users are saying about the Custom Facebook Feed plugin.
 
 == Installation ==
 
@@ -79,11 +93,6 @@ An Access Token is required by Facebook in order to access their feeds.  Don't w
 
 You can set your default Facebook Page ID on the Custom Facebook Feed settings page within the WordPress admin, you can then define different page IDs in the shortcodes you use to show multiple feeds from different Facebook pages. Just use the id option in your shortcode like so: [custom-facebook-feed id=another_page_id]. You can use as many shortcodes as you like with as many different IDs as you like.
 
-= Why isn't the feed from my group displaying? =
-
-Firstly, check that your group is public and not a private group.
-Secondly, be sure to check the 'Show posts by others on my page' option in the Custom Facebook Feed settings page.
-
 = Can I display the feed from a personal Facebook profile? =
 
 Due to Facebook's privacy policy you're not able to use the plugin to display all of your posts from a personal profile, only from a public page or group, as posts from a personal profile are protected for privacy reasons. You may have limited success in displaying certain posts from a personal profile but most posts are not able to be displayed.
@@ -94,11 +103,11 @@ Once you've done so, the plugin will be able to retrieve and display all of your
 
 = Can I show photos and videos in my Custom Facebook feed? =
 
-This free plugin only allows you to display text from your Facebook posts. To display photos and videos in your feed you need to upgrade to the Pro version of the plugin. Try out a demo of the Pro version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the Pro version [here](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
+This free plugin only allows you to display text from your Facebook posts. To display photos and videos in your feed you would need to upgrade to the Pro version of the plugin. Try out a demo of the Pro version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the Pro version [here](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
 
 = Can I show the comments, shares and likes associated with each Facebook post? =
 
-For this feature please upgrade to the [Pro version of the plugin](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
+This is a feature of the [Pro version of the plugin](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). To display comments, shares and likes you would need to upgrade from the free version to the Pro version.
 
 = Is the content of my Custom Facebook Feed crawlable by search engines? =
 
@@ -121,6 +130,13 @@ You can embed your Facebook feed directly into a template file by using the Word
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 1.7.1 =
+* Tweak: Moved the 'Show post author' option from the General settings tab to the Post Layout tab
+* Tweak: Added the ability to show or hide the author to the 'include' shortcode option
+* Fix: Added CSS box-sizing property to feed header so that padding doesn't increase its width
+* Fix: Fixed showheader=false and headeroutside=false shortcode options
+* Fix: Now allows users to enter their Facebook page URL as their Page ID
 
 = 1.7.0 =
 * New: Added ability to add a customizable header to your feed

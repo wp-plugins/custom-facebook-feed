@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.7.0
+Version: 1.7.1
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -33,6 +33,7 @@ function display_cff($atts) {
     $options = get_option('cff_style_settings');
     //Create the types string to set as shortcode default
     $include_string = '';
+    if($options[ 'cff_show_author' ]) $include_string .= 'author,';
     if($options[ 'cff_show_text' ]) $include_string .= 'text,';
     if($options[ 'cff_show_desc' ]) $include_string .= 'desc,';
     if($options[ 'cff_show_shared_links' ]) $include_string .= 'sharedlinks,';
@@ -59,7 +60,8 @@ function display_cff($atts) {
         'height' => isset($options[ 'cff_feed_height' ]) ? $options[ 'cff_feed_height' ] : '',
         'padding' => isset($options[ 'cff_feed_padding' ]) ? $options[ 'cff_feed_padding' ] : '',
         'bgcolor' => isset($options[ 'cff_bg_color' ]) ? $options[ 'cff_bg_color' ] : '',
-        'showauthor' => isset($options[ 'cff_show_author' ]) ? $options[ 'cff_show_author' ] : '',
+        'showauthor' => '',
+        'showauthornew' => isset($options[ 'cff_show_author' ]) ? $options[ 'cff_show_author' ] : '',
         'class' => isset($options[ 'cff_class' ]) ? $options[ 'cff_class' ] : '',
         'layout' => isset($options[ 'cff_preset_layout' ]) ? $options[ 'cff_preset_layout' ] : '',
         'include' => $include_string,
@@ -153,7 +155,7 @@ function display_cff($atts) {
     $cff_feed_height = $atts[ 'height' ];
     $cff_feed_padding = $atts[ 'padding' ];
     $cff_bg_color = $atts[ 'bgcolor' ];
-    $cff_show_author = $atts[ 'showauthor' ];
+    $cff_show_author = $atts[ 'showauthornew' ];
     $cff_cache_time = $atts[ 'cachetime' ];
     $cff_locale = $atts[ 'locale' ];
     if ( empty($cff_locale) || !isset($cff_locale) || $cff_locale == '' ) $cff_locale = 'en_US';
@@ -184,6 +186,7 @@ function display_cff($atts) {
     /********** LAYOUT **********/
     $cff_includes = $atts[ 'include' ];
     //Look for non-plural version of string in the types string in case user specifies singular in shortcode
+    $cff_show_author = false;
     $cff_show_text = false;
     $cff_show_desc = false;
     $cff_show_shared_links = false;
@@ -194,6 +197,7 @@ function display_cff($atts) {
     $cff_show_meta = false;
     $cff_show_link = false;
     $cff_show_like_box = false;
+    if ( stripos($cff_includes, 'author') !== false ) $cff_show_author = true;
     if ( stripos($cff_includes, 'text') !== false ) $cff_show_text = true;
     if ( stripos($cff_includes, 'desc') !== false ) $cff_show_desc = true;
     if ( stripos($cff_includes, 'sharedlink') !== false ) $cff_show_shared_links = true;
@@ -204,7 +208,14 @@ function display_cff($atts) {
     if ( stripos($cff_includes, 'social') !== false ) $cff_show_meta = true;
     if ( stripos($cff_includes, ',link') !== false ) $cff_show_link = true; //comma used to separate it from 'sharedlinks' - which also contains 'link' string
     if ( stripos($cff_includes, 'like') !== false ) $cff_show_like_box = true;
+    //Set free version to thumb layout by default as layout option not available on settings page
     $cff_preset_layout = 'thumb';
+
+    //If the old shortcode option 'showauthor' is being used then apply it
+    $cff_show_author_old = $atts[ 'showauthor' ];
+    if( $cff_show_author_old == 'false' ) $cff_show_author = false;
+    if( $cff_show_author_old == 'true' ) $cff_show_author = true;
+
     
     /********** META **********/
     $cff_icon_style = $atts[ 'iconstyle' ];
@@ -372,6 +383,18 @@ function display_cff($atts) {
     //Assign the Access Token and Page ID variables
     $access_token = trim( get_option('cff_access_token') );
     $page_id = trim( $atts['id'] );
+
+    //If user is retarded and pastes their full URL into the Page ID field then strip it out
+    $cff_facebook_string = 'facebook.com';
+    $cff_page_id_url_check = stripos($page_id, $cff_facebook_string);
+
+    if ( $cff_facebook_string ) {
+        //Remove trailing slash if exists
+        $page_id = preg_replace('{/$}', '', $page_id);
+        //Get last part of url
+        $page_id = substr( $page_id, strrpos( $page_id, '/' )+1 );
+    }
+
     //Get show posts attribute. If not set then default to 25
     $show_posts = $atts['num'];
     if (empty($show_posts)) $show_posts = 25;
@@ -441,14 +464,18 @@ function display_cff($atts) {
     $like_box = '<div class="cff-likebox';
     if ($cff_like_box_outside) $like_box .= ' cff-outside';
     $like_box .= ($cff_like_box_position == 'top') ? ' top' : ' bottom';
-    $like_box .= '" ' . $cff_likebox_styles . '><script src="http://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" show_faces="'.$cff_like_box_faces.'" stream="false" header="false" colorscheme="'. $cff_like_box_colorscheme .'" show_border="'. $cff_like_box_border .'"></fb:like-box></div>';
+    $like_box .= '" ' . $cff_likebox_styles . '><script src="https://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" show_faces="'.$cff_like_box_faces.'" stream="false" header="false" colorscheme="'. $cff_like_box_colorscheme .'" show_border="'. $cff_like_box_border .'"></fb:like-box></div>';
     //Don't show like box if it's a group
     if($cff_is_group) $like_box = '';
 
 
     //Feed header
     $cff_show_header = $atts['showheader'];
+    ($cff_show_header == 'true' || $cff_show_header == 'on') ? $cff_show_header = true : $cff_show_header = false;
+
     $cff_header_outside = $atts['headeroutside'];
+    ($cff_header_outside == 'true' || $cff_header_outside == 'on') ? $cff_header_outside = true : $cff_header_outside = false;
+
     $cff_header_text = $atts['headertext'];
     $cff_header_icon = $atts['headericon'];
     $cff_header_icon_color = $atts['headericoncolor'];
@@ -629,8 +656,8 @@ function display_cff($atts) {
                 }
 
                 //POST AUTHOR
-                $cff_author = '<a class="cff-author" href="http://facebook.com/' . $news->from->id . '" '.$target.' title="'.$news->from->name.' on Facebook">';
-                $cff_author .= '<img src="http://graph.facebook.com/' . $news->from->id . '/picture" width=50 height=50>';
+                $cff_author = '<a class="cff-author" href="https://facebook.com/' . $news->from->id . '" '.$target.' title="'.$news->from->name.' on Facebook">';
+                $cff_author .= '<img src="https://graph.facebook.com/' . $news->from->id . '/picture" width=50 height=50>';
                 $cff_author .= '<span class="cff-page-name">'.$news->from->name.'</span>';
                 $cff_author .= '</a>';
 
@@ -1281,34 +1308,35 @@ add_action( 'wp_head', 'cff_custom_css' );
 function cff_custom_css() {
     $options = get_option('cff_style_settings');
     isset($options[ 'cff_custom_css' ]) ? $cff_custom_css = $options[ 'cff_custom_css' ] : $cff_custom_css = '';
-    echo "\r\n";
-    echo '<!-- Custom Facebook Feed Custom CSS -->';
-    echo "\r\n";
-    echo '<style type="text/css">';
-    echo "\r\n";
-    echo $cff_custom_css;
-    echo "\r\n";
-    echo '</style>';
-    echo "\r\n";
+
+    if( !empty($cff_custom_css) ) echo "\r\n";
+    if( !empty($cff_custom_css) ) echo '<!-- Custom Facebook Feed Custom CSS -->';
+    if( !empty($cff_custom_css) ) echo "\r\n";
+    if( !empty($cff_custom_css) ) echo '<style type="text/css">';
+    if( !empty($cff_custom_css) ) echo "\r\n";
+    if( !empty($cff_custom_css) ) echo stripslashes($cff_custom_css);
+    if( !empty($cff_custom_css) ) echo "\r\n";
+    if( !empty($cff_custom_css) ) echo '</style>';
+    if( !empty($cff_custom_css) ) echo "\r\n";
 }
 add_action( 'wp_footer', 'cff_js' );
 function cff_js() {
     $options = get_option('cff_style_settings');
     $cff_custom_js = isset($options[ 'cff_custom_js' ]) ? $options[ 'cff_custom_js' ] : '';
 
-    echo "\r\n";
-    echo '<!-- Custom Facebook Feed JS -->';
-    echo "\r\n";
-    echo '<script type="text/javascript">';
-    echo "\r\n";
-    echo "jQuery( document ).ready(function($) {";
-    echo "\r\n";
-    echo stripslashes($cff_custom_js);
-    echo "\r\n";
-    echo "});";
-    echo "\r\n";
-    echo '</script>';
-    echo "\r\n";
+    if( !empty($cff_custom_js) ) echo "\r\n";
+    if( !empty($cff_custom_js) ) echo '<!-- Custom Facebook Feed JS -->';
+    if( !empty($cff_custom_js) ) echo "\r\n";
+    if( !empty($cff_custom_js) ) echo '<script type="text/javascript">';
+    if( !empty($cff_custom_js) ) echo "\r\n";
+    if( !empty($cff_custom_js) ) echo "jQuery( document ).ready(function($) {";
+    if( !empty($cff_custom_js) ) echo "\r\n";
+    if( !empty($cff_custom_js) ) echo stripslashes($cff_custom_js);
+    if( !empty($cff_custom_js) ) echo "\r\n";
+    if( !empty($cff_custom_js) ) echo "});";
+    if( !empty($cff_custom_js) ) echo "\r\n";
+    if( !empty($cff_custom_js) ) echo '</script>';
+    if( !empty($cff_custom_js) ) echo "\r\n";
 }
 
 //Comment out the line below to view errors
