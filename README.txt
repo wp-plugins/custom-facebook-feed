@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.7.1
+Stable tag: 1.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H5XFD33R3FHMG
@@ -131,7 +131,7 @@ You can embed your Facebook feed directly into a template file by using the Word
 
 == Changelog ==
 
-= 1.7.1 =
+= 1.7.2 =
 * Tweak: Moved the 'Show post author' option from the General settings tab to the Post Layout tab
 * Tweak: Added the ability to show or hide the author to the 'include' shortcode option
 * Fix: Added CSS box-sizing property to feed header so that padding doesn't increase its width
