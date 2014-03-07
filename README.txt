@@ -133,7 +133,7 @@ You can embed your Facebook feed directly into a template file by using the Word
 
 = 1.8.0 =
 * New: Added a built-in color picker
-* New: Added class to posts based on the author so allow for independent styling
+* New: Added class to posts based on the author to allow for independent styling
 * Tweak: Now loads the author avatar image in using JavaScript to help speed up load times
 * Tweak: Now automatically set the post limit based on the number of posts to be displayed
 * Tweak: Core improvements to the way posts are output
