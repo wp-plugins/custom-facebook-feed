@@ -49,5 +49,10 @@ jQuery(document).ready(function() {
 				$less.hide();
 			}
 		});
+
+		//Load in author image after the page load to prevent slowing down page load by hitting the API
+		var $authorImg = $self.find('.cff-author img');
+		$authorImg.attr('src', $authorImg.attr('rel') ).removeAttr('rel');
+		
 	});
 });

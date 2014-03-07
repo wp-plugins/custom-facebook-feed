@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.7.2
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H5XFD33R3FHMG
@@ -130,6 +130,19 @@ You can embed your Facebook feed directly into a template file by using the Word
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 1.8.0 =
+* New: Added a built-in color picker
+* New: Added class to posts based on the author so allow for independent styling
+* Tweak: Now loads the author avatar image in using JavaScript to help speed up load times
+* Tweak: Now automatically set the post limit based on the number of posts to be displayed
+* Tweak: Core improvements to the way posts are output
+* Tweak: Changed 'Layout & Style' page name to 'Customize'
+* Tweak: Moved the Support information to a tab on the Settings page
+* Tweak: Improved the 'Test connection to Facebook API' function
+* Fix: Encode URLs so that they pass HTML validation
+* Fix: Fixed an issue with post captions not displaying under some circumstances
+* Fix: More robust method for stripping the URL when user enters Facebook page URL instead of their Page ID
 
 = 1.7.2 =
 * Tweak: Moved the 'Show post author' option from the General settings tab to the Post Layout tab

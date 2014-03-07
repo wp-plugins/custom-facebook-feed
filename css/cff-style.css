@@ -44,6 +44,9 @@
 #cff a {
   text-decoration: underline;
 }
+#cff .cff-post-text-link{
+  display: block;
+}
 /* Post titles and body text */
 #cff h3, #cff h4, #cff h5, #cff h6, #cff p{
   float: left;

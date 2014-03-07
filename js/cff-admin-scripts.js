@@ -72,25 +72,8 @@ jQuery(document).ready(function() {
 	//Test Facebook API connection button
 	jQuery('#cff-api-test').click(function(e){
 		e.preventDefault();
-		var cff_page_id = jQuery('#cff_page_id').val(),
-			cff_access_token = jQuery('#cff_access_token').val(),
-			response = 'https://graph.facebook.com/' + cff_page_id + '/posts' + '?access_token=' + cff_access_token;
-
-		//Show the loader
-		jQuery('.cff-loader').show();
-
-		//Load the response into the text box
-		jQuery('#cff-api-test-result textarea').css('display', 'block').load(response, function( response, status, xhr ) {
-			//Check for an error
-			if ( status == "error" ) {
-				var msg = "Error: ";
-				jQuery( "#cff-api-test-result textarea" ).html( msg + xhr.status + " " + xhr.statusText + ". Could not connect to Facebook API." ).removeClass().addClass('cff-error');
-			} else {
-				jQuery('#cff-api-test-result textarea').removeClass().addClass('cff-success');
-			}
-			//Hide the loader
-			jQuery('.cff-loader').hide();
-		});
+		//Show the JSON
+		jQuery('#cff-api-test-result textarea').css('display', 'block');
 	});
 
 
@@ -121,6 +104,7 @@ jQuery(document).ready(function() {
 		}
 	});
 
-	
+    //Add the color picker
+	if( jQuery('.cff-colorpicker').length > 0 ) jQuery('.cff-colorpicker').wpColorPicker();
 
 });
