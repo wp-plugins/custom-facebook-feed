@@ -139,7 +139,7 @@ You can embed your Facebook feed directly into a template file by using the Word
 * Tweak: Core improvements to the way posts are output
 * Tweak: Changed 'Layout & Style' page name to 'Customize'
 * Tweak: Moved the Support information to a tab on the Settings page
-* Tweak: Improved the 'Test connection to Facebook API' function
+* Tweak: Improved the 'Test connection to Facebook API' functionality
 * Fix: Encode URLs so that they pass HTML validation
 * Fix: Fixed an issue with post captions not displaying under some circumstances
 * Fix: More robust method for stripping the URL when a user enters Facebook page URL instead of their Page ID
