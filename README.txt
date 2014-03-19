@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.8.0
+Stable tag: 1.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H5XFD33R3FHMG
@@ -131,6 +131,16 @@ You can embed your Facebook feed directly into a template file by using the Word
 
 == Changelog ==
 
+= 1.8.1 =
+* New: Added an 'exclude' shortcode option to allow you to easily exclude specific parts of the post
+* New: Timeline events are now cached to help reduce page load time
+* New: Added an option for when the WordPress theme is loading the feed via AJAX so that the JavaScript runs after the feed has been loaded into the page
+* Tweak: Changed author images back to loading via PHP rather than JavaScript due to issues with certain WordPress themes
+* Fix: Reset the timezone after the shortcode has run
+* Fix: Fixed an issue with the shared link descriptions not being hidden when specified
+* Fix: Fixed a rare issue with the 'textlink' shortcode option
+* Fix: Use a fallback JSON string if unable to find the cached version in the database
+
 = 1.8.0 =
 * New: Added a built-in color picker
 * New: Added class to posts based on the author to allow for independent styling
@@ -139,10 +149,10 @@ You can embed your Facebook feed directly into a template file by using the Word
 * Tweak: Core improvements to the way posts are output
 * Tweak: Changed 'Layout & Style' page name to 'Customize'
 * Tweak: Moved the Support information to a tab on the Settings page
-* Tweak: Improved the 'Test connection to Facebook API' functionality
+* Tweak: Improved the 'Test connection to Facebook API' function
 * Fix: Encode URLs so that they pass HTML validation
 * Fix: Fixed an issue with post captions not displaying under some circumstances
-* Fix: More robust method for stripping the URL when a user enters Facebook page URL instead of their Page ID
+* Fix: More robust method for stripping the URL when user enters Facebook page URL instead of their Page ID
 
 = 1.7.2 =
 * Tweak: Moved the 'Show post author' option from the General settings tab to the Post Layout tab

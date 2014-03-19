@@ -13,6 +13,29 @@
 #cff-admin .cff-tooltip li{
 	padding: 4px 0;
 }
+#cff-admin .cff-tooltip-link,
+#cff-admin .cff-external-link{
+	font-size: 13px;
+	margin-left: 10px;
+}
+#cff-admin .cff-more-info{
+	padding: 10px 15px;
+	margin: 10px 0;
+	font-size: 13px;
+	background: #f9f9f9;
+	background: rgba(255,255,255,0.8);
+	
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+}
+#cff-admin .postbox .cff-more-info{
+	background: #eee;
+	background: rgba(0,0,0,0.05);
+}
+#cff-admin .cff-more-info p{
+	font-size: 13px;
+}
 #cff-admin hr{
 	border: none;
 	margin: 25px 0;

@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.8.0
+Version: 1.8.1
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -57,6 +57,7 @@ function display_cff($atts) {
         'cachetime' => get_option('cff_cache_time'),
         'cacheunit' => get_option('cff_cache_time_unit'),
         'locale' => get_option('cff_locale'),
+        'ajax' => get_option('cff_ajax'),
         'width' => isset($options[ 'cff_feed_width' ]) ? $options[ 'cff_feed_width' ] : '',
         'height' => isset($options[ 'cff_feed_height' ]) ? $options[ 'cff_feed_height' ] : '',
         'padding' => isset($options[ 'cff_feed_padding' ]) ? $options[ 'cff_feed_padding' ] : '',
@@ -66,6 +67,7 @@ function display_cff($atts) {
         'class' => isset($options[ 'cff_class' ]) ? $options[ 'cff_class' ] : '',
         'layout' => isset($options[ 'cff_preset_layout' ]) ? $options[ 'cff_preset_layout' ] : '',
         'include' => $include_string,
+        'exclude' => '',
         //Typography
         'textformat' => isset($options[ 'cff_title_format' ]) ? $options[ 'cff_title_format' ] : '',
         'textsize' => isset($options[ 'cff_title_size' ]) ? $options[ 'cff_title_size' ] : '',
@@ -207,6 +209,24 @@ function display_cff($atts) {
     if ( stripos($cff_includes, 'social') !== false ) $cff_show_meta = true;
     if ( stripos($cff_includes, ',link') !== false ) $cff_show_link = true; //comma used to separate it from 'sharedlinks' - which also contains 'link' string
     if ( stripos($cff_includes, 'like') !== false ) $cff_show_like_box = true;
+
+
+    //Exclude string
+    $cff_excludes = $atts[ 'exclude' ];
+    //Look for non-plural version of string in the types string in case user specifies singular in shortcode
+    if ( stripos($cff_excludes, 'author') !== false ) $cff_show_author = false;
+    if ( stripos($cff_excludes, 'text') !== false ) $cff_show_text = false;
+    if ( stripos($cff_excludes, 'desc') !== false ) $cff_show_desc = false;
+    if ( stripos($cff_excludes, 'sharedlink') !== false ) $cff_show_shared_links = false;
+    if ( stripos($cff_excludes, 'date') !== false ) $cff_show_date = false;
+    if ( stripos($cff_excludes, 'media') !== false ) $cff_show_media = false;
+    if ( stripos($cff_excludes, 'eventtitle') !== false ) $cff_show_event_title = false;
+    if ( stripos($cff_excludes, 'eventdetail') !== false ) $cff_show_event_details = false;
+    if ( stripos($cff_excludes, 'social') !== false ) $cff_show_meta = false;
+    if ( stripos($cff_excludes, ',link') !== false ) $cff_show_link = false; //comma used to separate it from 'sharedlinks' - which also contains 'link' string
+    if ( stripos($cff_excludes, 'like') !== false ) $cff_show_like_box = false;
+
+
     //Set free version to thumb layout by default as layout option not available on settings page
     $cff_preset_layout = 'thumb';
 
@@ -301,6 +321,7 @@ function display_cff($atts) {
     $cff_date_after = isset($options[ 'cff_date_after' ]) ? $options[ 'cff_date_after' ] : '';
     //Set user's timezone based on setting
     $cff_timezone = $atts['timezone'];
+    $cff_orig_timezone = date_default_timezone_get();
     date_default_timezone_set($cff_timezone);
     //Link to Facebook
     $cff_link_size = $atts[ 'linksize' ];
@@ -543,6 +564,8 @@ function display_cff($atts) {
                 set_transient( $transient_name, $posts_json, $cache_seconds );
             } else {
                 $posts_json = get_transient( $transient_name );
+                //If we can't find the transient then fall back to just getting the json from the api
+                if ($posts_json == false) $posts_json = cff_fetchUrl($cff_posts_json_url);
             }
         } else {
             $posts_json = cff_fetchUrl($cff_posts_json_url);
@@ -671,8 +694,7 @@ function display_cff($atts) {
                 $cff_author_img_var = '$cff_author_img_' . $news->from->id;
                 if ( !isset($$cff_author_img_var) ) $$cff_author_img_var = 'https://graph.facebook.com/' . $news->from->id . '/picture?type=square';
 
-                //Set image url as rel and then switch it using jQuery
-                $cff_author .= '<img src="" width=50 height=50 rel="'.$$cff_author_img_var.'">';
+                $cff_author .= '<img src="'.$$cff_author_img_var.'" width=50 height=50>';
                 $cff_author .= '<span class="cff-page-name">'.$news->from->name.'</span>';
                 $cff_author .= '</a>';
 
@@ -685,7 +707,10 @@ function display_cff($atts) {
                 // $cff_post_text = '<div class="cff-post-text" ' . $cff_title_styles . '>';
                 $cff_post_text .= '<span class="cff-text">';
 
-                if ($cff_title_link == 'true' || $cff_title_link == 'on') $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
+                ( $cff_title_link == 'on' || $cff_title_link == 'true' || $cff_title_link == true ) ? $cff_title_link = true : $cff_title_link = false;
+                if( $atts[ 'textlink' ] == 'false' ) $cff_title_link = false;
+
+                if ($cff_title_link == true) $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
                 if (!empty($news->story)) $post_text = $news->story;
                 if (!empty($news->message)) $post_text = $news->message;
                 if (!empty($news->name) && empty($news->story) && empty($news->message)) $post_text = $news->name;
@@ -744,7 +769,9 @@ function display_cff($atts) {
                         $cff_shared_link .= 'cff-no-image';
                         $cff_shared_link .= '"><a class="cff-link-title" href="'.$link.'" '.$target.'>'. '<b>' . $news->name . '</b></a>';
                         if(!empty($news->caption)) $cff_shared_link .= '<p class="cff-link-caption">'.$news->caption.'</p>';
-                        $cff_shared_link .= $cff_description;
+                        if ($cff_show_desc) {
+                            $cff_shared_link .= $cff_description;
+                        }
                         $cff_shared_link .= '</div>';
                     }
 
@@ -770,7 +797,26 @@ function display_cff($atts) {
                         $eventID = $url_parts[count($url_parts)-2];
                         
                         //Get the contents of the event using the WP HTTP API
-                        $event_json = cff_fetchUrl('https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token . $cff_ssl);
+                        $event_json_url = 'https://graph.facebook.com/'.$eventID.'?access_token=' . $access_token . $cff_ssl;
+
+                        //Don't use caching if the cache time is set to zero
+                        if ($cff_cache_time != 0){
+                            // Get any existing copy of our transient data
+                            $transient_name = 'cff_timeline_event_json_' . $eventID;
+                            if ( false === ( $event_json = get_transient( $transient_name ) ) || $event_json === null ) {
+                                //Get the contents of the Facebook page
+                                $event_json = cff_fetchUrl($event_json_url);
+                                //Cache the JSON
+                                set_transient( $transient_name, $event_json, $cache_seconds );
+                            } else {
+                                $event_json = get_transient( $transient_name );
+                                //If we can't find the transient then fall back to just getting the json from the api
+                                if ($event_json == false) $event_json = cff_fetchUrl($event_json_url);
+                            }
+                        } else {
+                            $event_json = cff_fetchUrl($event_json_url);
+                        }
+
                         //Interpret data with JSON
                         $event_object = json_decode($event_json);
                         //Event date
@@ -900,12 +946,21 @@ function display_cff($atts) {
         $p++;
     }
 
+    //Reset the timezone
+    date_default_timezone_set( $cff_orig_timezone );
     //Add the Like Box inside
     if ($cff_like_box_position == 'bottom' && $cff_show_like_box && !$cff_like_box_outside) $cff_content .= $like_box;
     //End the feed
     $cff_content .= '</div><div class="cff-clear"></div>';
     //Add the Like Box outside
     if ($cff_like_box_position == 'bottom' && $cff_show_like_box && $cff_like_box_outside) $cff_content .= $like_box;
+    
+    //If the feed is loaded via Ajax then put the scripts into the shortcode itself
+    $ajax_theme = $atts['ajax'];
+    ( $ajax_theme == 'on' || $ajax_theme == 'true' || $ajax_theme == true ) ? $ajax_theme = true : $ajax_theme = false;
+    if( $atts[ 'ajax' ] == 'false' ) $ajax_theme = false;
+    if ($ajax_theme) $cff_content .= '<script type="text/javascript" src="' . plugins_url( '/js/cff-scripts.js?8' , __FILE__ ) . '"></script>';
+
     //Return our feed HTML to display
     return $cff_content;
 }
