@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.8.1
+Version: 1.8.2
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 //Include admin
 include dirname( __FILE__ ) .'/custom-facebook-feed-admin.php';
+include dirname( __FILE__ ) .'/cff_autolink.php';
 
 // Add shortcodes
 add_shortcode('custom-facebook-feed', 'display_cff');
@@ -74,6 +75,7 @@ function display_cff($atts) {
         'textweight' => isset($options[ 'cff_title_weight' ]) ? $options[ 'cff_title_weight' ] : '',
         'textcolor' => isset($options[ 'cff_title_color' ]) ? $options[ 'cff_title_color' ] : '',
         'textlink' => isset($options[ 'cff_title_link' ]) ? $options[ 'cff_title_link' ] : '',
+        'posttags' => isset($options[ 'cff_post_tags' ]) ? $options[ 'cff_post_tags' ] : '',
         'descsize' => isset($options[ 'cff_body_size' ]) ? $options[ 'cff_body_size' ] : '',
         'descweight' => isset($options[ 'cff_body_weight' ]) ? $options[ 'cff_body_weight' ] : '',
         'desccolor' => isset($options[ 'cff_body_color' ]) ? $options[ 'cff_body_color' ] : '',
@@ -702,31 +704,102 @@ function display_cff($atts) {
                 $cff_translate_photos_text = $atts['photostext'];
                 if (!isset($cff_translate_photos_text) || empty($cff_translate_photos_text)) $cff_translate_photos_text = 'photos';
                 $cff_post_text = '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
-                //__ shared __'s photo
-                // if ($news->type == 'photo' && !empty($news->story) ) $cff_post_text .= '<span class="cff-byline" '.$cff_body_styles.'>' . $news->story . '</span>';
-                // $cff_post_text = '<div class="cff-post-text" ' . $cff_title_styles . '>';
                 $cff_post_text .= '<span class="cff-text">';
-
-                ( $cff_title_link == 'on' || $cff_title_link == 'true' || $cff_title_link == true ) ? $cff_title_link = true : $cff_title_link = false;
-                if( $atts[ 'textlink' ] == 'false' ) $cff_title_link = false;
-
-                if ($cff_title_link == true) $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
-                if (!empty($news->story)) $post_text = $news->story;
-                if (!empty($news->message)) $post_text = $news->message;
-                if (!empty($news->name) && empty($news->story) && empty($news->message)) $post_text = $news->name;
+                if ($cff_title_link == 'true') $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
+                //Which content should we use?
+                $cff_post_text_type = '';
+                //Use the story
+                if (!empty($news->story)) {
+                    $post_text = htmlspecialchars($news->story);
+                    $cff_post_text_type = 'story';
+                }
+                //Use the message
+                if (!empty($news->message)) {
+                    $post_text = htmlspecialchars($news->message);
+                    $cff_post_text_type = 'message';
+                }
+                //Use the name
+                if (!empty($news->name) && empty($news->story) && empty($news->message)) {
+                    $post_text = htmlspecialchars($news->name);
+                    $cff_post_text_type = 'name';
+                }
                 if ($cff_album) {
-                    if (!empty($news->name)) $post_text = $news->name;
-                    if (!empty($news->message) && empty($news->name)) $post_text = $news->message;
+                    if (!empty($news->name)) {
+                        $post_text = htmlspecialchars($news->name);
+                        $cff_post_text_type = 'name';
+                    }
+                    if (!empty($news->message) && empty($news->name)) {
+                        $post_text = htmlspecialchars($news->message);
+                        $cff_post_text_type = 'message';
+                    }
                     $post_text .= ' (' . $num_photos . ' '.$cff_translate_photos_text.')';
                 }
+
+
+                //MESSAGE TAGS
+                $cff_post_tags = $atts[ 'posttags' ];
+                //If the post tags option doesn't exist yet (ie. on plugin update) then set them as true
+                if ( !array_key_exists( 'cff_post_tags', $options ) ) $cff_post_tags = true;
+                //Add message and story tags if there are any and the post text is the message or the story
+                if( $cff_post_tags && ( isset($news->message_tags) || isset($news->story_tags) ) && ($cff_post_text_type == 'message' || $cff_post_text_type == 'story')  && $cff_title_link != 'true' ){
+                    //Use message_tags or story_tags?
+                    ( $cff_post_text_type == 'message' )? $text_tags = $news->message_tags : $text_tags = $news->story_tags;
+
+                    //Does the Post Text contain any html tags? - the & symbol is the best indicator of this
+                    $html_check = stripos($post_text, '&');
+
+                    //If it contains HTML tags then use the name replace method
+                    if( $html_check ) {
+                        //Loop through the tags
+                        foreach($text_tags as $message_tag ) {
+                            $tag_name = $message_tag[0]->name;
+                            $tag_link = '<a href="http://facebook.com/' . $message_tag[0]->id . '" target="_blank">' . $message_tag[0]->name . '</a>';
+
+                            $post_text = str_replace($tag_name, $tag_link, $post_text);
+                        }
+
+                    } else {
+                    //If it doesn't contain HTMl tags then use the offset to replace message tags
+                        $message_tags_arr = array();
+
+                        $i = 0;
+                        foreach($text_tags as $message_tag ) {
+                            $i++;
+                            $message_tags_arr = array_push_assoc(
+                                $message_tags_arr,
+                                $i,
+                                array(
+                                    'id' => $message_tag[0]->id,
+                                    'name' => $message_tag[0]->name,
+                                    'type' => $message_tag[0]->type,
+                                    'offset' => $message_tag[0]->offset,
+                                    'length' => $message_tag[0]->length
+                                )
+                            );
+                        }
+
+                        for($i = count($message_tags_arr); $i >= 1; $i--) {
+                           
+                            $b = '<a href="http://facebook.com/' . $message_tags_arr[$i]['id'] . '" target="_blank">' . $message_tags_arr[$i]['name'] . '</a>';
+                            $c = $message_tags_arr[$i]['offset'];
+                            $d = $message_tags_arr[$i]['length'];
+
+                            $post_text = substr_replace( $post_text, $b, $c, $d);
+
+                        }   
+
+                    }         
+
+                } //END MESSAGE TAGS
 
 
                 //If the text is wrapped in a link then don't hyperlink any text within
                 if ($cff_title_link) {
                     //Wrap links in a span so we can break the text if it's too long
-                    $cff_post_text .= cff_wrap_span( htmlspecialchars($post_text) ) . ' ';
+                    $cff_post_text .= cff_autolink( htmlspecialchars($post_text), true ) . ' ';
                 } else {
-                    $cff_post_text .= cff_make_clickable( htmlspecialchars($post_text) ) . ' ';
+                    //Don't use htmlspecialchars for post_text as it's added above so that it doesn't mess up the message_tag offsets
+                    $cff_post_text .= cff_autolink( $post_text ) . ' ';
                 }
                 
                 if ($cff_title_link) $cff_post_text .= '</a>';
@@ -750,7 +823,7 @@ function display_cff($atts) {
                     if (!empty($body_limit)) {
                         if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
                     }
-                    $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_make_clickable( htmlspecialchars($description_text) )  . '</span></p>';
+                    $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_autolink( htmlspecialchars($description_text) )  . '</span></p>';
 
                     //If the post text and description/caption are the same then don't show the description
                     if($post_text == $description_text) $cff_description = '';
@@ -847,7 +920,7 @@ function display_cff($atts) {
                                 if (!empty($body_limit)) {
                                     if (strlen($description) > $body_limit) $description = substr($description, 0, $body_limit) . '...';
                                 }
-                                $cff_event .= '<p class="cff-info" ' . $cff_event_details_styles . '>' . cff_make_clickable($description) . '</p>';
+                                $cff_event .= '<p class="cff-info" ' . $cff_event_details_styles . '>' . cff_autolink($description) . '</p>';
                             }
                         }
                         $cff_event .= '</div>';
@@ -867,7 +940,7 @@ function display_cff($atts) {
                         $cff_description = '<div class="cff-desc-wrap ';
                         if (empty($picture)) $cff_description .= 'cff-no-image';
                         $cff_description .= '"><a class="cff-link-title" href="'.$link.'" '.$target.'>'. '<b>' . $video_name . '</b></a>';
-                        $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_make_clickable( htmlspecialchars($description_text) ) . '</span></p></div>';
+                        $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_autolink( htmlspecialchars($description_text) ) . '</span></p></div>';
                     }
                 }
 
@@ -964,6 +1037,9 @@ function display_cff($atts) {
     //Return our feed HTML to display
     return $cff_content;
 }
+
+//***FUNCTIONS***
+
 //Get JSON object of feed data
 function cff_fetchUrl($url){
     //Can we use cURL?
@@ -988,92 +1064,7 @@ function cff_fetchUrl($url){
     
     return $feedData;
 }
-//***FUNCTIONS***
-//Make links in text clickable
-function cff_make_clickable($text) {
-    $pattern  = '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#';
-    return preg_replace_callback($pattern, 'cff_auto_link_text_callback', $text);
-}
-function cff_auto_link_text_callback($matches) {
-    $max_url_length = 50;
-    $max_depth_if_over_length = 2;
-    $ellipsis = '&hellip;';
-    $target = 'target="_blank"';
-    $url_full = $matches[0];
-    $url_short = '';
-    if (strlen($url_full) > $max_url_length) {
-        $parts = parse_url($url_full);
-        $url_short = $parts['scheme'] . '://' . preg_replace('/^www\./', '', $parts['host']) . '/';
-        $path_components = explode('/', trim($parts['path'], '/'));
-        foreach ($path_components as $dir) {
-            $url_string_components[] = $dir . '/';
-        }
-        if (!empty($parts['query'])) {
-            $url_string_components[] = '?' . $parts['query'];
-        }
-        if (!empty($parts['fragment'])) {
-            $url_string_components[] = '#' . $parts['fragment'];
-        }
-        for ($k = 0; $k < count($url_string_components); $k++) {
-            $curr_component = $url_string_components[$k];
-            if ($k >= $max_depth_if_over_length || strlen($url_short) + strlen($curr_component) > $max_url_length) {
-                if ($k == 0 && strlen($url_short) < $max_url_length) {
-                    // Always show a portion of first directory
-                    $url_short .= substr($curr_component, 0, $max_url_length - strlen($url_short));
-                }
-                $url_short .= $ellipsis;
-                break;
-            }
-            $url_short .= $curr_component;
-        }
-    } else {
-        $url_short = $url_full;
-    }
-    if( substr( $url_full, 0, 4 ) !== "http" ) $url_full = 'http://' . $url_full;
-    return "<a class='cff-break-word' rel=\"nofollow\" href=\"$url_full\" " . $target . ">$url_full</a>";
-}
-//Make links into span instead when the post text is made clickable
-function cff_wrap_span($text) {
-    $pattern  = '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#';
-    return preg_replace_callback($pattern, 'cff_wrap_span_callback', $text);
-}
-function cff_wrap_span_callback($matches) {
-    $max_url_length = 50;
-    $max_depth_if_over_length = 2;
-    $ellipsis = '&hellip;';
-    $target = 'target="_blank"';
-    $url_full = $matches[0];
-    $url_short = '';
-    if (strlen($url_full) > $max_url_length) {
-        $parts = parse_url($url_full);
-        $url_short = $parts['scheme'] . '://' . preg_replace('/^www\./', '', $parts['host']) . '/';
-        $path_components = explode('/', trim($parts['path'], '/'));
-        foreach ($path_components as $dir) {
-            $url_string_components[] = $dir . '/';
-        }
-        if (!empty($parts['query'])) {
-            $url_string_components[] = '?' . $parts['query'];
-        }
-        if (!empty($parts['fragment'])) {
-            $url_string_components[] = '#' . $parts['fragment'];
-        }
-        for ($k = 0; $k < count($url_string_components); $k++) {
-            $curr_component = $url_string_components[$k];
-            if ($k >= $max_depth_if_over_length || strlen($url_short) + strlen($curr_component) > $max_url_length) {
-                if ($k == 0 && strlen($url_short) < $max_url_length) {
-                    // Always show a portion of first directory
-                    $url_short .= substr($curr_component, 0, $max_url_length - strlen($url_short));
-                }
-                $url_short .= $ellipsis;
-                break;
-            }
-            $url_short .= $curr_component;
-        }
-    } else {
-        $url_short = $url_full;
-    }
-    return "<span class='cff-break-word'>$url_short</span>";
-}
+
 //2013-04-28T21:06:56+0000
 //Time stamp function - used for posts
 function cff_getdate($original, $date_format, $custom_date) {

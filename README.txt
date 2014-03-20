@@ -1,9 +1,9 @@
 === Custom Facebook Feed ===
 Contributors: smashballoon
-Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, custom, customizable, seo, responsive, mobile, social
+Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.8.1
+Stable tag: 1.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H5XFD33R3FHMG
@@ -117,6 +117,148 @@ It sure is. Unlike other Facebook plugins which use iframes to embed your Facebo
 
 You can embed your Facebook feed directly into a template file by using the WordPress [do_shortcode](http://codex.wordpress.org/Function_Reference/do_shortcode "WordPress.org do_shortcode reference") function: `<?php echo do_shortcode('[custom-facebook-feed]'); ?>`.
 
+== Other Notes ==
+
+**"The best dang Facebook plugin this side of the Mississippi!"**
+
+= At Smash Balloon we have two goals: =
+
+1. Creating and maintaining the most useful, functional, customizable, robust and down-right awesomist Facebook feed plugin your website has ever seen.
+2. To provide the quickest, friendliest and most mind-blowingly amazing product support you have ever experienced.
+
+= Why do I need the Custom Facebook Feed plugin? =
+
+**Increase Social Engagement**
+Increase engagement between you and your users, customers, fans or group members. Get more Facebook likes by displaying your Facebook content directly on your site.
+
+**Save Time**
+Don't have time to blog? Save time by using the Custom Facebook Feed instead to generate dynamic content for your website.
+
+**Display Your Facebook Content Your Way**
+Tailor your Facebook feeds to display whatever types of content you like. Integrate your Facebook content into your website to completely match the look and feel of the site. No more uncustomizable Facebook iframes.
+
+**Add Dynamic SEO Facebook Content to Your Site**
+All of that quality keyword-rich Facebook content from Facebook posts is directly embedded into your website.
+
+**No Coding Required**
+Choose from tons of built-in customization options to create a truly unique feed of your Facebook content.
+
+**Mind-blowing Customer Support**
+We understand that sometimes you need help, have issues or just have questions. We love our customers and strive to provide the best support experience in the business. If you need support then just let us know and we'll get back to you right away.
+
+= How to get a Facebook Access Token =
+
+**For step-by-step instructions and screenshots on how to get a Facebook Access Token just follow the [Facebook Access Token instructions](http://smashballoon.com/custom-facebook-feed/access-token/ "Facebook Access Token instructions") on the Smash Balloon website.**
+
+In order to use the Custom Facebook Feed Plugin you will need to obtain an Access Token from Facebook.  Don't worry though, this is really easy to do.  Just follow the steps below:
+
+**1)** Go to [developers.facebook.com](http://developers.facebook.com "Facebook developers website") and click on Log In in the top right.  Log in using your personal Facebook credentials.
+
+**Note:** The personal Facebook account that you use to register as a Facebook developer does not need to be associated in any way with the Facebook page or Facebook group whose posts you want to display. You can use the Facebook Access Token you receive to display the Facebook posts from any public Facebook page or open Facebook group.
+
+**Note:** You cannot log in to the Facebook Developer site using a Facebook Page or Facebook Business account. You must use the username and password from your personal Facebook profile. Facebook doesn't allow businesses to register as Facebook developers, only individuals.
+
+**2)** If this is your first time signing in to the Facebook Developer portal then click on Register Now. Registering is a quick an easy process which will take less than a couple of minutes.  If you're already registered as a Facebook developer then you can skip ahead to step 9.
+
+**3)** Accept the Facebook terms and click Continue.
+
+**4)** Enter your phone number to confirm your account.
+
+**5)** Facebook will send you an automated text message containing a confirmation code. Enter it in the box and click Confirm.
+
+**6)** Choose to share your phone number with Only Me (unless you wish to share it with publicly or with Facebook friends).
+
+**7)** You can skip the next step by clicking Skip.
+
+**8)** Click Done.
+ 
+**9)** Now click on Create New App.
+
+**10)** Enter your Facebook App Name. This can be anything you like. Click Continue.
+
+**11)** Fill in Facebook's Security Check and click Continue.
+
+**12)** Your Facebook App should now be set up. Copy and paste your Facebook App ID and Facebook App Secret into the fields in the last step of the [Access Token instructions](http://smashballoon.com/custom-facebook-feed/access-token/ "How to get a Facebook Access Token") to retrieve your Facebook Access Token.
+
+= What some of our users think =
+
+**See all of the reviews [here](http://smashballoon.com/custom-facebook-feed/#support "Custom Facebook Feed customer reviews")**
+
+"Loving the Facebook feed plugin from @smashballoon. It's gonna transform my work's website! Great customer service too :)" - Grace Snow
+
+"Love the style and functionality of the @smashballoon facebook feed plugin. AMAZING support!" - Bella Guzman
+
+"Hands down the BEST Facebook feed plugin for WP - @smashballoon #prettysureivetriedthemall" - Jacob Ajjarapu
+
+"@smashballoon Custom Facebook Feed plugin for WordPress is excellent and support couldn't have been easier or faster.  Thx!" - Scott Whittier
+
+"@smashballoon Love your Facebook plugin, and fantastic back-up support - good work" - Mike Harwood
+
+"Very smooth purchase process. After getting the Facebook access key, the plugin worked perfectly. Needed some questions answered, and received the best personal support i've ever had. Can't recommend this plugin highly enough." - jondennis
+
+"I am not by any means an experienced web designer or programmer. Normally upon seeking tech support for anything I am met with a support tech that either talks over my head and answers me as shortly as possible. The short answers would not normally bother me if the response time was under 6-8 hours if not 3 days for a response. I found Smash Balloon by absolute luck in my search for a Facebook Plugin for my blog site that had a better look than the Facebook widget that my site came with. In fear that I would receive the aforementioned type of "help," I spent almost 2 days trying to save myself the frustration of the technicians by thinking that I could do it myself. Well, I couldn't do it myself and finally I submitted a support request from Smash Balloon. It was the fastest response that I have ever experienced with any tech that I have ever contacted in my life and I didn't feel as if I was talking to a robot whos creator forgot to program the part where they liked their job. Furthermore, I trusted the SmashTeam to go into my site and fix what my limited amount of knowledge would allow me to do on my own. I sat at my computer hitting refresh watching it come to life.
+I'm now sitting here playing with the very simple and highly extensive custom Facebook feed customization options and my stress has been removed. I recommend this product and this company to anyone and I will continue to do so. Thank you SmashTeam" - Chris West
+
+"I can't tell you how many plugins I struggle with because of poor documentation. I'm not a developer, I am a user who needs (fairly quick) responses.
+The Custom Facebook Feed plugin doesn't fit into that category at all! I handled 90% of the install by myself, and got immediate and accurate support from the developer when it came to slight customizations.
+Bottom line: this is the best tool for implementing a Facebook feed into a WordPress page - and the people behind it are simply awesome!" - kairostcheck
+
+"This is THE plugin to use if you want to get realtime postings from your Facebook page onto your WordPress Site. I was up and running in no time. I had a few settings wrong but was able to receive VERY quick responses from Smash Ballon's tech support team (Thanks John!)." - kevymars
+
+"This plugin is great. Pull in as little or as much content from a Facebook page into your WordPress site. Fantastic for keeping content on your WordPress pages dynamic with no more effort other than using your Facebook page as per normal. I had some issues in getting the plugin to work at first, so I contacted support at SmashBalloon. John was immensely helpful, considering I was only using the free version of the plugin. He got to the bottom of my problem (which was a hosting server issue), got this fixed and it works a treat. Would highly recommend SmashBalloon for quality of product and refreshingly good support. Well done!" - gluedesign
+
+"Easy to install, took about 5-10 minutes in total. Was able to get 3 facebook feeds showing up on my page which is exactly what I needed as we have 3 facebook pages. Definately the easiest facebook plugin to use that I've tried." - susiep
+
+"I got it working pretty easily and looks sweet. A lot of customization options for a simple facebook plugin - makes it really easy to get it lookin just right.
+Wish facebook made it easier to get a token but is what it is. The step by step instructions helped so wasn't too bad.
+Cheers, Moz" - mozlover
+
+"Tried a bunch of other facebook plugins but they were either impossible to get working or looked like garbage. This facebook plugin has easy to follow instructions and lets you customize pretty much every aspect of it. Highly recommend." - Samtaray
+
+"You will have a professional touch to a website with this plugin. Total freedom to integrate Facebook in your website - which is of course much nicer than the standard options from Facebook. Have a look at youngfocus.org where you can see the implementation.
+Smashballoon did a great job with this plugin and their service and instructions on their website are very clear! Bravo!
+Paul (Young Focus)" - paulvw
+
+"Easy to set up. Nice to be able to show facebook posts on my site without the ugly facebook social plugin." - B
+
+= The Importance of Facebook for Small Businesses =
+
+**Below is an article indicating the importance of building a Facebook community around your business or product. The Custom Facebook Feed plugin can help you to build a Facebook community more easily and effectively.**
+
+A few years back when Mark Zuckerberg came up with his concept of a social networking site and named it Facebook, he had no idea what it would become in the time to come. Facebook has quite literally revolutionized the way we look at social networking. With over 700 million active Facebook users, it is definitely the biggest platform you can get if you seek to engage with many people simultaneously. Though Facebook is the premiere social networking platform, it also holds a lot of potential for businesses. The fact that Facebook can help businesses in growing and reaching out to a new customer base has added to Facebook's popularity.
+
+Today when you look at Facebook and the Facebook groups or Facebook pages that exist on the site, you will find that every popular brand is there. They are not only there but are active on Facebook on almost a daily basis. For the present generation, who spend a lot more time on the internet than on the TV, brands needed to change their approach. Facebook provides the best possible solution in this scenario. However, it is not only the big brands that make the full use of Facebook’s social media power. Even small businesses can benefit greatly from using Facebook if they make optimal use of the various features that Facebook has to offer.
+
+**Why Use Facebook for Your Business?**
+
+When you start your business, many things have to be taken into account. Amongst the tons of seemingly more important things, you might question the need for using Facebook. Often people end up feeling that Facebook is too trivial a task and can be accomplished at anytime. Here are some reasons why you should have your presence on a social networking giant like Facebook and take it very seriously:
+
+Customer Interaction: Having your business on Facebook through a Facebook fanpage or a Facebook group is a great way to learn more about your customers. Through Facebook comments or Facebook posts, you get to have direct feedback and conversations with your target audience on Facebook. The people who like your Facebook fanpage or join your Facebook group are only there because they want to be. They are there to know what they can about you and you can do the same thing.
+
+Give a personal touch to your business: Being well connected is important for any business, especially for a small one. You need to be able to communicate with people and grow your contacts. The best possible way to do that is through direct involvement. Facebook allows you to give your business an image and then you can actually have live conversations with people who matter, making communicating through Facebook a more personal experience then what you get on a TV.
+
+Develop a loyal fan base: Facebook allows you to develop your very own Facebook community. All you need to do is, post links and content that is both relevant and useful. You can even have promotional Facebook campaigns and Facebook contests through your Facebook page and offer incentives as well. If done correctly, you will find that you can develop a loyal community for your business on Facebook.
+
+SEO: Search Engine Optimization is a key aspect for anyone who wants to build a significant presence on the web. Having a Facebook page for your business can help you in your SEO efforts as well. All the links and Facebook posts on the page are indexed by search engines. So having a Facebook page flowing with continuous relevant content will definitely give you a jump in search engine rankings.
+
+Beat your competition: One of the biggest reasons for you to make sure that you are on Facebook is that your competition might already be there. In this cut throat environment, lagging behind will make it really hard for your business to succeed.
+
+Viral promotion: If someone ends up liking your page then it appears in their Facebook news feed. This makes it possible for your business to be in their eyes on a regular basis through Facebook status updates or content posting. What’s more, if they comment on your Facebook post, their Facebook friends will also see your Facebook post and this will help in viral promotion of your business.
+
+Facebook Ads: Your business at Facebook is not just limited to a Facebook page or Facebook group. Facebook also offers you a chance to put up Facebook advertising campaigns. You can build your Facebook advertisements, and as per your budget requirements, go for a Facebook campaign suitable for your business. You can also choose the set of people to whom these Facebook ads will be visible. You can target your Facebook ads on the basis of demographics, educational level, interests etc. It is also up to you to decide how often these Facebook ads will appear.
+
+Save money: Apart from these facts, Facebook is free. You do not need to spend anything for promoting your company through a Facebook page. Facebook already has people addicted to it. This means you do not have to look for customers – they are already there on Facebook.
+
+**How to Make the Best Use of Facebook?**
+
+Many people feel that simply having a Facebook page or Facebook group is enough to help their company. It cannot be further from the truth. In fact, if you are not going to use it properly, then it can be more disadvantageous than not being on Facebook.
+
+Make sure that you do not leave your Facebook page or Facebook group after a few days. It reduces participation and gives your business a bad name. Do not spam through your Facebook pages, it is the simplest way to lose customers. Make sure that your Facebook fans and members are rewarded for being there in your Facebook group or Facebook page. You could give them free coupons via Facebook or something similar.
+
+Facebook has really changed the way people go about promoting their business. With so many people with varied interests available on a single platform, there is something for everyone. All you need to do is find the right target audience and then market your business to them. Facebook provides you all the tools required to reach these people.
+
+Credit [iMarketing Factory](http://www.imarketingfactory.com/facebook/ "The Importance of Facebook for Small Businesses")
+
 == Screenshots ==
 
 1. By default the Facebook feed inherits your theme's default styles and is completely responsive
@@ -130,6 +272,10 @@ You can embed your Facebook feed directly into a template file by using the Word
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 1.8.2 =
+* New: Now supports Facebook tags - creates links when using the @ symbol to tag other people or Facebook pages in your posts
+* Tweak: Changed the method used for link replacement in posts
 
 = 1.8.1 =
 * New: Added an 'exclude' shortcode option to allow you to easily exclude specific parts of the post

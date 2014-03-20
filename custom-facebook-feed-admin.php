@@ -472,6 +472,7 @@ function cff_style_page() {
         'cff_custom_css'            => '',
         'cff_custom_js'             => '',
         'cff_title_link'            => false,
+        'cff_post_tags'             => true,
         'cff_event_title_link'      => false,
         'cff_video_action'          => 'file',
         'cff_sep_color'             => '',
@@ -643,6 +644,7 @@ function cff_style_page() {
     $cff_custom_css = $options[ 'cff_custom_css' ];
     $cff_custom_js = $options[ 'cff_custom_js' ];
     $cff_title_link = $options[ 'cff_title_link' ];
+    $cff_post_tags = $options[ 'cff_post_tags' ];
     $cff_event_title_link = $options[ 'cff_event_title_link' ];
     $cff_video_action = $options[ 'cff_video_action' ];
     $cff_sep_color = $options[ 'cff_sep_color' ];
@@ -723,6 +725,7 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_title_weight' ]) ) $cff_title_weight = $_POST[ 'cff_title_weight' ];
             if (isset($_POST[ 'cff_title_color' ]) ) $cff_title_color = $_POST[ 'cff_title_color' ];
             (isset($_POST[ 'cff_title_link' ]) ) ? $cff_title_link = $_POST[ 'cff_title_link' ] : $cff_title_link = '';
+            (isset($_POST[ 'cff_post_tags' ]) ) ? $cff_post_tags = $_POST[ 'cff_post_tags' ] : $cff_post_tags = '';
             $cff_body_size = $_POST[ 'cff_body_size' ];
             if (isset($_POST[ 'cff_body_weight' ]) ) $cff_body_weight = $_POST[ 'cff_body_weight' ];
             if (isset($_POST[ 'cff_body_color' ]) ) $cff_body_color = $_POST[ 'cff_body_color' ];
@@ -787,6 +790,7 @@ function cff_style_page() {
             $options[ 'cff_title_weight' ] = $cff_title_weight;
             $options[ 'cff_title_color' ] = $cff_title_color;
             $options[ 'cff_title_link' ] = $cff_title_link;
+            $options[ 'cff_post_tags' ] = $cff_post_tags;
             $options[ 'cff_body_size' ] = $cff_body_size;
             $options[ 'cff_body_weight' ] = $cff_body_weight;
             $options[ 'cff_body_color' ] = $cff_body_color;
@@ -1256,6 +1260,15 @@ function cff_style_page() {
                                 <tr>
                                     <th><label for="cff_title_link" class="bump-left"><?php _e('Link text to Facebook post?'); ?></label></th>
                                     <td><input type="checkbox" name="cff_title_link" id="cff_title_link" <?php if($cff_title_link == true) echo 'checked="checked"' ?> />&nbsp;Yes</td>
+                                </tr>
+
+                                <tr>
+                                    <th><label for="cff_post_tags" class="bump-left"><?php _e('Enable Post Tags?'); ?></label></th>
+                                    <td>
+                                        <input type="checkbox" name="cff_post_tags" id="cff_post_tags" <?php if($cff_post_tags == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                                        <a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('What are Post Tags?'); ?></a>
+                                        <p class="cff-tooltip cff-more-info"><?php _e("When you use tag another Facebook page or user in your post using the @ symbol it creates a post tag, which is a link to either that Facebook page or user profile."); ?></p>
+                                    </td>
                                 </tr>
                                 
                                 </tbody>
