@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.8.2.1
+Stable tag: 1.8.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H5XFD33R3FHMG
@@ -273,7 +273,7 @@ Credit [iMarketing Factory](http://www.imarketingfactory.com/facebook/ "The Impo
 
 == Changelog ==
 
-= 1.8.2.1 =
+= 1.8.2.3 =
 * New: Now supports Facebook tags - creates links when using the @ symbol to tag other people or Facebook pages in your posts
 * Tweak: Changed the method used for link replacement in posts
 * Fix: Fixed issue with php include
