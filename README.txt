@@ -28,6 +28,7 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Show **events** from your Facebook feed with name, date/time, location and description
 * Add your own **custom CSS**
 * **Caching** means that your Facebook posts load lightning fast. Set your own caching time - check for new posts on Facebook every few seconds, minutes, hours or days. You decide.
+* Super **simple to set up**. Just enter your Facebook page ID and you're done.
 * Show and hide certain parts of each Facebook post
 * Show or hide the Facebook profile picture and name of the author above each post
 * Display Facebook posts by just the page owner, everyone who posts on your Facebook page, or only other people
@@ -84,10 +85,6 @@ The Facebook feed you're trying to display has to be from a publicly accessible 
 If your Facebook page has any restrictions on it (age, for example) then it means that people have to be signed into Facebook in order to view your page. This isn't desirable for most Facebook pages as it means that it isn't accessible by people who don't have a Facebook account and that your Facebook page can't be crawled and indexed by search engines.
 
 An easy way to determine whether your Facebook page is set to public is to sign out of your Facebook account and try to visit your page. If Facebook forces you to sign in to view your page then it isn't public. You can change your Facebook page to public in your Facebook page settings simply by removing any age or location restrictions you have on it ([screenshot](http://smashballoon.com/wp-content/uploads/2013/06/facebook-page-restrictions.png)), which will then allow the Custom Facebook Feed plugin to access and display your feed.
-
-= What's an Access Token and why do I need one? =
-
-An Access Token is required by Facebook in order to access their feeds.  Don't worry, it's easy to get one.  Just follow the step-by-step instructions [here](http://smashballoon.com/custom-facebook-feed/access-token/ "Getting an Access Token"). to get yours. Your Access Token will never expire.
 
 = Can I display feeds from multiple Facebook pages or groups? =
 
