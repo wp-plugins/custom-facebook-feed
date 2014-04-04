@@ -44,7 +44,6 @@ function cff_settings_page() {
     $cff_cache_time         = 'cff_cache_time';
     $cff_cache_time_unit    = 'cff_cache_time_unit';
     $cff_locale             = 'cff_locale';
-    $cff_ajax               = 'cff_ajax';
     // Read in existing option value from database
     $access_token_val = get_option( $access_token );
     $page_id_val = get_option( $page_id );
@@ -67,7 +66,6 @@ function cff_settings_page() {
         $cff_cache_time_val = $_POST[ $cff_cache_time ];
         $cff_cache_time_unit_val = $_POST[ $cff_cache_time_unit ];
         $cff_locale_val = $_POST[ $cff_locale ];
-        $cff_ajax_val = $_POST[ $cff_ajax ];
         // Save the posted value in the database
         update_option( $access_token, $access_token_val );
         update_option( $page_id, $page_id_val );
@@ -78,7 +76,6 @@ function cff_settings_page() {
         update_option( $cff_cache_time, $cff_cache_time_val );
         update_option( $cff_cache_time_unit, $cff_cache_time_unit_val );
         update_option( $cff_locale, $cff_locale_val );
-        update_option( $cff_ajax, $cff_ajax_val );
         
         //Delete the transient for the main page ID
         delete_transient( 'cff_posts_json_' .$page_id_val );
@@ -129,26 +126,9 @@ function cff_settings_page() {
             <table class="form-table">
                 <tbody>
                     <tr valign="top">
-                        <th scope="row"><?php _e('Access Token'); ?></th>
+                        <th scope="row"><?php _e('Facebook Page ID<br /><i style="font-weight: normal; font-size: 12px;">ID of your Facebook Page or Group</i>'); ?></th>
                         <td>
-                            <input name="cff_access_token" id="cff_access_token" type="text" value="<?php esc_attr_e( $access_token_val ); ?>" size="60" />
-                            <!--<a href="#" id="verify-token" class="button-secondary"><?php _e('Verify Access Token'); ?></a>-->
-                            &nbsp;<a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e("How do I get an Access Token?"); ?></a>
-                            <br /><i style="color: #666; font-size: 11px;">Eg. 1234567890123|ABC2fvp5h9tJe4-5-AbC123.</i>
-
-                            <div class="cff-notice cff-profile-error cff-access-token">
-                                <?php _e("<p>This doesn't appear to be an Access Token. Please be sure that you didn't enter your App Secret instead of your Access Token.<br />Your App ID and App Secret are used to obtain your Access Token; simply paste them into the fields in the last step of the <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>Access Token instructions</a> and click '<b>Get my Access Token</b>'.</p>"); ?>
-                            </div>
-
-                            <div class="cff-tooltip cff-more-info">
-                                <?php _e("<p>In order to use the plugin, Facebook requires you to obtain an access token to verify that you're authorized to access their data.  Don't worry though, this is really easy to do.  Just follow these <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>.</p><p><b>Already have an App ID and App Secret?</b> Simply paste them into the fields in the last step of the <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>Access Token instructions</a> and click '<b>Get my Access Token</b>'.</p>"); ?>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th scope="row"><?php _e('Facebook Page ID (or slug)'); ?></th>
-                        <td>
-                            <input name="cff_page_id" id="cff_page_id" type="text" value="<?php esc_attr_e( $page_id_val ); ?>" size="60" />
+                            <input name="cff_page_id" id="cff_page_id" type="text" value="<?php esc_attr_e( $page_id_val ); ?>" size="45" />
                             &nbsp;<a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('What\'s my Page ID?'); ?></a>
                             <br /><i style="color: #666; font-size: 11px;">Eg. 1234567890123 or smashballoon</i>
                             <div class="cff-tooltip cff-more-info">
@@ -161,6 +141,25 @@ function cff_settings_page() {
                         </td>
                     </tr>
 
+                    <tr valign="top">
+                        <th scope="row" style="padding-bottom: 10px;"><?php _e('Facebook Access Token <i style="font-weight: normal; font-size: 12px;">(Optional)</i>'); ?></th>
+                        <td>
+                            <input name="cff_access_token" id="cff_access_token" type="text" value="<?php esc_attr_e( $access_token_val ); ?>" size="45" />
+                            &nbsp;<a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e("What is this?"); ?></a>
+
+                            <div class="cff-notice cff-profile-error cff-access-token">
+                                <?php _e("<p>This doesn't appear to be an Access Token. Please be sure that you didn't enter your App Secret instead of your Access Token.<br />Your App ID and App Secret are used to obtain your Access Token; simply paste them into the fields in the last step of the <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>Access Token instructions</a> and click '<b>Get my Access Token</b>'.</p>"); ?>
+                            </div>
+
+                            <p class="cff-tooltip cff-more-info"><?php _e("This is optional. If you have your own Facebook Access Token then you can enter it here. To get your own Access Token you can follow these <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>"); ?>.</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr />
+            <table class="form-table">
+                <tbody>
+                    <h3><?php _e('Settings'); ?></h3>
                     <tr valign="top" class="cff-page-type">
                         <th scope="row"><?php _e('Is this a page, group or profile?'); ?></th>
                         <td>
@@ -303,16 +302,6 @@ function cff_settings_page() {
                             <i style="color: #666; font-size: 11px;"><?php _e('Select a language'); ?></i>
                         </td>
                     </tr>
-
-                    <tr>
-                        <th><label for="cff_ajax" class="bump-left"><?php _e('Loading the feed via Ajax?'); ?></label></th>
-                        <td>
-                            <input name="cff_ajax" type="checkbox" id="cff_ajax" <?php if($cff_ajax_val == true) echo "checked"; ?> />
-                            <label for="cff_ajax"><?php _e('Yes'); ?></label>
-                            <a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('What does this mean?'); ?></a>
-                            <p class="cff-tooltip cff-more-info"><?php _e('Some modern WordPress themes use Ajax to load content into the page after it has loaded. If your theme uses Ajax to load the Custom Facebook Feed content into the page then check this box. If you are not sure then please check with the theme author.'); ?></p>
-                        </td>
-                    </tr>
                     
                 </tbody>
             </table>
@@ -365,7 +354,11 @@ function cff_settings_page() {
         <button class="button secondary-button" id="cff-api-test">Test connection to Facebook API</button>
         
         <div id="cff-api-test-result">
-            <?php $posts_json = cff_fetchUrl("https://graph.facebook.com/".get_option( $page_id )."/feed?access_token=".get_option( $access_token )."&limit=1"); ?>
+            <?php
+            $access_token = get_option( $access_token );
+            if ( $access_token == '' || empty($access_token) ) $access_token = '1436737606570258|MGh1BX4_b_D9HzJtKe702cwMRPI';
+            ?>
+            <?php $posts_json = cff_fetchUrl("https://graph.facebook.com/".get_option( $page_id )."/feed?access_token=".$access_token."&limit=1"); ?>
             <textarea readonly="readonly" onclick="this.focus();this.select()" title="To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo $posts_json; ?></textarea>
         </div>
 
@@ -408,9 +401,14 @@ function cff_style_page() {
         'cff_title_size'            => 'inherit',
         'cff_title_weight'          => 'inherit',
         'cff_title_color'           => '',
+        'cff_posttext_link_color'   => '',
         'cff_body_size'             => 'inherit',
         'cff_body_weight'           => 'inherit',
         'cff_body_color'            => '',
+        'cff_link_title_format'     => 'p',
+        'cff_link_title_size'       => 'inherit',
+        'cff_link_title_color'      => '',
+        'cff_link_url_color'        => '',
         //Event title
         'cff_event_title_format'    => 'p',
         'cff_event_title_size'      => 'inherit',
@@ -427,6 +425,7 @@ function cff_style_page() {
         'cff_event_details_size'    => 'inherit',
         'cff_event_details_weight'  => 'inherit',
         'cff_event_details_color'   => '',
+        'cff_event_link_color'      => '',
         //Date
         'cff_date_position'         => 'below',
         'cff_date_size'             => 'inherit',
@@ -444,7 +443,7 @@ function cff_style_page() {
         'cff_link_color'            => '',
         'cff_facebook_link_text'    => 'View on Facebook',
         'cff_view_link_text'        => 'View Link',
-        'cff_link_to_timeline'          => false,
+        'cff_link_to_timeline'      => false,
         //Meta
         'cff_icon_style'            => 'light',
         'cff_meta_text_color'       => '',
@@ -474,14 +473,14 @@ function cff_style_page() {
         'cff_title_link'            => false,
         'cff_post_tags'             => true,
         'cff_event_title_link'      => false,
-        'cff_video_action'          => 'file',
+        'cff_video_action'          => 'post',
         'cff_sep_color'             => '',
         'cff_sep_size'              => '1',
 
         //Feed Header
         'cff_show_header'           => '',
         'cff_header_outside'        => false,
-        'cff_header_text'           => '',
+        'cff_header_text'           => 'Facebook Posts',
         'cff_header_bg_color'       => '',
         'cff_header_padding'        => '',
         'cff_header_text_size'      => '',
@@ -490,6 +489,10 @@ function cff_style_page() {
         'cff_header_icon'           => '',
         'cff_header_icon_color'     => '',
         'cff_header_icon_size'      => '28',
+
+        //Author
+        'cff_author_size'           => 'inherit',
+        'cff_author_color'          => '',
 
         //Translate - general
         'cff_see_more_text'         => 'See More',
@@ -546,9 +549,14 @@ function cff_style_page() {
     $cff_title_size = $options[ 'cff_title_size' ];
     $cff_title_weight = $options[ 'cff_title_weight' ];
     $cff_title_color = $options[ 'cff_title_color' ];
+    $cff_posttext_link_color = $options[ 'cff_posttext_link_color' ];
     $cff_body_size = $options[ 'cff_body_size' ];
     $cff_body_weight = $options[ 'cff_body_weight' ];
     $cff_body_color = $options[ 'cff_body_color' ];
+    $cff_link_title_format = $options[ 'cff_link_title_format' ];
+    $cff_link_title_size = $options[ 'cff_link_title_size' ];
+    $cff_link_title_color = $options[ 'cff_link_title_color' ];
+    $cff_link_url_color = $options[ 'cff_link_url_color' ];
     //Event title
     $cff_event_title_format = $options[ 'cff_event_title_format' ];
     $cff_event_title_size = $options[ 'cff_event_title_size' ];
@@ -565,6 +573,7 @@ function cff_style_page() {
     $cff_event_details_size = $options[ 'cff_event_details_size' ];
     $cff_event_details_weight = $options[ 'cff_event_details_weight' ];
     $cff_event_details_color = $options[ 'cff_event_details_color' ];
+    $cff_event_link_color = $options[ 'cff_event_link_color' ];
     //Date
     $cff_date_position = $options[ 'cff_date_position' ];
     $cff_date_size = $options[ 'cff_date_size' ];
@@ -640,6 +649,10 @@ function cff_style_page() {
     $cff_header_icon_color = $options[ 'cff_header_icon_color' ];
     $cff_header_icon_size = $options[ 'cff_header_icon_size' ];
 
+    //Author
+    $cff_author_size = $options[ 'cff_author_size' ];
+    $cff_author_color = $options[ 'cff_author_color' ];
+
     //New
     $cff_custom_css = $options[ 'cff_custom_css' ];
     $cff_custom_js = $options[ 'cff_custom_js' ];
@@ -656,6 +669,11 @@ function cff_style_page() {
     // Read in existing option value from database
     $cff_title_length_val = get_option( $cff_title_length );
     $cff_body_length_val = get_option( $cff_body_length );
+
+    //Ajax
+    $cff_ajax = 'cff_ajax';
+    $cff_ajax_val = get_option( $cff_ajax );
+
     // See if the user has posted us some information. If they did, this hidden field will be set to 'Y'.
     if( isset($_POST[ $style_hidden_field_name ]) && $_POST[ $style_hidden_field_name ] == 'Y' ) {
         //Update the General options
@@ -719,16 +737,42 @@ function cff_style_page() {
             //Character limits
             if (isset($_POST[ 'cff_title_length' ]) ) $cff_title_length_val = $_POST[ $cff_title_length ];
             if (isset($_POST[ 'cff_body_length' ]) ) $cff_body_length_val = $_POST[ $cff_body_length ];
+
+            //Page Header
+            (isset($_POST[ 'cff_show_header' ])) ? $cff_show_header = $_POST[ 'cff_show_header' ] : $cff_show_header = '';
+            (isset($_POST[ 'cff_header_outside' ])) ? $cff_header_outside = $_POST[ 'cff_header_outside' ] : $cff_header_outside = '';
+            if (isset($_POST[ 'cff_header_text' ])) $cff_header_text = $_POST[ 'cff_header_text' ];
+            if (isset($_POST[ 'cff_header_bg_color' ])) $cff_header_bg_color = $_POST[ 'cff_header_bg_color' ];
+            if (isset($_POST[ 'cff_header_padding' ])) $cff_header_padding = $_POST[ 'cff_header_padding' ];
+            if (isset($_POST[ 'cff_header_text_size' ])) $cff_header_text_size = $_POST[ 'cff_header_text_size' ];
+            if (isset($_POST[ 'cff_header_text_weight' ])) $cff_header_text_weight = $_POST[ 'cff_header_text_weight' ];
+            if (isset($_POST[ 'cff_header_text_color' ])) $cff_header_text_color = $_POST[ 'cff_header_text_color' ];
+            if (isset($_POST[ 'cff_header_icon' ])) $cff_header_icon = $_POST[ 'cff_header_icon' ];
+            if (isset($_POST[ 'cff_header_icon_color' ])) $cff_header_icon_color = $_POST[ 'cff_header_icon_color' ];
+            if (isset($_POST[ 'cff_header_icon_size' ])) $cff_header_icon_size = $_POST[ 'cff_header_icon_size' ];
+
+            //Author
+            if (isset($_POST[ 'cff_author_size' ])) $cff_author_size = $_POST[ 'cff_author_size' ];
+            if (isset($_POST[ 'cff_author_color' ])) $cff_author_color = $_POST[ 'cff_author_color' ];
+
             //Typography
             if (isset($_POST[ 'cff_title_format' ]) ) $cff_title_format = $_POST[ 'cff_title_format' ];
             if (isset($_POST[ 'cff_title_size' ]) ) $cff_title_size = $_POST[ 'cff_title_size' ];
             if (isset($_POST[ 'cff_title_weight' ]) ) $cff_title_weight = $_POST[ 'cff_title_weight' ];
             if (isset($_POST[ 'cff_title_color' ]) ) $cff_title_color = $_POST[ 'cff_title_color' ];
+            if (isset($_POST[ 'cff_posttext_link_color' ]) ) $cff_posttext_link_color = $_POST[ 'cff_posttext_link_color' ];
+
             (isset($_POST[ 'cff_title_link' ]) ) ? $cff_title_link = $_POST[ 'cff_title_link' ] : $cff_title_link = '';
             (isset($_POST[ 'cff_post_tags' ]) ) ? $cff_post_tags = $_POST[ 'cff_post_tags' ] : $cff_post_tags = '';
             $cff_body_size = $_POST[ 'cff_body_size' ];
             if (isset($_POST[ 'cff_body_weight' ]) ) $cff_body_weight = $_POST[ 'cff_body_weight' ];
             if (isset($_POST[ 'cff_body_color' ]) ) $cff_body_color = $_POST[ 'cff_body_color' ];
+
+            if (isset($_POST[ 'cff_link_title_format' ]) ) $cff_link_title_format = $_POST[ 'cff_link_title_format' ];
+            if (isset($_POST[ 'cff_link_title_size' ]) ) $cff_link_title_size = $_POST[ 'cff_link_title_size' ];
+            if (isset($_POST[ 'cff_link_title_color' ]) ) $cff_link_title_color = $_POST[ 'cff_link_title_color' ];
+            if (isset($_POST[ 'cff_link_url_color' ]) ) $cff_link_url_color = $_POST[ 'cff_link_url_color' ];
+
             //Event title
             if (isset($_POST[ 'cff_event_title_format' ]) ) $cff_event_title_format = $_POST[ 'cff_event_title_format' ];
             if (isset($_POST[ 'cff_event_title_size' ]) ) $cff_event_title_size = $_POST[ 'cff_event_title_size' ];
@@ -746,6 +790,7 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_event_details_size' ]) ) $cff_event_details_size = $_POST[ 'cff_event_details_size' ];
             if (isset($_POST[ 'cff_event_details_weight' ]) ) $cff_event_details_weight = $_POST[ 'cff_event_details_weight' ];
             if (isset($_POST[ 'cff_event_details_color' ]) ) $cff_event_details_color = $_POST[ 'cff_event_details_color' ];
+            if (isset($_POST[ 'cff_event_link_color' ]) ) $cff_event_link_color = $_POST[ 'cff_event_link_color' ];
             //Date
             if (isset($_POST[ 'cff_date_position' ]) ) $cff_date_position = $_POST[ 'cff_date_position' ];
             if (isset($_POST[ 'cff_date_size' ]) ) $cff_date_size = $_POST[ 'cff_date_size' ];
@@ -781,19 +826,40 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_facebook_link_text' ]) ) $cff_facebook_link_text = $_POST[ 'cff_facebook_link_text' ];
             if (isset($_POST[ 'cff_view_link_text' ]) ) $cff_view_link_text = $_POST[ 'cff_view_link_text' ];
             if (isset($_POST[ 'cff_link_to_timeline' ]) ) $cff_link_to_timeline = $_POST[ 'cff_link_to_timeline' ];
+
             //Character limits
             update_option( $cff_title_length, $cff_title_length_val );
             update_option( $cff_body_length, $cff_body_length_val );
+            //Page Header
+            $options[ 'cff_show_header' ] = $cff_show_header;
+            $options[ 'cff_header_outside' ] = $cff_header_outside;
+            $options[ 'cff_header_text' ] = $cff_header_text;
+            $options[ 'cff_header_bg_color' ] = $cff_header_bg_color;
+            $options[ 'cff_header_padding' ] = $cff_header_padding;
+            $options[ 'cff_header_text_size' ] = $cff_header_text_size;
+            $options[ 'cff_header_text_weight' ] = $cff_header_text_weight;
+            $options[ 'cff_header_text_color' ] = $cff_header_text_color;
+            $options[ 'cff_header_icon' ] = $cff_header_icon;
+            $options[ 'cff_header_icon_color' ] = $cff_header_icon_color;
+            $options[ 'cff_header_icon_size' ] = $cff_header_icon_size;
+            //Author
+            $options[ 'cff_author_size' ] = $cff_author_size;
+            $options[ 'cff_author_color' ] = $cff_author_color;
             //Typography
             $options[ 'cff_title_format' ] = $cff_title_format;
             $options[ 'cff_title_size' ] = $cff_title_size;
             $options[ 'cff_title_weight' ] = $cff_title_weight;
             $options[ 'cff_title_color' ] = $cff_title_color;
+            $options[ 'cff_posttext_link_color' ] = $cff_posttext_link_color;
             $options[ 'cff_title_link' ] = $cff_title_link;
             $options[ 'cff_post_tags' ] = $cff_post_tags;
             $options[ 'cff_body_size' ] = $cff_body_size;
             $options[ 'cff_body_weight' ] = $cff_body_weight;
             $options[ 'cff_body_color' ] = $cff_body_color;
+            $options[ 'cff_link_title_format' ] = $cff_link_title_format;
+            $options[ 'cff_link_title_size' ] = $cff_link_title_size;
+            $options[ 'cff_link_title_color' ] = $cff_link_title_color;
+            $options[ 'cff_link_url_color' ] = $cff_link_url_color;
             //Event title
             $options[ 'cff_event_title_format' ] = $cff_event_title_format;
             $options[ 'cff_event_title_size' ] = $cff_event_title_size;
@@ -811,6 +877,7 @@ function cff_style_page() {
             $options[ 'cff_event_details_size' ] = $cff_event_details_size;
             $options[ 'cff_event_details_weight' ] = $cff_event_details_weight;
             $options[ 'cff_event_details_color' ] = $cff_event_details_color;
+            $options[ 'cff_event_link_color' ] = $cff_event_link_color;
             //Date
             $options[ 'cff_date_position' ] = $cff_date_position;
             $options[ 'cff_date_size' ] = $cff_date_size;
@@ -869,24 +936,14 @@ function cff_style_page() {
             (isset($_POST[ 'cff_like_box_faces' ])) ? $cff_like_box_faces = $_POST[ 'cff_like_box_faces' ] : $cff_like_box_faces = '';
             (isset($_POST[ 'cff_like_box_border' ])) ? $cff_like_box_border = $_POST[ 'cff_like_box_border' ] : $cff_like_box_border = '';
 
-            //Page Header
-            (isset($_POST[ 'cff_show_header' ])) ? $cff_show_header = $_POST[ 'cff_show_header' ] : $cff_show_header = '';
-            (isset($_POST[ 'cff_header_outside' ])) ? $cff_header_outside = $_POST[ 'cff_header_outside' ] : $cff_header_outside = '';
-            if (isset($_POST[ 'cff_header_text' ])) $cff_header_text = $_POST[ 'cff_header_text' ];
-            if (isset($_POST[ 'cff_header_bg_color' ])) $cff_header_bg_color = $_POST[ 'cff_header_bg_color' ];
-            if (isset($_POST[ 'cff_header_padding' ])) $cff_header_padding = $_POST[ 'cff_header_padding' ];
-            if (isset($_POST[ 'cff_header_text_size' ])) $cff_header_text_size = $_POST[ 'cff_header_text_size' ];
-            if (isset($_POST[ 'cff_header_text_weight' ])) $cff_header_text_weight = $_POST[ 'cff_header_text_weight' ];
-            if (isset($_POST[ 'cff_header_text_color' ])) $cff_header_text_color = $_POST[ 'cff_header_text_color' ];
-            if (isset($_POST[ 'cff_header_icon' ])) $cff_header_icon = $_POST[ 'cff_header_icon' ];
-            if (isset($_POST[ 'cff_header_icon_color' ])) $cff_header_icon_color = $_POST[ 'cff_header_icon_color' ];
-            if (isset($_POST[ 'cff_header_icon_size' ])) $cff_header_icon_size = $_POST[ 'cff_header_icon_size' ];
-
             if (isset($_POST[ 'cff_video_height' ])) $cff_video_height = $_POST[ 'cff_video_height' ];
             if (isset($_POST[ 'cff_video_action' ])) $cff_video_action = $_POST[ 'cff_video_action' ];
             if (isset($_POST[ 'cff_sep_color' ])) $cff_sep_color = $_POST[ 'cff_sep_color' ];
             if (isset($_POST[ 'cff_sep_size' ])) $cff_sep_size = $_POST[ 'cff_sep_size' ];
             if (isset($_POST[ 'cff_open_links' ])) $cff_open_links = $_POST[ 'cff_open_links' ];
+
+            $cff_ajax_val = $_POST[ $cff_ajax ];
+
             //Meta
             $options[ 'cff_icon_style' ] = $cff_icon_style;
             $options[ 'cff_meta_text_color' ] = $cff_meta_text_color;
@@ -906,25 +963,14 @@ function cff_style_page() {
             $options[ 'cff_likebox_width' ] = $cff_likebox_width;
             $options[ 'cff_like_box_faces' ] = $cff_like_box_faces;
             $options[ 'cff_like_box_border' ] = $cff_like_box_border;
-            
-            //Page Header
-            $options[ 'cff_show_header' ] = $cff_show_header;
-            $options[ 'cff_header_outside' ] = $cff_header_outside;
-            $options[ 'cff_header_text' ] = $cff_header_text;
-            $options[ 'cff_header_bg_color' ] = $cff_header_bg_color;
-            $options[ 'cff_header_padding' ] = $cff_header_padding;
-            $options[ 'cff_header_text_size' ] = $cff_header_text_size;
-            $options[ 'cff_header_text_weight' ] = $cff_header_text_weight;
-            $options[ 'cff_header_text_color' ] = $cff_header_text_color;
-            $options[ 'cff_header_icon' ] = $cff_header_icon;
-            $options[ 'cff_header_icon_color' ] = $cff_header_icon_color;
-            $options[ 'cff_header_icon_size' ] = $cff_header_icon_size;
 
             $options[ 'cff_video_height' ] = $cff_video_height;
             $options[ 'cff_video_action' ] = $cff_video_action;
             $options[ 'cff_sep_color' ] = $cff_sep_color;
             $options[ 'cff_sep_size' ] = $cff_sep_size;
             $options[ 'cff_open_links' ] = $cff_open_links;
+
+            update_option( $cff_ajax, $cff_ajax_val );
         }
         //Update the Custom Text / Translate options
         if( isset($_POST[ $style_custom_text_hidden_field_name ]) && $_POST[ $style_custom_text_hidden_field_name ] == 'Y' ) {
@@ -988,7 +1034,7 @@ function cff_style_page() {
  
     <div id="cff-admin" class="wrap">
         <div id="header">
-            <h1><?php _e('Layout &amp; Style'); ?></h1>
+            <h2><?php _e('Customize'); ?></h2>
         </div>
         <form name="form1" method="post" action="">
             <input type="hidden" name="<?php echo $style_hidden_field_name; ?>" value="Y">
@@ -1071,6 +1117,10 @@ function cff_style_page() {
                             <div>
                                 <input type="checkbox" name="cff_show_links_type" id="cff_show_links_type" disabled checked />
                                 <label for="cff_show_links_type"><?php _e('Links'); ?></label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="cff_show_links_type" id="cff_show_links_type" disabled checked />
+                                <label for="cff_show_links_type"><?php _e('Albums'); ?></label>
                             </div>
                         </td>
                     </tr>
@@ -1174,13 +1224,202 @@ function cff_style_page() {
             <?php if( $active_tab == 'typography' ) { //Start Typography tab ?>
             <input type="hidden" name="<?php echo $style_typography_hidden_field_name; ?>" value="Y">
             <br />
-            <h3><?php _e('Typography'); ?></h3>
             <p><i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('"Inherit" means that the text will inherit the styles from your theme.'); ?></i></p>
+            
             <div id="poststuff" class="metabox-holder">
                 <div class="meta-box-sortables ui-sortable">
+                
+
+                    <div id="adminform" class="postbox" style="display: block;">
+                    <div class="handlediv" title="Click to toggle"><br></div>
+                    <h3 class="hndle"><span><?php _e('Feed Header'); ?></span></h3>
+                    <div class="inside">
+                        <table class="form-table">
+                            <tbody>
+                                <tr valign="top">
+                                    <th class="bump-left" scope="row"><label><?php _e('Show Feed Header'); ?></label></th>
+                                    <td>
+                                        <input type="checkbox" name="cff_show_header" id="cff_show_header" <?php if($cff_show_header == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                                        <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('This will show a header at the top of your feed'); ?></i>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th class="bump-left" scope="row"><label><?php _e('Display outside the scrollable area'); ?></label></th>
+                                    <td>
+                                        <input type="checkbox" name="cff_header_outside" id="cff_header_outside" <?php if($cff_header_outside == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                                        <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Only applicable if you have set a height on the feed'); ?></i>
+                                    </td>
+                                </tr>
+                                </tr>
+                                    <th class="bump-left" scope="row"><label><?php _e('Text'); ?></label></th>
+                                    <td>
+                                        <input name="cff_header_text" type="text" value="<?php esc_attr_e( $cff_header_text ); ?>" size="30" />
+                                        <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('The text to display in the feed header'); ?></i>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th class="bump-left" scope="row"><label><?php _e('Background Color'); ?></label></th>
+                                    <td>
+                                        <input name="cff_header_bg_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_header_bg_color) ); ?>" class="cff-colorpicker" />
+                                    </td>
+                                </tr>
+                                </tr>
+                                    <th class="bump-left" scope="row"><label><?php _e('Padding'); ?></label></th>
+                                    <td>
+                                        <input name="cff_header_padding" type="text" value="<?php esc_attr_e( $cff_header_padding ); ?>" size="6" />
+                                        <span>Eg. 20px, 5%. <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('This is the amount of padding/spacing that goes around the header.'); ?></i></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bump-left" scope="row"><label><?php _e('Text Size'); ?></label></th>
+                                    <td>
+                                        <select name="cff_header_text_size">
+                                            <option value="inherit" <?php if($cff_header_text_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
+                                            <option value="10" <?php if($cff_header_text_size == "10") echo 'selected="selected"' ?> >10px</option>
+                                            <option value="11" <?php if($cff_header_text_size == "11") echo 'selected="selected"' ?> >11px</option>
+                                            <option value="12" <?php if($cff_header_text_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                            <option value="13" <?php if($cff_header_text_size == "13") echo 'selected="selected"' ?> >13px</option>
+                                            <option value="14" <?php if($cff_header_text_size == "14") echo 'selected="selected"' ?> >14px</option>
+                                            <option value="16" <?php if($cff_header_text_size == "16") echo 'selected="selected"' ?> >16px</option>
+                                            <option value="18" <?php if($cff_header_text_size == "18") echo 'selected="selected"' ?> >18px</option>
+                                            <option value="20" <?php if($cff_header_text_size == "20") echo 'selected="selected"' ?> >20px</option>
+                                            <option value="24" <?php if($cff_header_text_size == "24") echo 'selected="selected"' ?> >24px</option>
+                                            <option value="28" <?php if($cff_header_text_size == "28") echo 'selected="selected"' ?> >28px</option>
+                                            <option value="32" <?php if($cff_header_text_size == "32") echo 'selected="selected"' ?> >32px</option>
+                                            <option value="36" <?php if($cff_header_text_size == "36") echo 'selected="selected"' ?> >36px</option>
+                                            <option value="42" <?php if($cff_header_text_size == "42") echo 'selected="selected"' ?> >42px</option>
+                                            <option value="48" <?php if($cff_header_text_size == "48") echo 'selected="selected"' ?> >48px</option>
+                                            <option value="54" <?php if($cff_header_text_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                            <option value="60" <?php if($cff_header_text_size == "60") echo 'selected="selected"' ?> >60px</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bump-left" scope="row"><label><?php _e('Text Weight'); ?></label></th>
+                                    <td>
+                                        <select name="cff_header_text_weight">
+                                            <option value="inherit" <?php if($cff_header_text_weight == "inherit") echo 'selected="selected"' ?> >Inherit</option>
+                                            <option value="normal" <?php if($cff_header_text_weight == "normal") echo 'selected="selected"' ?> >Normal</option>
+                                            <option value="bold" <?php if($cff_header_text_weight == "bold") echo 'selected="selected"' ?> >Bold</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bump-left" scope="row"><label><?php _e('Text Color'); ?></label></th>
+                                    <td>
+                                        <input name="cff_header_text_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_header_text_color) ); ?>" class="cff-colorpicker" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bump-left" scope="row"><label><?php _e('Icon Type'); ?></label></th>
+                                    <td>
+                                        <select name="cff_header_icon" id="cff-header-icon">
+                                            <option value="facebook-square" <?php if($cff_header_icon == "facebook-square") echo 'selected="selected"' ?> >Facebook 1</option>
+                                            <option value="facebook" <?php if($cff_header_icon == "facebook") echo 'selected="selected"' ?> >Facebook 2</option>
+                                            <option value="calendar" <?php if($cff_header_icon == "calendar") echo 'selected="selected"' ?> >Events 1</option>
+                                            <option value="calendar-o" <?php if($cff_header_icon == "calendar-o") echo 'selected="selected"' ?> >Events 2</option>
+                                            <option value="picture-o" <?php if($cff_header_icon == "picture-o") echo 'selected="selected"' ?> >Photos</option>
+                                            <option value="users" <?php if($cff_header_icon == "users") echo 'selected="selected"' ?> >People</option>
+                                            <option value="thumbs-o-up" <?php if($cff_header_icon == "thumbs-o-up") echo 'selected="selected"' ?> >Thumbs Up 1</option>
+                                            <option value="thumbs-up" <?php if($cff_header_icon == "thumbs-up") echo 'selected="selected"' ?> >Thumbs Up 2</option>
+                                            <option value="comment-o" <?php if($cff_header_icon == "comment-o") echo 'selected="selected"' ?> >Speech Bubble 1</option>
+                                            <option value="comment" <?php if($cff_header_icon == "comment") echo 'selected="selected"' ?> >Speech Bubble 2</option>
+                                            <option value="ticket" <?php if($cff_header_icon == "ticket") echo 'selected="selected"' ?> >Ticket</option>
+                                            <option value="list-alt" <?php if($cff_header_icon == "list-alt") echo 'selected="selected"' ?> >News List</option>
+                                            <option value="file" <?php if($cff_header_icon == "file") echo 'selected="selected"' ?> >File 1</option>
+                                            <option value="file-o" <?php if($cff_header_icon == "file-o") echo 'selected="selected"' ?> >File 2</option>
+                                            <option value="file-text" <?php if($cff_header_icon == "file-text") echo 'selected="selected"' ?> >File 3</option>
+                                            <option value="file-text-o" <?php if($cff_header_icon == "file-text-o") echo 'selected="selected"' ?> >File 4</option>
+                                            <option value="youtube-play" <?php if($cff_header_icon == "youtube-play") echo 'selected="selected"' ?> >Video</option>
+                                            <option value="youtube" <?php if($cff_header_icon == "youtube") echo 'selected="selected"' ?> >YouTube</option>
+                                            <option value="vimeo-square" <?php if($cff_header_icon == "vimeo-square") echo 'selected="selected"' ?> >Vimeo</option>
+                                        </select>
+
+                                        <i id="cff-header-icon-example" class="fa fa-facebook-square"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bump-left" scope="row"><label><?php _e('Icon Color'); ?></label></th>
+                                    <td>
+                                        <input name="cff_header_icon_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_header_icon_color) ); ?>" class="cff-colorpicker" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="bump-left" scope="row"><label><?php _e('Icon Size'); ?></label></th>
+                                    <td>
+                                        <select name="cff_header_icon_size" id="cff-header-icon-size">
+                                            <option value="10" <?php if($cff_header_icon_size == "10") echo 'selected="selected"' ?> >10px</option>
+                                            <option value="11" <?php if($cff_header_icon_size == "11") echo 'selected="selected"' ?> >11px</option>
+                                            <option value="12" <?php if($cff_header_icon_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                            <option value="13" <?php if($cff_header_icon_size == "13") echo 'selected="selected"' ?> >13px</option>
+                                            <option value="14" <?php if($cff_header_icon_size == "14") echo 'selected="selected"' ?> >14px</option>
+                                            <option value="16" <?php if($cff_header_icon_size == "16") echo 'selected="selected"' ?> >16px</option>
+                                            <option value="18" <?php if($cff_header_icon_size == "18") echo 'selected="selected"' ?> >18px</option>
+                                            <option value="20" <?php if($cff_header_icon_size == "20") echo 'selected="selected"' ?> >20px</option>
+                                            <option value="24" <?php if($cff_header_icon_size == "24") echo 'selected="selected"' ?> >24px</option>
+                                            <option value="28" <?php if($cff_header_icon_size == "28") echo 'selected="selected"' ?> >28px</option>
+                                            <option value="32" <?php if($cff_header_icon_size == "32") echo 'selected="selected"' ?> >32px</option>
+                                            <option value="36" <?php if($cff_header_icon_size == "36") echo 'selected="selected"' ?> >36px</option>
+                                            <option value="42" <?php if($cff_header_icon_size == "42") echo 'selected="selected"' ?> >42px</option>
+                                            <option value="48" <?php if($cff_header_icon_size == "48") echo 'selected="selected"' ?> >48px</option>
+                                            <option value="54" <?php if($cff_header_icon_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                            <option value="60" <?php if($cff_header_icon_size == "60") echo 'selected="selected"' ?> >60px</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <div id="adminform" class="postbox" style="display: block;">
                     <div class="handlediv" title="Click to toggle"><br></div>
-                    <h3 class="hndle"><span><?php _e('Text Character Limits'); ?></span></h3>
+                    <h3 class="hndle"><span><?php _e('Post Author'); ?></span></h3>
+                    <div class="inside">
+                        <table class="form-table">
+                            <tbody>
+                                <tr>
+                                    <th><label for="cff_author_size" class="bump-left"><?php _e('Text Size'); ?></label></th>
+                                    <td>
+                                        <select name="cff_author_size">
+                                            <option value="inherit" <?php if($cff_author_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
+                                            <option value="10" <?php if($cff_author_size == "10") echo 'selected="selected"' ?> >10px</option>
+                                            <option value="11" <?php if($cff_author_size == "11") echo 'selected="selected"' ?> >11px</option>
+                                            <option value="12" <?php if($cff_author_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                            <option value="13" <?php if($cff_author_size == "13") echo 'selected="selected"' ?> >13px</option>
+                                            <option value="14" <?php if($cff_author_size == "14") echo 'selected="selected"' ?> >14px</option>
+                                            <option value="16" <?php if($cff_author_size == "16") echo 'selected="selected"' ?> >16px</option>
+                                            <option value="18" <?php if($cff_author_size == "18") echo 'selected="selected"' ?> >18px</option>
+                                            <option value="20" <?php if($cff_author_size == "20") echo 'selected="selected"' ?> >20px</option>
+                                            <option value="24" <?php if($cff_author_size == "24") echo 'selected="selected"' ?> >24px</option>
+                                            <option value="28" <?php if($cff_author_size == "28") echo 'selected="selected"' ?> >28px</option>
+                                            <option value="32" <?php if($cff_author_size == "32") echo 'selected="selected"' ?> >32px</option>
+                                            <option value="36" <?php if($cff_author_size == "36") echo 'selected="selected"' ?> >36px</option>
+                                            <option value="42" <?php if($cff_author_size == "42") echo 'selected="selected"' ?> >42px</option>
+                                            <option value="48" <?php if($cff_author_size == "48") echo 'selected="selected"' ?> >48px</option>
+                                            <option value="54" <?php if($cff_author_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                            <option value="60" <?php if($cff_author_size == "60") echo 'selected="selected"' ?> >60px</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label for="cff_author_color" class="bump-left"><?php _e('Text Color'); ?></label></th>
+                                    <td>
+                                        <input name="cff_author_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_author_color) ); ?>" class="cff-colorpicker" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="margin-top: -15px;">
+                    <?php submit_button(); ?>
+                </div>
+                <div id="adminform" class="postbox" style="display: block;">
+                    <div class="handlediv" title="Click to toggle"><br></div>
+                    <h3 class="hndle"><span><?php _e('Post Text'); ?></span></h3>
                     <div class="inside">
                         <table class="form-table">
                             <tbody>
@@ -1190,22 +1429,6 @@ function cff_style_page() {
                                         <input name="cff_title_length" type="text" value="<?php esc_attr_e( $cff_title_length_val ); ?>" size="4" /> <span><?php _e('Characters.'); ?></span> <span>Eg. 200</span> <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('If the post text exceeds this length then a "See More" button will be added. Leave empty to set no maximum length.'); ?></i>
                                     </td>
                                 </tr>
-                                <tr valign="top">
-                                    <th scope="row"><label class="bump-left"><?php _e('Maximum Description Length'); ?></label></th>
-                                    <td>
-                                        <input name="cff_body_length" type="text" value="<?php esc_attr_e( $cff_body_length_val ); ?>" size="4" /> <span><?php _e('Characters.'); ?></span> <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Leave empty to set no maximum length'); ?></i>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div id="adminform" class="postbox" style="display: block;">
-                    <div class="handlediv" title="Click to toggle"><br></div>
-                    <h3 class="hndle"><span><?php _e('Post Text'); ?></span></h3>
-                    <div class="inside">
-                        <table class="form-table">
-                            <tbody>
                                 <tr>
                                     <th><label for="cff_title_format" class="bump-left"><?php _e('Format'); ?></label></th>
                                     <td>
@@ -1226,6 +1449,7 @@ function cff_style_page() {
                                             <option value="10" <?php if($cff_title_size == "10") echo 'selected="selected"' ?> >10px</option>
                                             <option value="11" <?php if($cff_title_size == "11") echo 'selected="selected"' ?> >11px</option>
                                             <option value="12" <?php if($cff_title_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                            <option value="13" <?php if($cff_title_size == "13") echo 'selected="selected"' ?> >13px</option>
                                             <option value="14" <?php if($cff_title_size == "14") echo 'selected="selected"' ?> >14px</option>
                                             <option value="16" <?php if($cff_title_size == "16") echo 'selected="selected"' ?> >16px</option>
                                             <option value="18" <?php if($cff_title_size == "18") echo 'selected="selected"' ?> >18px</option>
@@ -1236,7 +1460,7 @@ function cff_style_page() {
                                             <option value="36" <?php if($cff_title_size == "36") echo 'selected="selected"' ?> >36px</option>
                                             <option value="42" <?php if($cff_title_size == "42") echo 'selected="selected"' ?> >42px</option>
                                             <option value="48" <?php if($cff_title_size == "48") echo 'selected="selected"' ?> >48px</option>
-                                            <option value="60" <?php if($cff_title_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                            <option value="54" <?php if($cff_title_size == "54") echo 'selected="selected"' ?> >54px</option>
                                             <option value="60" <?php if($cff_title_size == "60") echo 'selected="selected"' ?> >60px</option>
                                         </select>
                                     </td>
@@ -1258,16 +1482,22 @@ function cff_style_page() {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th><label for="cff_title_link" class="bump-left"><?php _e('Link text to Facebook post?'); ?></label></th>
-                                    <td><input type="checkbox" name="cff_title_link" id="cff_title_link" <?php if($cff_title_link == true) echo 'checked="checked"' ?> />&nbsp;Yes</td>
+                                    <th><label for="cff_posttext_link_color" class="bump-left"><?php _e('Link Color'); ?></label></th>
+                                    <td>
+                                        <input name="cff_posttext_link_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_posttext_link_color) ); ?>" class="cff-colorpicker" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label for="cff_title_link" class="bump-left"><?php _e('Link Text to Facebook Post?'); ?></label></th>
+                                    <td><input type="checkbox" name="cff_title_link" id="cff_title_link" <?php if($cff_title_link == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?></td>
                                 </tr>
 
                                 <tr>
-                                    <th><label for="cff_post_tags" class="bump-left"><?php _e('Enable Post Tags?'); ?></label></th>
+                                    <th><label for="cff_post_tags" class="bump-left"><?php _e('Link Post Tags?'); ?></label></th>
                                     <td>
                                         <input type="checkbox" name="cff_post_tags" id="cff_post_tags" <?php if($cff_post_tags == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
                                         <a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('What are Post Tags?'); ?></a>
-                                        <p class="cff-tooltip cff-more-info"><?php _e("When you use tag another Facebook page or user in your post using the @ symbol it creates a post tag, which is a link to either that Facebook page or user profile."); ?></p>
+                                        <p class="cff-tooltip cff-more-info"><?php _e("When you tag another Facebook page or user in your post using the @ symbol it creates a post tag, which is a link to either that Facebook page or user profile."); ?></p>
                                     </td>
                                 </tr>
                                 
@@ -1281,6 +1511,13 @@ function cff_style_page() {
                     <div class="inside">
                         <table class="form-table">
                             <tbody>
+
+                            <tr valign="top">
+                                <th scope="row"><label class="bump-left"><?php _e('Maximum Description Length'); ?></label></th>
+                                <td>
+                                    <input name="cff_body_length" type="text" value="<?php esc_attr_e( $cff_body_length_val ); ?>" size="4" /> <span><?php _e('Characters. Eg. 200'); ?></span> <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Leave empty to set no maximum length'); ?></i>
+                                </td>
+                            </tr>
                             
                             <tr>
                                 <th><label for="cff_body_size" class="bump-left"><?php _e('Text Size'); ?></label></th>
@@ -1290,6 +1527,7 @@ function cff_style_page() {
                                         <option value="10" <?php if($cff_body_size == "10") echo 'selected="selected"' ?> >10px</option>
                                         <option value="11" <?php if($cff_body_size == "11") echo 'selected="selected"' ?> >11px</option>
                                         <option value="12" <?php if($cff_body_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                        <option value="13" <?php if($cff_body_size == "13") echo 'selected="selected"' ?> >13px</option>
                                         <option value="14" <?php if($cff_body_size == "14") echo 'selected="selected"' ?> >14px</option>
                                         <option value="16" <?php if($cff_body_size == "16") echo 'selected="selected"' ?> >16px</option>
                                         <option value="18" <?php if($cff_body_size == "18") echo 'selected="selected"' ?> >18px</option>
@@ -1300,7 +1538,7 @@ function cff_style_page() {
                                         <option value="36" <?php if($cff_body_size == "36") echo 'selected="selected"' ?> >36px</option>
                                         <option value="42" <?php if($cff_body_size == "42") echo 'selected="selected"' ?> >42px</option>
                                         <option value="48" <?php if($cff_body_size == "48") echo 'selected="selected"' ?> >48px</option>
-                                        <option value="60" <?php if($cff_body_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                        <option value="54" <?php if($cff_body_size == "54") echo 'selected="selected"' ?> >54px</option>
                                         <option value="60" <?php if($cff_body_size == "60") echo 'selected="selected"' ?> >60px</option>
                                     </select>
                                 </td>
@@ -1322,6 +1560,55 @@ function cff_style_page() {
                                     <input name="cff_body_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_body_color) ); ?>" class="cff-colorpicker" />
                                 </td>
                             </tr>
+                            <tr>
+                                <th><label for="cff_link_title_format" class="bump-left"><?php _e('Shared Link Title Format'); ?></label></th>
+                                <td>
+                                    <select name="cff_link_title_format">
+                                        <option value="p" <?php if($cff_link_title_format == "p") echo 'selected="selected"' ?> >Paragraph</option>
+                                        <option value="h3" <?php if($cff_link_title_format == "h3") echo 'selected="selected"' ?> >Heading 3</option>
+                                        <option value="h4" <?php if($cff_link_title_format == "h4") echo 'selected="selected"' ?> >Heading 4</option>
+                                        <option value="h5" <?php if($cff_link_title_format == "h5") echo 'selected="selected"' ?> >Heading 5</option>
+                                        <option value="h6" <?php if($cff_link_title_format == "h6") echo 'selected="selected"' ?> >Heading 6</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="cff_link_title_size" class="bump-left"><?php _e('Shared Link Title Size'); ?></label></th>
+                                <td>
+                                    <select name="cff_link_title_size">
+                                        <option value="inherit" <?php if($cff_link_title_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
+                                        <option value="10" <?php if($cff_link_title_size == "10") echo 'selected="selected"' ?> >10px</option>
+                                        <option value="11" <?php if($cff_link_title_size == "11") echo 'selected="selected"' ?> >11px</option>
+                                        <option value="12" <?php if($cff_link_title_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                        <option value="13" <?php if($cff_link_title_size == "13") echo 'selected="selected"' ?> >13px</option>
+                                        <option value="14" <?php if($cff_link_title_size == "14") echo 'selected="selected"' ?> >14px</option>
+                                        <option value="16" <?php if($cff_link_title_size == "16") echo 'selected="selected"' ?> >16px</option>
+                                        <option value="18" <?php if($cff_link_title_size == "18") echo 'selected="selected"' ?> >18px</option>
+                                        <option value="20" <?php if($cff_link_title_size == "20") echo 'selected="selected"' ?> >20px</option>
+                                        <option value="24" <?php if($cff_link_title_size == "24") echo 'selected="selected"' ?> >24px</option>
+                                        <option value="28" <?php if($cff_link_title_size == "28") echo 'selected="selected"' ?> >28px</option>
+                                        <option value="32" <?php if($cff_link_title_size == "32") echo 'selected="selected"' ?> >32px</option>
+                                        <option value="36" <?php if($cff_link_title_size == "36") echo 'selected="selected"' ?> >36px</option>
+                                        <option value="42" <?php if($cff_link_title_size == "42") echo 'selected="selected"' ?> >42px</option>
+                                        <option value="48" <?php if($cff_link_title_size == "48") echo 'selected="selected"' ?> >48px</option>
+                                        <option value="54" <?php if($cff_link_title_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                        <option value="60" <?php if($cff_link_title_size == "60") echo 'selected="selected"' ?> >60px</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="cff_link_title_color" class="bump-left"><?php _e('Shared Link Title Color'); ?></label></th>
+                                <td>
+                                    <input name="cff_link_title_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_link_title_color) ); ?>" class="cff-colorpicker" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><label for="cff_link_url_color" class="bump-left"><?php _e('Shared Link URL Color'); ?></label></th>
+                                <td>
+                                    <input name="cff_link_url_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_link_url_color) ); ?>" class="cff-colorpicker" />
+                                </td>
+                            </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -1331,7 +1618,7 @@ function cff_style_page() {
             </div>
                 <div id="adminform" class="postbox" style="display: block;">
                     <div class="handlediv" title="Click to toggle"><br></div>
-                    <h3 class="hndle"><span><?php _e('Date'); ?></span></h3>
+                    <h3 class="hndle"><span><?php _e('Post Date'); ?></span></h3>
                     <div class="inside">
                         <table class="form-table">
                             <tbody>
@@ -1352,6 +1639,7 @@ function cff_style_page() {
                                         <option value="10" <?php if($cff_date_size == "10") echo 'selected="selected"' ?> >10px</option>
                                         <option value="11" <?php if($cff_date_size == "11") echo 'selected="selected"' ?> >11px</option>
                                         <option value="12" <?php if($cff_date_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                        <option value="13" <?php if($cff_date_size == "13") echo 'selected="selected"' ?> >13px</option>
                                         <option value="14" <?php if($cff_date_size == "14") echo 'selected="selected"' ?> >14px</option>
                                         <option value="16" <?php if($cff_date_size == "16") echo 'selected="selected"' ?> >16px</option>
                                         <option value="18" <?php if($cff_date_size == "18") echo 'selected="selected"' ?> >18px</option>
@@ -1362,7 +1650,7 @@ function cff_style_page() {
                                         <option value="36" <?php if($cff_date_size == "36") echo 'selected="selected"' ?> >36px</option>
                                         <option value="42" <?php if($cff_date_size == "42") echo 'selected="selected"' ?> >42px</option>
                                         <option value="48" <?php if($cff_date_size == "48") echo 'selected="selected"' ?> >48px</option>
-                                        <option value="60" <?php if($cff_date_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                        <option value="54" <?php if($cff_date_size == "54") echo 'selected="selected"' ?> >54px</option>
                                         <option value="60" <?php if($cff_date_size == "60") echo 'selected="selected"' ?> >60px</option>
                                     </select>
                                 </td>
@@ -1387,7 +1675,7 @@ function cff_style_page() {
                             <tr>
                                 <th><label for="cff_date_formatting" class="bump-left"><?php _e('Date formatting'); ?></label></th>
                                 <td>
-                                    <select name="cff_date_formatting" id="cff-date-formatting">
+                                    <select name="cff_date_formatting">
                                         <?php $original = strtotime('2013-07-25T17:30:00+0000'); ?>
                                         <option value="1" <?php if($cff_date_formatting == "1") echo 'selected="selected"' ?> ><?php _e('2 days ago'); ?></option>
                                         <option value="2" <?php if($cff_date_formatting == "2") echo 'selected="selected"' ?> ><?php echo date('F jS, g:i a', $original); ?></option>
@@ -1403,61 +1691,6 @@ function cff_style_page() {
                                         <option value="12" <?php if($cff_date_formatting == "12") echo 'selected="selected"' ?> ><?php echo date('d.m.y', $original); ?></option>
                                         <option value="13" <?php if($cff_date_formatting == "13") echo 'selected="selected"' ?> ><?php echo date('d/m/y', $original); ?></option>
                                     </select>
-
-                                    <i style="margin-left: 5px; font-size: 11px;"><a class="cff-tooltip-link" href="JavaScript:void(0);" id="cff-translate-date"><?php _e('Translate this'); ?></a></i>
-                                    <div class="cff-tooltip cff-more-info">
-                                        <div class="cff-tooltip-table">
-                                            <p style="margin-bottom: 15px;"><?php _e('Translate the text below into the language you would like to use:'); ?></p>
-
-
-                                            <label for="cff_translate_second"><?php _e("second"); ?></label>
-                                            <input name="cff_translate_second" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_seconds"><?php _e("seconds"); ?></label>
-                                            <input name="cff_translate_seconds" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_minute"><?php _e("minute"); ?></label>
-                                            <input name="cff_translate_minute" type="text" value="<?php esc_attr_e( $cff_translate_minute ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_minutes"><?php _e("minutes"); ?></label>
-                                            <input name="cff_translate_minutes" type="text" value="<?php esc_attr_e( $cff_translate_minutes ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_hour"><?php _e("hour"); ?></label>
-                                            <input name="cff_translate_hour" type="text" value="<?php esc_attr_e( $cff_translate_hour ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_hours"><?php _e("hours"); ?></label>
-                                            <input name="cff_translate_hours" type="text" value="<?php esc_attr_e( $cff_translate_hours ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_day"><?php _e("day"); ?></label>
-                                            <input name="cff_translate_day" type="text" value="<?php esc_attr_e( $cff_translate_day ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_days"><?php _e("days"); ?></label>
-                                            <input name="cff_translate_days" type="text" value="<?php esc_attr_e( $cff_translate_days ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_week"><?php _e("week"); ?></label>
-                                            <input name="cff_translate_week" type="text" value="<?php esc_attr_e( $cff_translate_week ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_weeks"><?php _e("weeks"); ?></label>
-                                            <input name="cff_translate_weeks" type="text" value="<?php esc_attr_e( $cff_translate_weeks ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_month"><?php _e("month"); ?></label>
-                                            <input name="cff_translate_month" type="text" value="<?php esc_attr_e( $cff_translate_month ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_months"><?php _e("months"); ?></label>
-                                            <input name="cff_translate_months" type="text" value="<?php esc_attr_e( $cff_translate_months ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_year"><?php _e("year"); ?></label>
-                                            <input name="cff_translate_year" type="text" value="<?php esc_attr_e( $cff_translate_year ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_years"><?php _e("years"); ?></label>
-                                            <input name="cff_translate_years" type="text" value="<?php esc_attr_e( $cff_translate_years ); ?>" size="20" />
-                                            <br />
-                                            <label for="cff_translate_ago"><?php _e("ago"); ?></label>
-                                            <input name="cff_translate_ago" type="text" value="<?php esc_attr_e( $cff_translate_ago ); ?>" size="20" />
-                                        </div>
-                                    </div>
-
-                                </td>
                             </tr>
 
                             <tr>
@@ -1562,7 +1795,7 @@ function cff_style_page() {
                                 <th><label for="cff_date_custom" class="bump-left"><?php _e('Custom format'); ?></label></th>
                                 <td>
                                     <input name="cff_date_custom" type="text" value="<?php esc_attr_e( $cff_date_custom ); ?>" size="10" placeholder="Eg. F j, Y" />
-                                    <i style="margin-left: 5px; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/docs/date/" class="cff-external-link" target="_blank"><?php _e('Examples'); ?></a></i>
+                                    <a href="http://smashballoon.com/custom-facebook-feed/docs/date/" class="cff-external-link" target="_blank"><?php _e('Examples'); ?></a>
                                 </td>
                             </tr>
                             <tr>
@@ -1605,6 +1838,7 @@ function cff_style_page() {
                                         <option value="10" <?php if($cff_event_title_size == "10") echo 'selected="selected"' ?> >10px</option>
                                         <option value="11" <?php if($cff_event_title_size == "11") echo 'selected="selected"' ?> >11px</option>
                                         <option value="12" <?php if($cff_event_title_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                        <option value="13" <?php if($cff_event_title_size == "13") echo 'selected="selected"' ?> >13px</option>
                                         <option value="14" <?php if($cff_event_title_size == "14") echo 'selected="selected"' ?> >14px</option>
                                         <option value="16" <?php if($cff_event_title_size == "16") echo 'selected="selected"' ?> >16px</option>
                                         <option value="18" <?php if($cff_event_title_size == "18") echo 'selected="selected"' ?> >18px</option>
@@ -1615,7 +1849,7 @@ function cff_style_page() {
                                         <option value="36" <?php if($cff_event_title_size == "36") echo 'selected="selected"' ?> >36px</option>
                                         <option value="42" <?php if($cff_event_title_size == "42") echo 'selected="selected"' ?> >42px</option>
                                         <option value="48" <?php if($cff_event_title_size == "48") echo 'selected="selected"' ?> >48px</option>
-                                        <option value="60" <?php if($cff_event_title_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                        <option value="54" <?php if($cff_event_title_size == "54") echo 'selected="selected"' ?> >54px</option>
                                         <option value="60" <?php if($cff_event_title_size == "60") echo 'selected="selected"' ?> >60px</option>
                                     </select>
                                 </td>
@@ -1637,8 +1871,8 @@ function cff_style_page() {
                                 </td>
                             </tr>
                             <tr>
-                                <th><label for="cff_title_link" class="bump-left"><?php _e('Link title to Facebook event page?'); ?></label></th>
-                                <td><input type="checkbox" name="cff_event_title_link" id="cff_event_title_link" <?php if($cff_event_title_link == true) echo 'checked="checked"' ?> />&nbsp;Yes</td>
+                                <th><label for="cff_event_title_link" class="bump-left"><?php _e('Link title to Facebook event page?'); ?></label></th>
+                                <td><input type="checkbox" name="cff_event_title_link" id="cff_event_title_link" <?php if($cff_event_title_link == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?></td>
                             </tr>
                             </tbody>
                         </table>
@@ -1662,6 +1896,7 @@ function cff_style_page() {
                                         <option value="10" <?php if($cff_event_date_size == "10") echo 'selected="selected"' ?> >10px</option>
                                         <option value="11" <?php if($cff_event_date_size == "11") echo 'selected="selected"' ?> >11px</option>
                                         <option value="12" <?php if($cff_event_date_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                        <option value="13" <?php if($cff_event_date_size == "13") echo 'selected="selected"' ?> >13px</option>
                                         <option value="14" <?php if($cff_event_date_size == "14") echo 'selected="selected"' ?> >14px</option>
                                         <option value="16" <?php if($cff_event_date_size == "16") echo 'selected="selected"' ?> >16px</option>
                                         <option value="18" <?php if($cff_event_date_size == "18") echo 'selected="selected"' ?> >18px</option>
@@ -1672,7 +1907,7 @@ function cff_style_page() {
                                         <option value="36" <?php if($cff_event_date_size == "36") echo 'selected="selected"' ?> >36px</option>
                                         <option value="42" <?php if($cff_event_date_size == "42") echo 'selected="selected"' ?> >42px</option>
                                         <option value="48" <?php if($cff_event_date_size == "48") echo 'selected="selected"' ?> >48px</option>
-                                        <option value="60" <?php if($cff_event_date_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                        <option value="54" <?php if($cff_event_date_size == "54") echo 'selected="selected"' ?> >54px</option>
                                         <option value="60" <?php if($cff_event_date_size == "60") echo 'selected="selected"' ?> >60px</option>
                                     </select>
                                 </td>
@@ -1727,7 +1962,7 @@ function cff_style_page() {
                                 <th><label for="cff_event_date_custom" class="bump-left"><?php _e('Custom event date format'); ?></label></th>
                                 <td>
                                     <input name="cff_event_date_custom" type="text" value="<?php esc_attr_e( $cff_event_date_custom ); ?>" size="10" placeholder="Eg. F j, Y - g:ia" />
-                                    <i style="margin-left: 5px; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/docs/date/" class="cff-external-link" target="_blank"><?php _e('Examples'); ?></a></i>
+                                    <a href="http://smashballoon.com/custom-facebook-feed/docs/date/" class="cff-external-link" target="_blank"><?php _e('Examples'); ?></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -1749,6 +1984,7 @@ function cff_style_page() {
                                         <option value="10" <?php if($cff_event_details_size == "10") echo 'selected="selected"' ?> >10px</option>
                                         <option value="11" <?php if($cff_event_details_size == "11") echo 'selected="selected"' ?> >11px</option>
                                         <option value="12" <?php if($cff_event_details_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                        <option value="13" <?php if($cff_event_details_size == "13") echo 'selected="selected"' ?> >13px</option>
                                         <option value="14" <?php if($cff_event_details_size == "14") echo 'selected="selected"' ?> >14px</option>
                                         <option value="16" <?php if($cff_event_details_size == "16") echo 'selected="selected"' ?> >16px</option>
                                         <option value="18" <?php if($cff_event_details_size == "18") echo 'selected="selected"' ?> >18px</option>
@@ -1759,7 +1995,7 @@ function cff_style_page() {
                                         <option value="36" <?php if($cff_event_details_size == "36") echo 'selected="selected"' ?> >36px</option>
                                         <option value="42" <?php if($cff_event_details_size == "42") echo 'selected="selected"' ?> >42px</option>
                                         <option value="48" <?php if($cff_event_details_size == "48") echo 'selected="selected"' ?> >48px</option>
-                                        <option value="60" <?php if($cff_event_details_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                        <option value="54" <?php if($cff_event_details_size == "54") echo 'selected="selected"' ?> >54px</option>
                                         <option value="60" <?php if($cff_event_details_size == "60") echo 'selected="selected"' ?> >60px</option>
                                     </select>
                                 </td>
@@ -1780,6 +2016,13 @@ function cff_style_page() {
                                     <input name="cff_event_details_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_event_details_color) ); ?>" class="cff-colorpicker" />
                                 </td>
                             </tr>
+                            <tr>
+                                <th><label for="cff_event_link_color" class="bump-left"><?php _e('Link Color'); ?></label></th>
+                                <td>
+                                    <input name="cff_event_link_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_event_link_color) ); ?>" class="cff-colorpicker" />
+                                </td>
+                            </tr>
+                           
                             </tbody>
                         </table>
                     </div>
@@ -1799,6 +2042,7 @@ function cff_style_page() {
                                         <option value="10" <?php if($cff_link_size == "10") echo 'selected="selected"' ?> >10px</option>
                                         <option value="11" <?php if($cff_link_size == "11") echo 'selected="selected"' ?> >11px</option>
                                         <option value="12" <?php if($cff_link_size == "12") echo 'selected="selected"' ?> >12px</option>
+                                        <option value="13" <?php if($cff_link_size == "13") echo 'selected="selected"' ?> >13px</option>
                                         <option value="14" <?php if($cff_link_size == "14") echo 'selected="selected"' ?> >14px</option>
                                         <option value="16" <?php if($cff_link_size == "16") echo 'selected="selected"' ?> >16px</option>
                                         <option value="18" <?php if($cff_link_size == "18") echo 'selected="selected"' ?> >18px</option>
@@ -1809,7 +2053,7 @@ function cff_style_page() {
                                         <option value="36" <?php if($cff_link_size == "36") echo 'selected="selected"' ?> >36px</option>
                                         <option value="42" <?php if($cff_link_size == "42") echo 'selected="selected"' ?> >42px</option>
                                         <option value="48" <?php if($cff_link_size == "48") echo 'selected="selected"' ?> >48px</option>
-                                        <option value="60" <?php if($cff_link_size == "54") echo 'selected="selected"' ?> >54px</option>
+                                        <option value="54" <?php if($cff_link_size == "54") echo 'selected="selected"' ?> >54px</option>
                                         <option value="60" <?php if($cff_link_size == "60") echo 'selected="selected"' ?> >60px</option>
                                     </select>
                                 </td>
@@ -1831,10 +2075,9 @@ function cff_style_page() {
                                 </td>
                             </tr>
                             <tr>
-                                <th><label for="cff_facebook_link_text" class="bump-left"><?php _e('Custom "View on Facebook" text'); ?></label></th>
+                                <th><label for="cff_facebook_link_text" class="bump-left"><?php _e('Text'); ?></label></th>
                                 <td>
-                                    <input name="cff_facebook_link_text" type="text" value="<?php esc_attr_e( $cff_facebook_link_text ); ?>" size="20" />
-                                    <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Use different text in place of the default "View on Facebook" link'); ?></i>
+                                    <input name="cff_facebook_link_text" type="text" value="<?php esc_attr_e( $cff_facebook_link_text ); ?>" size="25" />
                                 </td>
                             </tr>
                             
@@ -1847,6 +2090,7 @@ function cff_style_page() {
             <div style="margin-top: -15px;">
                 <?php submit_button(); ?>
             </div>
+
             <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
             
             <?php } //End Typography tab ?>
@@ -1855,40 +2099,6 @@ function cff_style_page() {
             <br />
             <h3><?php _e('Likes, Shares and Comments'); ?></h3><i style="color: #666; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable likes, shares and comments'); ?></a></i>
             
-            <hr />
-            <h3><?php _e('Custom CSS'); ?></h3>
-            <table class="form-table">
-                <tbody>
-                    <tr valign="top">
-                        <td>
-                        <?php _e('Enter your own custom CSS in the box below'); ?>
-                        <i style="margin-left: 5px; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/docs/snippets/" target="_blank"><?php _e('See some examples'); ?></a></i>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <td>
-                            <textarea name="cff_custom_css" id="cff_custom_css" style="width: 70%;" rows="7"><?php esc_attr_e( $cff_custom_css ); ?></textarea>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <h3><?php _e('Custom JavaScript'); ?></h3>
-            <table class="form-table">
-                <tbody>
-                    <tr valign="top">
-                        <td>
-                        <?php _e('Enter your own custom JavaScript/jQuery in the box below'); ?>
-                        <i style="margin-left: 5px; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/docs/snippets/" target="_blank"><?php _e('See some examples'); ?></a></i>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <td>
-                            <textarea name="cff_custom_js" id="cff_custom_js" style="width: 70%;" rows="7"><?php esc_attr_e( stripslashes($cff_custom_js) ); ?></textarea>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <?php submit_button(); ?>
             <hr />
             <h3><?php _e('Like Box'); ?></h3>
             <table class="form-table">
@@ -1905,8 +2115,8 @@ function cff_style_page() {
                         <th class="bump-left" scope="row"><label><?php _e('Position'); ?></label></th>
                         <td>
                             <select name="cff_like_box_position">
-                                <option value="bottom" <?php if($cff_like_box_position == "bottom") echo 'selected="selected"' ?> ><?php _e('Above posts'); ?></option>
-                                <option value="top" <?php if($cff_like_box_position == "top") echo 'selected="selected"' ?> ><?php _e('Below posts'); ?></option>
+                                <option value="bottom" <?php if($cff_like_box_position == "bottom") echo 'selected="selected"' ?> ><?php _e('Below posts'); ?></option>
+                                <option value="top" <?php if($cff_like_box_position == "top") echo 'selected="selected"' ?> ><?php _e('Above posts'); ?></option>
                             </select>
                         </td>
                     </tr>
@@ -1958,143 +2168,40 @@ function cff_style_page() {
                 </tbody>
             </table>
 
-
             <hr />
-            <h3 id="cff-header"><?php _e('Feed Header'); ?></h3>
+            <h3><?php _e('Custom CSS'); ?></h3>
             <table class="form-table">
                 <tbody>
                     <tr valign="top">
-                        <th class="bump-left" scope="row"><label><?php _e('Show Feed Header'); ?></label></th>
                         <td>
-                            <input type="checkbox" name="cff_show_header" id="cff_show_header" <?php if($cff_show_header == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
-                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('This will show a header at the top of your feed'); ?></i>
+                        <?php _e('Enter your own custom CSS in the box below'); ?>
+                        <i style="margin-left: 5px; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/docs/snippets/" target="_blank"><?php _e('See some examples'); ?></a></i>
                         </td>
                     </tr>
                     <tr valign="top">
-                        <th class="bump-left" scope="row"><label><?php _e('Display outside the scrollable area'); ?></label></th>
                         <td>
-                            <input type="checkbox" name="cff_header_outside" id="cff_header_outside" <?php if($cff_header_outside == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
-                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Only applicable if you have set a height on the feed'); ?></i>
+                            <textarea name="cff_custom_css" id="cff_custom_css" style="width: 70%;" rows="7"><?php esc_attr_e( $cff_custom_css ); ?></textarea>
                         </td>
                     </tr>
-                    </tr>
-                        <th class="bump-left" scope="row"><label><?php _e('Text'); ?></label></th>
-                        <td>
-                            <input name="cff_header_text" type="text" value="<?php esc_attr_e( $cff_header_text ); ?>" size="30" />
-                            <span>Eg. Facebook Feed, Events, News..</span>
-                        </td>
-                    </tr>
-                    <tr valign="top">
-                        <th class="bump-left" scope="row"><label><?php _e('Background Color'); ?></label></th>
-                        <td>
-                            <input name="cff_header_bg_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_header_bg_color) ); ?>" class="cff-colorpicker" />
-                        </td>
-                    </tr>
-                    </tr>
-                        <th class="bump-left" scope="row"><label><?php _e('Padding'); ?></label></th>
-                        <td>
-                            <input name="cff_header_padding" type="text" value="<?php esc_attr_e( $cff_header_padding ); ?>" size="6" />
-                            <span>Eg. 20px, 5%. <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('This is the amount of padding/spacing that goes around the header.'); ?></i></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="bump-left" scope="row"><label><?php _e('Text Size'); ?></label></th>
-                        <td>
-                            <select name="cff_header_text_size">
-                                <option value="inherit" <?php if($cff_header_text_size == "inherit") echo 'selected="selected"' ?> >Inherit</option>
-                                <option value="10" <?php if($cff_header_text_size == "10") echo 'selected="selected"' ?> >10px</option>
-                                <option value="11" <?php if($cff_header_text_size == "11") echo 'selected="selected"' ?> >11px</option>
-                                <option value="12" <?php if($cff_header_text_size == "12") echo 'selected="selected"' ?> >12px</option>
-                                <option value="14" <?php if($cff_header_text_size == "14") echo 'selected="selected"' ?> >14px</option>
-                                <option value="16" <?php if($cff_header_text_size == "16") echo 'selected="selected"' ?> >16px</option>
-                                <option value="18" <?php if($cff_header_text_size == "18") echo 'selected="selected"' ?> >18px</option>
-                                <option value="20" <?php if($cff_header_text_size == "20") echo 'selected="selected"' ?> >20px</option>
-                                <option value="24" <?php if($cff_header_text_size == "24") echo 'selected="selected"' ?> >24px</option>
-                                <option value="28" <?php if($cff_header_text_size == "28") echo 'selected="selected"' ?> >28px</option>
-                                <option value="32" <?php if($cff_header_text_size == "32") echo 'selected="selected"' ?> >32px</option>
-                                <option value="36" <?php if($cff_header_text_size == "36") echo 'selected="selected"' ?> >36px</option>
-                                <option value="42" <?php if($cff_header_text_size == "42") echo 'selected="selected"' ?> >42px</option>
-                                <option value="48" <?php if($cff_header_text_size == "48") echo 'selected="selected"' ?> >48px</option>
-                                <option value="54" <?php if($cff_header_text_size == "54") echo 'selected="selected"' ?> >54px</option>
-                                <option value="60" <?php if($cff_header_text_size == "60") echo 'selected="selected"' ?> >60px</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="bump-left" scope="row"><label><?php _e('Text Weight'); ?></label></th>
-                        <td>
-                            <select name="cff_header_text_weight">
-                                <option value="inherit" <?php if($cff_header_text_weight == "inherit") echo 'selected="selected"' ?> >Inherit</option>
-                                <option value="normal" <?php if($cff_header_text_weight == "normal") echo 'selected="selected"' ?> >Normal</option>
-                                <option value="bold" <?php if($cff_header_text_weight == "bold") echo 'selected="selected"' ?> >Bold</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="bump-left" scope="row"><label><?php _e('Text Color'); ?></label></th>
-                        <td>
-                            <input name="cff_header_text_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_header_text_color) ); ?>" class="cff-colorpicker" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="bump-left" scope="row"><label><?php _e('Icon Type'); ?></label></th>
-                        <td>
-                            <select name="cff_header_icon" id="cff-header-icon">
-                                <option value="facebook-square" <?php if($cff_header_icon == "facebook-square") echo 'selected="selected"' ?> >Facebook 1</option>
-                                <option value="facebook" <?php if($cff_header_icon == "facebook") echo 'selected="selected"' ?> >Facebook 2</option>
-                                <option value="calendar" <?php if($cff_header_icon == "calendar") echo 'selected="selected"' ?> >Events 1</option>
-                                <option value="calendar-o" <?php if($cff_header_icon == "calendar-o") echo 'selected="selected"' ?> >Events 2</option>
-                                <option value="picture-o" <?php if($cff_header_icon == "picture-o") echo 'selected="selected"' ?> >Photos</option>
-                                <option value="users" <?php if($cff_header_icon == "users") echo 'selected="selected"' ?> >People</option>
-                                <option value="thumbs-o-up" <?php if($cff_header_icon == "thumbs-o-up") echo 'selected="selected"' ?> >Thumbs Up 1</option>
-                                <option value="thumbs-up" <?php if($cff_header_icon == "thumbs-up") echo 'selected="selected"' ?> >Thumbs Up 2</option>
-                                <option value="comment-o" <?php if($cff_header_icon == "comment-o") echo 'selected="selected"' ?> >Speech Bubble 1</option>
-                                <option value="comment" <?php if($cff_header_icon == "comment") echo 'selected="selected"' ?> >Speech Bubble 2</option>
-                                <option value="ticket" <?php if($cff_header_icon == "ticket") echo 'selected="selected"' ?> >Ticket</option>
-                                <option value="list-alt" <?php if($cff_header_icon == "list-alt") echo 'selected="selected"' ?> >News List</option>
-                                <option value="file" <?php if($cff_header_icon == "file") echo 'selected="selected"' ?> >File 1</option>
-                                <option value="file-o" <?php if($cff_header_icon == "file-o") echo 'selected="selected"' ?> >File 2</option>
-                                <option value="file-text" <?php if($cff_header_icon == "file-text") echo 'selected="selected"' ?> >File 3</option>
-                                <option value="file-text-o" <?php if($cff_header_icon == "file-text-o") echo 'selected="selected"' ?> >File 4</option>
-                                <option value="youtube-play" <?php if($cff_header_icon == "youtube-play") echo 'selected="selected"' ?> >Video</option>
-                                <option value="youtube" <?php if($cff_header_icon == "youtube") echo 'selected="selected"' ?> >YouTube</option>
-                                <option value="vimeo-square" <?php if($cff_header_icon == "vimeo-square") echo 'selected="selected"' ?> >Vimeo</option>
-                            </select>
-
-                            <i id="cff-header-icon-example" class="fa fa-facebook-square"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="bump-left" scope="row"><label><?php _e('Icon Color'); ?></label></th>
-                        <td>
-                            <input name="cff_header_icon_color" value="#<?php esc_attr_e( str_replace('#', '', $cff_header_icon_color) ); ?>" class="cff-colorpicker" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="bump-left" scope="row"><label><?php _e('Icon Size'); ?></label></th>
-                        <td>
-                            <select name="cff_header_icon_size" id="cff-header-icon-size">
-                                <option value="10" <?php if($cff_header_icon_size == "10") echo 'selected="selected"' ?> >10px</option>
-                                <option value="11" <?php if($cff_header_icon_size == "11") echo 'selected="selected"' ?> >11px</option>
-                                <option value="12" <?php if($cff_header_icon_size == "12") echo 'selected="selected"' ?> >12px</option>
-                                <option value="14" <?php if($cff_header_icon_size == "14") echo 'selected="selected"' ?> >14px</option>
-                                <option value="16" <?php if($cff_header_icon_size == "16") echo 'selected="selected"' ?> >16px</option>
-                                <option value="18" <?php if($cff_header_icon_size == "18") echo 'selected="selected"' ?> >18px</option>
-                                <option value="20" <?php if($cff_header_icon_size == "20") echo 'selected="selected"' ?> >20px</option>
-                                <option value="24" <?php if($cff_header_icon_size == "24") echo 'selected="selected"' ?> >24px</option>
-                                <option value="28" <?php if($cff_header_icon_size == "28") echo 'selected="selected"' ?> >28px</option>
-                                <option value="32" <?php if($cff_header_icon_size == "32") echo 'selected="selected"' ?> >32px</option>
-                                <option value="36" <?php if($cff_header_icon_size == "36") echo 'selected="selected"' ?> >36px</option>
-                                <option value="42" <?php if($cff_header_icon_size == "42") echo 'selected="selected"' ?> >42px</option>
-                                <option value="48" <?php if($cff_header_icon_size == "48") echo 'selected="selected"' ?> >48px</option>
-                                <option value="54" <?php if($cff_header_icon_size == "54") echo 'selected="selected"' ?> >54px</option>
-                                <option value="60" <?php if($cff_header_icon_size == "60") echo 'selected="selected"' ?> >60px</option>
-                            </select>
-                        </td>
-                    </tr>
-
                 </tbody>
             </table>
+            <h3><?php _e('Custom JavaScript'); ?></h3>
+            <table class="form-table">
+                <tbody>
+                    <tr valign="top">
+                        <td>
+                        <?php _e('Enter your own custom JavaScript/jQuery in the box below'); ?>
+                        <i style="margin-left: 5px; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/docs/snippets/" target="_blank"><?php _e('See some examples'); ?></a></i>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td>
+                            <textarea name="cff_custom_js" id="cff_custom_js" style="width: 70%;" rows="7"><?php esc_attr_e( stripslashes($cff_custom_js) ); ?></textarea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <?php submit_button(); ?>
 
 
             <hr />
@@ -2115,6 +2222,23 @@ function cff_style_page() {
                     </tr>
                 </tbody>
             </table>
+
+            <hr />
+            <h3><?php _e('Misc Settings'); ?></h3>
+            <table class="form-table">
+                <tbody>
+                    <tr>
+                        <th><label for="cff_ajax" class="bump-left"><?php _e('Is your theme loading the Facebook feed via Ajax?'); ?></label></th>
+                        <td>
+                            <input name="cff_ajax" type="checkbox" id="cff_ajax" <?php if($cff_ajax_val == true) echo "checked"; ?> />
+                            <label for="cff_ajax"><?php _e('Yes'); ?></label>
+                            <a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('What does this mean?'); ?></a>
+                            <p class="cff-tooltip cff-more-info"><?php _e('Some modern WordPress themes use Ajax to load content into the page after it has loaded. If your theme uses Ajax to load the Custom Facebook Feed content into the page then check this box. If you are not sure then please check with the theme author.'); ?></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
             <?php submit_button(); ?>
             <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
             <?php } //End Misc tab ?>
@@ -2227,7 +2351,7 @@ function cff_style_page() {
 } //End Style_Page
 //Enqueue admin styles
 function cff_admin_style() {
-        wp_register_style( 'custom_wp_admin_css', plugin_dir_url( __FILE__ ) . 'css/cff-admin-style.css?3', false, '1.0.0' );
+        wp_register_style( 'custom_wp_admin_css', plugin_dir_url( __FILE__ ) . 'css/cff-admin-style.css?4', false, '1.0.0' );
         wp_enqueue_style( 'custom_wp_admin_css' );
         wp_enqueue_style( 'cff-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), '4.0.3' );
         wp_enqueue_style( 'wp-color-picker' );
@@ -2235,7 +2359,7 @@ function cff_admin_style() {
 add_action( 'admin_enqueue_scripts', 'cff_admin_style' );
 //Enqueue admin scripts
 function cff_admin_scripts() {
-    wp_enqueue_script( 'cff_admin_script', plugin_dir_url( __FILE__ ) . 'js/cff-admin-scripts.js?2' );
+    wp_enqueue_script( 'cff_admin_script', plugin_dir_url( __FILE__ ) . 'js/cff-admin-scripts.js?4' );
     if( !wp_script_is('jquery-ui-draggable') ) { 
         wp_enqueue_script(
             array(

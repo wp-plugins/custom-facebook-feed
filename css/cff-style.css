@@ -42,6 +42,10 @@
 }
 /* Links */
 #cff a {
+  text-decoration: none;
+}
+#cff a:hover,
+#cff a:focus {
   text-decoration: underline;
 }
 #cff .cff-post-text-link{
@@ -126,6 +130,16 @@
   max-width: 100%;
 }
 /*Link text*/
+#cff .cff-link-title{
+  float: left;
+  clear: both;
+  width: 100%;
+  display: block;
+  font-weight: bold;
+}
+#cff p.cff-link-title{
+  margin: 0;
+}
 #cff .cff-text-link{
   float: left;
   clear: none;
@@ -221,6 +235,8 @@
 .cff-clear {
     display: inline-block;
     display: block;
+    /* Needs to be position static to override themes which set it to be relative*/
+    position: static;
 }
 /*********************/
 /*** STYLE OPTIONS ***/

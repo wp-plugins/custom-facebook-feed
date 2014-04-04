@@ -32,7 +32,7 @@ jQuery(document).ready(function() {
 		//Show the 'See More' link if needed
 		if (full_text.length > text_limit) $self.find('.cff-expand').show();
 		//Click function
-		$self.find('.cff-expand a').click(function(e){
+		$self.find('.cff-expand a').unbind('click').bind('click', function(e){
 			e.preventDefault();
 			var $expand = jQuery(this),
 				$more = $expand.find('.cff-more'),

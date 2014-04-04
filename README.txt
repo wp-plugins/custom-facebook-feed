@@ -3,10 +3,9 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.8.2.3
+Stable tag: 1.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H5XFD33R3FHMG
 
 The Custom Facebook Feed allows you to display a completely customizable Facebook feed of any public Facebook page or group on your website
 
@@ -30,10 +29,11 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Add your own **custom CSS**
 * **Caching** means that your Facebook posts load lightning fast. Set your own caching time - check for new posts on Facebook every few seconds, minutes, hours or days. You decide.
 * Show and hide certain parts of each Facebook post
-* Choose to show the Facebook profile picture and name above each post
+* Show or hide the Facebook profile picture and name of the author above each post
 * Display Facebook posts by just the page owner, everyone who posts on your Facebook page, or only other people
 * Control the width, height, padding and background color of your Facebook feed
 * Customize the size, weight and color of text
+* Supports Facebook tags - creates links when using the @ symbol to tag people in your Facebook posts
 * Select from a range of date formats or enter your own
 * Use your own custom link text in place of the defaults
 * Use the shortcode options to style multiple Facebook feeds in completely different ways
@@ -150,7 +150,7 @@ We understand that sometimes you need help, have issues or just have questions. 
 
 **For step-by-step instructions and screenshots on how to get a Facebook Access Token just follow the [Facebook Access Token instructions](http://smashballoon.com/custom-facebook-feed/access-token/ "Facebook Access Token instructions") on the Smash Balloon website.**
 
-In order to use the Custom Facebook Feed Plugin you will need to obtain an Access Token from Facebook.  Don't worry though, this is really easy to do.  Just follow the steps below:
+You no longer need your own Access Token to use the Custom Facebook Feed Plugin, but if you'd like to use your own then you will need to obtain one from Facebook.  Don't worry though, this is really easy to do.  Just follow the steps below:
 
 **1)** Go to [developers.facebook.com](http://developers.facebook.com "Facebook developers website") and click on Log In in the top right.  Log in using your personal Facebook credentials.
 
@@ -272,6 +272,17 @@ Credit [iMarketing Factory](http://www.imarketingfactory.com/facebook/ "The Impo
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 1.9.0 =
+* New: Added the ability to change the text size and color of the post author
+* New: Define the format, size and color of shared link titles
+* New: You can now define the color of the links in your post text, descriptions and events
+* Tweak: Moved the Feed Header options to the Typography page
+* Tweak: Moved the Ajax setting to the Misc page
+* Tweak: Now removes any query strings attached to the Page ID
+* Fix: Fixed an issue with HTML characters not rendering correctly when linking the post text
+* Fix: Fixed an issue with some themes causing the clear element to prevent links being clickable
+* Fix: Some minor bug fixes
 
 = 1.8.2.3 =
 * New: Now supports Facebook tags - creates links when using the @ symbol to tag other people or Facebook pages in your posts
