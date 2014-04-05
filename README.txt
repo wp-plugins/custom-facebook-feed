@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.8.1
-Stable tag: 1.9.0
+Stable tag: 1.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,7 +28,7 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Show **events** from your Facebook feed with name, date/time, location and description
 * Add your own **custom CSS**
 * **Caching** means that your Facebook posts load lightning fast. Set your own caching time - check for new posts on Facebook every few seconds, minutes, hours or days. You decide.
-* Super **simple to set up**. Just enter your Facebook page ID and you're done.
+* **Super simple to set up**. Just enter your Facebook page ID and you're done.
 * Show and hide certain parts of each Facebook post
 * Show or hide the Facebook profile picture and name of the author above each post
 * Display Facebook posts by just the page owner, everyone who posts on your Facebook page, or only other people
@@ -269,6 +269,11 @@ Credit [iMarketing Factory](http://www.imarketingfactory.com/facebook/ "The Impo
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+
+= 1.9.1 =
+* Fix: Fixed an issue with the 'textlink' shortcode option
+* Fix: Fixed an bug with post text sometimes being duplicated when linked
+* Fix: Removed error_reporting(0);
 
 = 1.9.0 =
 * New: Added the ability to change the text size and color of the post author

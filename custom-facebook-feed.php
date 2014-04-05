@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.9.0
+Version: 1.9.1
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -277,6 +277,9 @@ function display_cff($atts) {
     if ( !empty($cff_title_color) ) $cff_title_styles .= 'color:#' . str_replace('#', '', $cff_title_color) . ';';
     $cff_title_styles .= '"';
     $cff_title_link = $atts[ 'textlink' ];
+
+    ( $cff_title_link == 'on' || $cff_title_link == 'true' || $cff_title_link == true ) ? $cff_title_link = true : $cff_title_link = false;
+    if( $atts[ 'textlink' ] == 'false' ) $cff_title_link = false;
 
     //Author
     $cff_author_size = $atts[ 'authorsize' ];
@@ -743,7 +746,7 @@ function display_cff($atts) {
                 if (!isset($cff_translate_photos_text) || empty($cff_translate_photos_text)) $cff_translate_photos_text = 'photos';
                 $cff_post_text = '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
                 $cff_post_text .= '<span class="cff-text">';
-                if ($cff_title_link == 'true') $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
+                if ($cff_title_link) $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
                 //Which content should we use?
                 $cff_post_text_type = '';
                 //Use the story
@@ -779,7 +782,7 @@ function display_cff($atts) {
                 //If the post tags option doesn't exist yet (ie. on plugin update) then set them as true
                 if ( !array_key_exists( 'cff_post_tags', $options ) ) $cff_post_tags = true;
                 //Add message and story tags if there are any and the post text is the message or the story
-                if( $cff_post_tags && ( isset($news->message_tags) || isset($news->story_tags) ) && ($cff_post_text_type == 'message' || $cff_post_text_type == 'story')  && $cff_title_link != 'true' ){
+                if( $cff_post_tags && ( isset($news->message_tags) || isset($news->story_tags) ) && ($cff_post_text_type == 'message' || $cff_post_text_type == 'story')  && !$cff_title_link ){
                     //Use message_tags or story_tags?
                     ( isset($news->message_tags) )? $text_tags = $news->message_tags : $text_tags = $news->story_tags;
 
@@ -836,7 +839,7 @@ function display_cff($atts) {
                 //If the text is wrapped in a link then don't hyperlink any text within
                 if ($cff_title_link) {
                     //Wrap links in a span so we can break the text if it's too long
-                    $cff_post_text .= cff_autolink( $post_text, true ) . ' ';
+                    $cff_post_text .= cff_wrap_span( htmlspecialchars($post_text) ) . ' ';
                 } else {
                     //Don't use htmlspecialchars for post_text as it's added above so that it doesn't mess up the message_tag offsets
                     $cff_post_text .= cff_autolink( $post_text, $link_color=str_replace('#', '', $atts['textlinkcolor']) ) . ' ';
@@ -982,7 +985,7 @@ function display_cff($atts) {
                         $cff_description = '<div class="cff-desc-wrap ';
                         if (empty($picture)) $cff_description .= 'cff-no-image';
 
-                        $cff_description .= '"><'.$cff_link_title_format.' class="cff-link-title" '.$cff_link_title_styles.'><a href="'.$link.'" '.$target.' style="color:#' . str_replace('#', '', $cff_link_title_color) . ';">'. $news->name . '</a></'.$cff_link_title_format.'>';
+                        if( isset($news->name) ) $cff_description .= '"><'.$cff_link_title_format.' class="cff-link-title" '.$cff_link_title_styles.'><a href="'.$link.'" '.$target.' style="color:#' . str_replace('#', '', $cff_link_title_color) . ';">'. $news->name . '</a></'.$cff_link_title_format.'>';
 
                         if (!empty($body_limit)) {
                             if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
@@ -1111,6 +1114,49 @@ function cff_fetchUrl($url){
     }
     
     return $feedData;
+}
+
+//Make links into span instead when the post text is made clickable
+function cff_wrap_span($text) {
+    $pattern  = '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#';
+    return preg_replace_callback($pattern, 'cff_wrap_span_callback', $text);
+}
+function cff_wrap_span_callback($matches) {
+    $max_url_length = 100;
+    $max_depth_if_over_length = 2;
+    $ellipsis = '&hellip;';
+    $target = 'target="_blank"';
+    $url_full = $matches[0];
+    $url_short = '';
+    if (strlen($url_full) > $max_url_length) {
+        $parts = parse_url($url_full);
+        $url_short = $parts['scheme'] . '://' . preg_replace('/^www\./', '', $parts['host']) . '/';
+        $path_components = explode('/', trim($parts['path'], '/'));
+        foreach ($path_components as $dir) {
+            $url_string_components[] = $dir . '/';
+        }
+        if (!empty($parts['query'])) {
+            $url_string_components[] = '?' . $parts['query'];
+        }
+        if (!empty($parts['fragment'])) {
+            $url_string_components[] = '#' . $parts['fragment'];
+        }
+        for ($k = 0; $k < count($url_string_components); $k++) {
+            $curr_component = $url_string_components[$k];
+            if ($k >= $max_depth_if_over_length || strlen($url_short) + strlen($curr_component) > $max_url_length) {
+                if ($k == 0 && strlen($url_short) < $max_url_length) {
+                    // Always show a portion of first directory
+                    $url_short .= substr($curr_component, 0, $max_url_length - strlen($url_short));
+                }
+                $url_short .= $ellipsis;
+                break;
+            }
+            $url_short .= $curr_component;
+        }
+    } else {
+        $url_short = $url_full;
+    }
+    return "<span class='cff-break-word'>$url_short</span>";
 }
 
 //2013-04-28T21:06:56+0000
@@ -1807,5 +1853,5 @@ function cff_autolink_email($text, $tagfill=''){
 
 
 //Comment out the line below to view errors
-error_reporting(0);
+// error_reporting(0);
 ?>
