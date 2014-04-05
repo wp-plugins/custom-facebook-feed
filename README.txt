@@ -282,7 +282,7 @@ Credit [iMarketing Factory](http://www.imarketingfactory.com/facebook/ "The Impo
 * Tweak: Moved the Feed Header options to the Typography page
 * Tweak: Moved the Ajax setting to the Misc page
 * Tweak: Now removes any query strings attached to the Page ID
-* Fix: Fixed an issue with HTML characters not rendering correctly when linking the post text
+* Fix: Fixed an issue with some HTML characters not rendering correctly when linking the post text
 * Fix: Fixed an issue with some themes causing the clear element to prevent links being clickable
 * Fix: Some minor bug fixes
 
