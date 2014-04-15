@@ -3,12 +3,17 @@
 /**************/
 /* Feed container */
 #cff {
-  float: left;
+  /*float: left;*/
   width: 100%;
   margin: 0 auto;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;  
+}
+#cff:after{
+  content: "";
+  display: table;
+  clear: both;
 }
 /* Individual post item */
 #cff .cff-item{
@@ -225,7 +230,7 @@
 }
 
 /* Clear fix */
-.cff-clear:after {
+/*.cff-clear:after {
     clear: both;
     content: ".";
     display: block;
@@ -235,9 +240,8 @@
 .cff-clear {
     display: inline-block;
     display: block;
-    /* Needs to be position static to override themes which set it to be relative*/
     position: static;
-}
+}*/
 /*********************/
 /*** STYLE OPTIONS ***/
 /*********************/

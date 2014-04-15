@@ -2,8 +2,8 @@
 Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
-Tested up to: 3.8.1
-Stable tag: 1.9.1
+Tested up to: 3.8.3
+Stable tag: 1.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,12 @@ Credit [iMarketing Factory](http://www.imarketingfactory.com/facebook/ "The Impo
 
 == Changelog ==
 
+= 1.9.2 =
+* Fix: Added title and alt attributes to the post author profile picture
+* Fix: Improved the reliability of the post tag linking
+* Fix: Fixed an issue with HTML characters not rendering correctly when linking the post text
+* Fix: Improved the reliability of the CSS clearing method used on the feed container
+
 = 1.9.1 =
 * Fix: Fixed an issue with the 'textlink' shortcode option
 * Fix: Fixed an bug with post text sometimes being duplicated when linked
@@ -282,7 +288,6 @@ Credit [iMarketing Factory](http://www.imarketingfactory.com/facebook/ "The Impo
 * Tweak: Moved the Feed Header options to the Typography page
 * Tweak: Moved the Ajax setting to the Misc page
 * Tweak: Now removes any query strings attached to the Page ID
-* Fix: Fixed an issue with some HTML characters not rendering correctly when linking the post text
 * Fix: Fixed an issue with some themes causing the clear element to prevent links being clickable
 * Fix: Some minor bug fixes
 

@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.9.1
+Version: 1.9.2
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -736,8 +736,7 @@ function display_cff($atts) {
                 //Set the author image as a variable. If it already exists then don't query the api for it again.
                 $cff_author_img_var = '$cff_author_img_' . $news->from->id;
                 if ( !isset($$cff_author_img_var) ) $$cff_author_img_var = 'https://graph.facebook.com/' . $news->from->id . '/picture?type=square';
-
-                $cff_author .= '<img src="'.$$cff_author_img_var.'" width=50 height=50>';
+                $cff_author .= '<img src="'.$$cff_author_img_var.'" title="'.$news->from->name.'" alt="'.$news->from->name.'" width=50 height=50>';
                 $cff_author .= '<span class="cff-page-name">'.$news->from->name.'</span>';
                 $cff_author .= '</a>';
 
@@ -786,52 +785,59 @@ function display_cff($atts) {
                     //Use message_tags or story_tags?
                     ( isset($news->message_tags) )? $text_tags = $news->message_tags : $text_tags = $news->story_tags;
 
-                    //Does the Post Text contain any html tags? - the & symbol is the best indicator of this
-                    $html_check = stripos($post_text, '&');
+                    //If message tags and message is being used as the post text, or same with story. This stops story tags being used to replace the message inadvertently.
+                    if( ( $cff_post_text_type == 'message' && isset($news->message_tags) ) || ( $cff_post_text_type == 'story' && !isset($news->message_tags) ) ) {
 
-                    //If it contains HTML tags then use the name replace method
-                    $html_check = true;
-                    //always use the text replace method
-                    if( $html_check ) {
-                        //Loop through the tags
-                        foreach($text_tags as $message_tag ) {
-                            $tag_name = $message_tag[0]->name;
-                            $tag_link = '<a href="http://facebook.com/' . $message_tag[0]->id . '" style="color: #'.str_replace('#', '', $atts['textlinkcolor']).';" target="_blank">' . $message_tag[0]->name . '</a>';
+                        //Does the Post Text contain any html tags? - the & symbol is the best indicator of this
+                        $html_check_1 = stripos($post_text, '&');
+                        $html_check_2 = stripos($post_text, '’');
+                        $html_check_3 = stripos($post_text, '“');
 
-                            $post_text = str_replace($tag_name, $tag_link, $post_text);
-                        }
+                        //If it contains HTML tags then use the name replace method
+                        // $html_check = true;
+                        //always use the text replace method
+                        if( $html_check_1 || $html_check_2 || $html_check_3 ) {
+                            //Loop through the tags
+                            foreach($text_tags as $message_tag ) {
+                                $tag_name = $message_tag[0]->name;
+                                $tag_link = '<a href="http://facebook.com/' . $message_tag[0]->id . '" style="color: #'.str_replace('#', '', $atts['textlinkcolor']).';" target="_blank">' . $message_tag[0]->name . '</a>';
 
-                    } else {
-                    //If it doesn't contain HTMl tags then use the offset to replace message tags
-                        $message_tags_arr = array();
+                                $post_text = str_replace($tag_name, $tag_link, $post_text);
+                            }
 
-                        $i = 0;
-                        foreach($text_tags as $message_tag ) {
-                            $i++;
-                            $message_tags_arr = array_push_assoc(
-                                $message_tags_arr,
-                                $i,
-                                array(
-                                    'id' => $message_tag[0]->id,
-                                    'name' => $message_tag[0]->name,
-                                    'type' => $message_tag[0]->type,
-                                    'offset' => $message_tag[0]->offset,
-                                    'length' => $message_tag[0]->length
-                                )
-                            );
-                        }
+                        } else {
+                        //If it doesn't contain HTMl tags then use the offset to replace message tags
+                            $message_tags_arr = array();
 
-                        for($i = count($message_tags_arr); $i >= 1; $i--) {
-                           
-                            $b = '<a href="http://facebook.com/' . $message_tags_arr[$i]['id'] . '" target="_blank">' . $message_tags_arr[$i]['name'] . '</a>';
-                            $c = $message_tags_arr[$i]['offset'];
-                            $d = $message_tags_arr[$i]['length'];
+                            $i = 0;
+                            foreach($text_tags as $message_tag ) {
+                                $i++;
+                                $message_tags_arr = array_push_assoc(
+                                    $message_tags_arr,
+                                    $i,
+                                    array(
+                                        'id' => $message_tag[0]->id,
+                                        'name' => $message_tag[0]->name,
+                                        'type' => $message_tag[0]->type,
+                                        'offset' => $message_tag[0]->offset,
+                                        'length' => $message_tag[0]->length
+                                    )
+                                );
+                            }
 
-                            $post_text = substr_replace( $post_text, $b, $c, $d);
+                            for($i = count($message_tags_arr); $i >= 1; $i--) {
+                               
+                                $b = '<a href="http://facebook.com/' . $message_tags_arr[$i]['id'] . '" target="_blank">' . $message_tags_arr[$i]['name'] . '</a>';
+                                $c = $message_tags_arr[$i]['offset'];
+                                $d = $message_tags_arr[$i]['length'];
 
-                        }   
+                                $post_text = substr_replace( $post_text, $b, $c, $d);
 
-                    }         
+                            }   
+
+                        } // end if/else    
+
+                    } // end message check
 
                 } //END MESSAGE TAGS
 
@@ -839,7 +845,7 @@ function display_cff($atts) {
                 //If the text is wrapped in a link then don't hyperlink any text within
                 if ($cff_title_link) {
                     //Wrap links in a span so we can break the text if it's too long
-                    $cff_post_text .= cff_wrap_span( htmlspecialchars($post_text) ) . ' ';
+                    $cff_post_text .= cff_wrap_span( $post_text ) . ' ';
                 } else {
                     //Don't use htmlspecialchars for post_text as it's added above so that it doesn't mess up the message_tag offsets
                     $cff_post_text .= cff_autolink( $post_text, $link_color=str_replace('#', '', $atts['textlinkcolor']) ) . ' ';
@@ -1043,7 +1049,7 @@ function display_cff($atts) {
                     if($cff_show_link) $cff_post_item .= $cff_link;
                 
                 //End the post item
-                $cff_post_item .= '</div><div class="cff-clear"></div>';
+                $cff_post_item .= '</div>';
 
                 //PUSH TO ARRAY
                 $cff_posts_array = array_push_assoc($cff_posts_array, strtotime($post_time), $cff_post_item);

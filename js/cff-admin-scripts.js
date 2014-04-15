@@ -59,15 +59,6 @@ jQuery(document).ready(function() {
 	    jQuery('#cff-header-icon-example').removeClass().addClass('fa fa-' + $self.val() );
 	});
 
-	//Icon style
-	var iconStyles = 'color: #' + jQuery('#cff-header-icon-color').val() + '; font-size: ' + jQuery('#cff-header-icon-size').val() + 'px;';
-	jQuery('#cff-header-icon-example').attr('style', iconStyles);
-
-	jQuery('#cff-header-icon-size, #cff-header-icon-color').change(function() {
-	    var iconStyles = 'color: #' + jQuery('#cff-header-icon-color').val() + '; font-size: ' + jQuery('#cff-header-icon-size').val() + 'px;';
-	    jQuery('#cff-header-icon-example').attr('style', iconStyles);
-	});
-
 
 	//Test Facebook API connection button
 	jQuery('#cff-api-test').click(function(e){
