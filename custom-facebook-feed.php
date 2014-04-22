@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.9.2
+Version: 1.9.3
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -84,6 +84,9 @@ function display_cff($atts) {
         'linktitlesize' => isset($options[ 'cff_link_title_size' ]) ? $options[ 'cff_link_title_size' ] : '',
         'linktitlecolor' => isset($options[ 'cff_link_title_color' ]) ? $options[ 'cff_link_title_color' ] : '',
         'linkurlcolor' => isset($options[ 'cff_link_url_color' ]) ? $options[ 'cff_link_url_color' ] : '',
+        'linkbgcolor' => isset($options[ 'cff_link_bg_color' ]) ? $options[ 'cff_link_bg_color' ] : '',
+        'linkbordercolor' => isset($options[ 'cff_link_border_color' ]) ? $options[ 'cff_link_border_color' ] : '',
+        'disablelinkbox' => isset($options[ 'cff_disable_link_box' ]) ? $options[ 'cff_disable_link_box' ] : '',
 
         //Author
         'authorsize' => isset($options[ 'cff_author_size' ]) ? $options[ 'cff_author_size' ] : '',
@@ -310,6 +313,17 @@ function display_cff($atts) {
     if ( !empty($cff_link_title_size) && $cff_link_title_size != 'inherit' ) $cff_link_title_styles .=  'font-size:' . $cff_link_title_size . 'px;';
     $cff_link_title_styles .= '"';
 
+    //Shared link box
+    $cff_link_bg_color = $atts[ 'linkbgcolor' ];
+    $cff_link_border_color = $atts[ 'linkbordercolor' ];
+    $cff_disable_link_box = $atts['disablelinkbox'];
+    ($cff_disable_link_box == 'true' || $cff_disable_link_box == 'on') ? $cff_disable_link_box = true : $cff_disable_link_box = false;
+
+    $cff_link_box_styles = 'style="';
+    if ( !empty($cff_link_border_color) ) $cff_link_box_styles .=  'border: 1px solid #' . str_replace('#', '', $cff_link_border_color) . '; ';
+    if ( !empty($cff_link_bg_color) ) $cff_link_box_styles .= 'background-color: #' . str_replace('#', '', $cff_link_bg_color) . ';';
+    $cff_link_box_styles .= '"';
+
     //Event Title
     $cff_event_title_format = $atts[ 'eventtitleformat' ];
     if (empty($cff_event_title_format)) $cff_event_title_format = 'p';
@@ -381,9 +395,6 @@ function display_cff($atts) {
     $cff_like_box_colorscheme = 'light';
     if ($cff_like_box_text_color == 'white') $cff_like_box_colorscheme = 'dark';
 
-    $cff_likebox_styles = 'style="';
-    if ( !empty($cff_likebox_bg_color) ) $cff_likebox_styles .=  'background-color:#' . str_replace('#', '', $cff_likebox_bg_color) . '; margin-left: 0; ';
-
     $cff_likebox_width = $atts[ 'likeboxwidth' ];
     if ( !isset($cff_likebox_width) || empty($cff_likebox_width) || $cff_likebox_width == '' ) $cff_likebox_width = '100%';
     $cff_like_box_faces = $atts[ 'likeboxfaces' ];
@@ -397,7 +408,7 @@ function display_cff($atts) {
 
     //Compile Like box styles
     $cff_likebox_styles = 'style="width: ' . $cff_likebox_width . ';';
-    if ( !empty($cff_likebox_bg_color) ) $cff_likebox_styles .= 'background-color: #' . str_replace('#', '', $cff_likebox_bg_color) . ';';
+    if ( !empty($cff_likebox_bg_color) ) $cff_likebox_styles .= 'background-color: #' . str_replace('#', '', $cff_likebox_bg_color) . '; margin-left: 0; ';
     if ( empty($cff_likebox_bg_color) && $cff_like_box_faces == 'false' ) $cff_likebox_styles .= ' margin-left: -10px;';
     $cff_likebox_styles .= '"';
 
@@ -469,7 +480,7 @@ function display_cff($atts) {
     if ($access_token == '') $access_token = '1436737606570258|MGh1BX4_b_D9HzJtKe702cwMRPI';
     //Check whether a Page ID has been defined
     if ($page_id == '') {
-        echo "Please enter the Page ID of the Facebook feed you'd like to display. You can do this in either the Custom Facebook Feed plugin settings or in the shortcode itself. For example, [custom_facebook_feed id=YOUR_PAGE_ID_HERE].<br /><br />";
+        echo "Please enter the Page ID of the Facebook feed you'd like to display. You can do this in either the Custom Facebook Feed plugin settings or in the shortcode itself. For example, [custom-facebook-feed id=YOUR_PAGE_ID_HERE].<br /><br />";
         return false;
     }
 
@@ -731,14 +742,14 @@ function display_cff($atts) {
                 }
 
                 //POST AUTHOR
-                $cff_author = '<a class="cff-author" href="https://facebook.com/' . $news->from->id . '" '.$target.' title="'.$news->from->name.' on Facebook" '.$cff_author_styles.'>';
+                $cff_author = '<div class="cff-author"><a href="https://facebook.com/' . $news->from->id . '" '.$target.' title="'.$news->from->name.' on Facebook" '.$cff_author_styles.'>';
 
                 //Set the author image as a variable. If it already exists then don't query the api for it again.
                 $cff_author_img_var = '$cff_author_img_' . $news->from->id;
                 if ( !isset($$cff_author_img_var) ) $$cff_author_img_var = 'https://graph.facebook.com/' . $news->from->id . '/picture?type=square';
                 $cff_author .= '<img src="'.$$cff_author_img_var.'" title="'.$news->from->name.'" alt="'.$news->from->name.'" width=50 height=50>';
                 $cff_author .= '<span class="cff-page-name">'.$news->from->name.'</span>';
-                $cff_author .= '</a>';
+                $cff_author .= '</a></div>';
 
                 //POST TEXT
                 $cff_translate_photos_text = $atts['photostext'];
@@ -781,7 +792,7 @@ function display_cff($atts) {
                 //If the post tags option doesn't exist yet (ie. on plugin update) then set them as true
                 if ( !array_key_exists( 'cff_post_tags', $options ) ) $cff_post_tags = true;
                 //Add message and story tags if there are any and the post text is the message or the story
-                if( $cff_post_tags && ( isset($news->message_tags) || isset($news->story_tags) ) && ($cff_post_text_type == 'message' || $cff_post_text_type == 'story')  && !$cff_title_link ){
+                if( $cff_post_tags && ( isset($news->message_tags) || isset($news->story_tags) ) && ($cff_post_text_type == 'message' || $cff_post_text_type == 'story')  && !$cff_title_link){
                     //Use message_tags or story_tags?
                     ( isset($news->message_tags) )? $text_tags = $news->message_tags : $text_tags = $news->story_tags;
 
@@ -789,14 +800,10 @@ function display_cff($atts) {
                     if( ( $cff_post_text_type == 'message' && isset($news->message_tags) ) || ( $cff_post_text_type == 'story' && !isset($news->message_tags) ) ) {
 
                         //Does the Post Text contain any html tags? - the & symbol is the best indicator of this
-                        $html_check_1 = stripos($post_text, '&');
-                        $html_check_2 = stripos($post_text, '’');
-                        $html_check_3 = stripos($post_text, '“');
+                        $cff_html_check_array = array('&lt;', '’', '“', '&quot;', '&amp;');
 
-                        //If it contains HTML tags then use the name replace method
-                        // $html_check = true;
                         //always use the text replace method
-                        if( $html_check_1 || $html_check_2 || $html_check_3 ) {
+                        if( stripos_arr($post_text, $cff_html_check_array) !== false ) {
                             //Loop through the tags
                             foreach($text_tags as $message_tag ) {
                                 $tag_name = $message_tag[0]->name;
@@ -831,16 +838,18 @@ function display_cff($atts) {
                                 $c = $message_tags_arr[$i]['offset'];
                                 $d = $message_tags_arr[$i]['length'];
 
-                                $post_text = substr_replace( $post_text, $b, $c, $d);
+                                $post_text = mb_substr_replace( $post_text, $b, $c, $d);
 
                             }   
 
-                        } // end if/else    
+                        } // end if/else
 
                     } // end message check
 
                 } //END MESSAGE TAGS
 
+                //Replace line breaks in text (needed for IE8)
+                $post_text = preg_replace("/\r\n|\r|\n/",'<br/>', $post_text);
 
                 //If the text is wrapped in a link then don't hyperlink any text within
                 if ($cff_title_link) {
@@ -882,8 +891,11 @@ function display_cff($atts) {
                 //LINK
                 $cff_shared_link = '';
                 //Display shared link
-                if ($news->type == 'link') {
-                    $cff_shared_link .= '<div class="cff-shared-link">';
+                if ($cff_post_type == 'link') {
+                    $cff_shared_link .= '<div class="cff-shared-link';
+                    if($cff_disable_link_box) $cff_shared_link .= ' cff-no-styles"';
+                    if(!$cff_disable_link_box) $cff_shared_link .= '" ' . $cff_link_box_styles;
+                    $cff_shared_link .= '>';
 
                     //Display link name and description
                     if (!empty($news->description)) {
@@ -988,10 +1000,13 @@ function display_cff($atts) {
                     if($cff_is_video_embed) {
                         isset($news->name) ? $video_name = $news->name : $video_name = $link;
                         isset($news->description) ? $description_text = $news->description : $description_text = '';
-                        $cff_description = '<div class="cff-desc-wrap ';
+                        $cff_description = '<div class="cff-desc-wrap cff-shared-link ';
                         if (empty($picture)) $cff_description .= 'cff-no-image';
+                        if($cff_disable_link_box) $cff_description .= ' cff-no-styles"';
+                        if(!$cff_disable_link_box) $cff_description .= '" ' . $cff_link_box_styles;
+                        $cff_description .= '>';
 
-                        if( isset($news->name) ) $cff_description .= '"><'.$cff_link_title_format.' class="cff-link-title" '.$cff_link_title_styles.'><a href="'.$link.'" '.$target.' style="color:#' . str_replace('#', '', $cff_link_title_color) . ';">'. $news->name . '</a></'.$cff_link_title_format.'>';
+                        if( isset($news->name) ) $cff_description .= '<'.$cff_link_title_format.' class="cff-link-title" '.$cff_link_title_styles.'><a href="'.$link.'" '.$target.' style="color:#' . str_replace('#', '', $cff_link_title_color) . ';">'. $news->name . '</a></'.$cff_link_title_format.'>';
 
                         if (!empty($body_limit)) {
                             if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
@@ -1421,6 +1436,48 @@ if(!is_callable('stripos')){
         return strpos($haystack, stristr( $haystack, $needle ));
     }
 }
+function stripos_arr($haystack, $needle) {
+    if(!is_array($needle)) $needle = array($needle);
+    foreach($needle as $what) {
+        if(($pos = stripos($haystack, ltrim($what) ))!==false) return $pos;
+    }
+    return false;
+}
+function mb_substr_replace($string, $replacement, $start, $length=NULL) {
+    if (is_array($string)) {
+        $num = count($string);
+        // $replacement
+        $replacement = is_array($replacement) ? array_slice($replacement, 0, $num) : array_pad(array($replacement), $num, $replacement);
+        // $start
+        if (is_array($start)) {
+            $start = array_slice($start, 0, $num);
+            foreach ($start as $key => $value)
+                $start[$key] = is_int($value) ? $value : 0;
+        }
+        else {
+            $start = array_pad(array($start), $num, $start);
+        }
+        // $length
+        if (!isset($length)) {
+            $length = array_fill(0, $num, 0);
+        }
+        elseif (is_array($length)) {
+            $length = array_slice($length, 0, $num);
+            foreach ($length as $key => $value)
+                $length[$key] = isset($value) ? (is_int($value) ? $value : $num) : 0;
+        }
+        else {
+            $length = array_pad(array($length), $num, $length);
+        }
+        // Recursive call
+        return array_map(__FUNCTION__, $string, $replacement, $start, $length);
+    }
+    preg_match_all('/./us', (string)$string, $smatches);
+    preg_match_all('/./us', (string)$replacement, $rmatches);
+    if ($length === NULL) $length = mb_strlen($string);
+    array_splice($smatches[0], $start, $length, $rmatches[0]);
+    return join($smatches[0]);
+}
 
 //Push to assoc array
 function array_push_assoc($array, $key, $value){
@@ -1456,28 +1513,27 @@ function cff_scripts_method() {
     wp_enqueue_script('cffscripts');
 }
 
-function cff_activate() {
-    $options = get_option('cff_style_settings');
-    $options[ 'cff_show_links_type' ] = true;
-    $options[ 'cff_show_event_type' ] = true;
-    $options[ 'cff_show_video_type' ] = true;
-    $options[ 'cff_show_photos_type' ] = true;
-    $options[ 'cff_show_status_type' ] = true;
-    // Show all parts of the feed by default on activation
-    $options[ 'cff_show_author' ] = true;
-    $options[ 'cff_show_text' ] = true;
-    $options[ 'cff_show_desc' ] = true;
-    $options[ 'cff_show_shared_links' ] = true;
-    $options[ 'cff_show_date' ] = true;
-    $options[ 'cff_show_media' ] = true;
-    $options[ 'cff_show_event_title' ] = true;
-    $options[ 'cff_show_event_details' ] = true;
-    $options[ 'cff_show_meta' ] = true;
-    $options[ 'cff_show_link' ] = true;
-    $options[ 'cff_show_like_box' ] = true;
-    update_option( 'cff_style_settings', $options );
-}
-register_activation_hook( __FILE__, 'cff_activate' );
+// function cff_activate() {
+//     $options = get_option('cff_style_settings');
+//     $options[ 'cff_show_links_type' ] = true;
+//     $options[ 'cff_show_event_type' ] = true;
+//     $options[ 'cff_show_video_type' ] = true;
+//     $options[ 'cff_show_photos_type' ] = true;
+//     $options[ 'cff_show_status_type' ] = true;
+//     $options[ 'cff_show_author' ] = true;
+//     $options[ 'cff_show_text' ] = true;
+//     $options[ 'cff_show_desc' ] = true;
+//     $options[ 'cff_show_shared_links' ] = true;
+//     $options[ 'cff_show_date' ] = true;
+//     $options[ 'cff_show_media' ] = true;
+//     $options[ 'cff_show_event_title' ] = true;
+//     $options[ 'cff_show_event_details' ] = true;
+//     $options[ 'cff_show_meta' ] = true;
+//     $options[ 'cff_show_link' ] = true;
+//     $options[ 'cff_show_like_box' ] = true;
+//     update_option( 'cff_style_settings', $options );
+// }
+// register_activation_hook( __FILE__, 'cff_activate' );
 //Uninstall
 function cff_uninstall()
 {

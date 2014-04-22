@@ -49,6 +49,12 @@ jQuery(document).ready(function() {
 				$less.hide();
 			}
 		});
+
+		//Hide the shared link box if it's empty
+		$sharedLink = $self.find('.cff-shared-link');
+		if( $sharedLink.text() == '' ){
+			$sharedLink.remove();
+		}
 		
 	});
 });
