@@ -3,9 +3,10 @@
 /**************/
 /* Feed container */
 #cff {
-  /*float: left;*/
+  float: left;
   width: 100%;
   margin: 0 auto;
+  padding: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;  
@@ -21,6 +22,7 @@
   width: 100%;
   clear: both;
   padding: 20px 0 15px 0;
+  margin: 0;
   border-bottom: 1px solid #ddd;
 }
 #cff .cff-item:first-child{
@@ -30,13 +32,15 @@
 .cff-header{
   width: 100%;
   margin: 0 0 15px 0;
+  padding: 0;
   line-height: 1;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 .cff-header .fa{
-  margin-right: 10px;
+  margin: 0 10px 0 0;
+  padding: 0;
 }
 /******************/
 /*** TYPOGRAPHY ***/
@@ -86,18 +90,19 @@
 #cff .cff-author{
   float: left;
   clear: both;
-  margin-bottom: 15px;
+  margin: 0 0 15px 0;
+  padding: 0;
   line-height: 1.2;
   width: 100%;
 }
 #cff .cff-author a{
-  float: left;
+  /*float: left;*/
   display: block;
   min-width: 100%\9;
 }
 #cff .cff-author img{
   float: left;
-  margin-right: 15px;
+  margin: 0 15px 0 0;
 }
 #cff .cff-author span{
   display: table-cell;
@@ -128,7 +133,7 @@
   float: left;
   clear: both;
   width: 100%;
-  padding: 8px;
+  padding: 5px 10px;
   margin: 10px 0 5px 0;
   background: rgba(0,0,0,0.02);
   border: 1px solid rgba(0,0,0,0.07);
@@ -146,7 +151,7 @@
   float: left;
   clear: both;
   max-width: 20%;
-  margin-top: 10px;
+  margin: 10px 0 0 0;
 }
 #cff .cff-link img{
   max-width: 100%;
@@ -195,10 +200,6 @@
   padding: 10px 0 0 0;
   line-height: 1.2;
 }
-#cff .cff-details .cff-where,
-#cff .cff-details .cff-when{
-  /*font-weight: bold;*/
-}
 /* Video */
 #cff .cff-desc-wrap{
   float: left;
@@ -210,8 +211,8 @@
 #cff .cff-viewpost-facebook{
   float: right;
   clear: none;
-  padding-top: 4px;
-  padding-left: 4px;
+  padding: 4px 0 0 4px;
+  margin: 0;
   font-size: 11px;
 }
 
@@ -219,8 +220,7 @@
 .cff-likebox{
   float: left;
   width: 100%;
-  margin-left: -10px;
-
+  /*margin-left: -10px;*/
   position: relative;
 }
 .cff-likebox .fb_iframe_widget{
@@ -266,6 +266,7 @@
   overflow: hidden;
   overflow-y: auto;
   padding: 5px 10px;
+
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;

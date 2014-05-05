@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.9.4
+Version: 1.9.5
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -137,6 +137,7 @@ function display_cff($atts) {
         'likeboxcolor' => isset($options[ 'cff_likebox_bg_color' ]) ? $options[ 'cff_likebox_bg_color' ] : '',
         'likeboxtextcolor' => isset($options[ 'cff_like_box_text_color' ]) ? $options[ 'cff_like_box_text_color' ] : '',
         'likeboxwidth' => isset($options[ 'cff_likebox_width' ]) ? $options[ 'cff_likebox_width' ] : '',
+        'likeboxheight' => isset($options[ 'cff_likebox_height' ]) ? $options[ 'cff_likebox_height' ] : '',
         'likeboxfaces' => isset($options[ 'cff_like_box_faces' ]) ? $options[ 'cff_like_box_faces' ] : '',
         'likeboxborder' => isset($options[ 'cff_like_box_border' ]) ? $options[ 'cff_like_box_border' ] : '',
 
@@ -396,6 +397,9 @@ function display_cff($atts) {
     if ($cff_like_box_text_color == 'white') $cff_like_box_colorscheme = 'dark';
 
     $cff_likebox_width = $atts[ 'likeboxwidth' ];
+    $cff_likebox_height = $atts[ 'likeboxheight' ];
+    $cff_likebox_height = preg_replace('/px$/', '', $cff_likebox_height);
+
     if ( !isset($cff_likebox_width) || empty($cff_likebox_width) || $cff_likebox_width == '' ) $cff_likebox_width = '100%';
     $cff_like_box_faces = $atts[ 'likeboxfaces' ];
     if ( !isset($cff_like_box_faces) || empty($cff_like_box_faces) ) $cff_like_box_faces = 'false';
@@ -408,7 +412,7 @@ function display_cff($atts) {
 
     //Compile Like box styles
     $cff_likebox_styles = 'style="width: ' . $cff_likebox_width . ';';
-    if ( !empty($cff_likebox_bg_color) ) $cff_likebox_styles .= 'background-color: #' . str_replace('#', '', $cff_likebox_bg_color) . '; margin-left: 0; ';
+    if ( !empty($cff_likebox_bg_color) ) $cff_likebox_styles .= ' background-color: #' . str_replace('#', '', $cff_likebox_bg_color) . ';';
     if ( empty($cff_likebox_bg_color) && $cff_like_box_faces == 'false' ) $cff_likebox_styles .= ' margin-left: -10px;';
     $cff_likebox_styles .= '"';
 
@@ -546,7 +550,7 @@ function display_cff($atts) {
     $like_box = '<div class="cff-likebox';
     if ($cff_like_box_outside) $like_box .= ' cff-outside';
     $like_box .= ($cff_like_box_position == 'top') ? ' top' : ' bottom';
-    $like_box .= '" ' . $cff_likebox_styles . '><script src="https://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" show_faces="'.$cff_like_box_faces.'" stream="false" header="false" colorscheme="'. $cff_like_box_colorscheme .'" show_border="'. $cff_like_box_border .'"></fb:like-box></div>';
+    $like_box .= '" ' . $cff_likebox_styles . '><script src="https://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" show_faces="'.$cff_like_box_faces.'" stream="false" header="false" colorscheme="'. $cff_like_box_colorscheme .'" show_border="'. $cff_like_box_border .'" data-height="'.$cff_likebox_height.'"></fb:like-box></div>';
     //Don't show like box if it's a group
     if($cff_is_group) $like_box = '';
 
@@ -572,7 +576,7 @@ function display_cff($atts) {
     if(!empty($cff_header_icon_size)) $cff_header .= ' font-size: ' . $cff_header_icon_size . 'px;';
     if(!empty($cff_header_icon_color) || !empty($cff_header_icon_size))$cff_header .= '"';
     $cff_header .= '></i>';
-    $cff_header .= $cff_header_text;
+    $cff_header .= '<span class="header-text" style="height: '.$cff_header_icon_size.'px;">' . $cff_header_text . '</span>';
     $cff_header .= '</h3>';
 
 
@@ -834,7 +838,7 @@ function display_cff($atts) {
 
                             for($i = count($message_tags_arr); $i >= 1; $i--) {
                                
-                                $b = '<a href="http://facebook.com/' . $message_tags_arr[$i]['id'] . '" target="_blank">' . $message_tags_arr[$i]['name'] . '</a>';
+                                $b = '<a href="http://facebook.com/' . $message_tags_arr[$i]['id'] . '" style="color: #'.str_replace('#', '', $atts['textlinkcolor']).';" target="_blank">' . $message_tags_arr[$i]['name'] . '</a>';
                                 $c = $message_tags_arr[$i]['offset'];
                                 $d = $message_tags_arr[$i]['length'];
 

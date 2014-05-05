@@ -453,6 +453,7 @@ function cff_settings_page() {
         'cff_like_box_position'     => 'bottom',
         'cff_like_box_outside'      => false,
         'cff_likebox_width'         => '',
+        'cff_likebox_height'        => '',
         'cff_like_box_faces'        => false,
         'cff_like_box_border'       => false,
 
@@ -641,6 +642,7 @@ function cff_style_page() {
     $cff_like_box_position = $options[ 'cff_like_box_position' ];
     $cff_like_box_outside = $options[ 'cff_like_box_outside' ];
     $cff_likebox_width = $options[ 'cff_likebox_width' ];
+    $cff_likebox_height = $options[ 'cff_likebox_height' ];
     $cff_like_box_faces = $options[ 'cff_like_box_faces' ];
     $cff_like_box_border = $options[ 'cff_like_box_border' ];
 
@@ -956,6 +958,7 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_like_box_text_color' ])) $cff_like_box_text_color = $_POST[ 'cff_like_box_text_color' ];
 
             if (isset($_POST[ 'cff_likebox_width' ])) $cff_likebox_width = $_POST[ 'cff_likebox_width' ];
+            if (isset($_POST[ 'cff_likebox_height' ])) $cff_likebox_height = $_POST[ 'cff_likebox_height' ];
             (isset($_POST[ 'cff_like_box_faces' ])) ? $cff_like_box_faces = $_POST[ 'cff_like_box_faces' ] : $cff_like_box_faces = '';
             (isset($_POST[ 'cff_like_box_border' ])) ? $cff_like_box_border = $_POST[ 'cff_like_box_border' ] : $cff_like_box_border = '';
 
@@ -984,6 +987,7 @@ function cff_style_page() {
             $options[ 'cff_like_box_text_color' ] = $cff_like_box_text_color;
 
             $options[ 'cff_likebox_width' ] = $cff_likebox_width;
+            $options[ 'cff_likebox_height' ] = $cff_likebox_height;
             $options[ 'cff_like_box_faces' ] = $cff_like_box_faces;
             $options[ 'cff_like_box_border' ] = $cff_like_box_border;
 
@@ -2236,6 +2240,13 @@ function cff_style_page() {
                         </td>
                     </tr>
                     <tr valign="top">
+                        <th class="bump-left" for="cff_likebox_height" scope="row"><label><?php _e('Custom Like Box Height'); ?></label></th>
+                        <td>
+                            <input name="cff_likebox_height" type="text" value="<?php esc_attr_e( $cff_likebox_height ); ?>" size="3" />
+                            <span>px</span>
+                        </td>
+                    </tr>
+                    <tr valign="top">
                         <th class="bump-left" scope="row"><label><?php _e('Show faces of fans'); ?></label></th>
                         <td>
                             <input type="checkbox" name="cff_like_box_faces" id="cff_like_box_faces" <?php if($cff_like_box_faces == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
@@ -2251,6 +2262,8 @@ function cff_style_page() {
                     </tr>
                 </tbody>
             </table>
+
+            <?php submit_button(); ?>
 
             <hr />
             <h3><?php _e('Custom CSS'); ?></h3>
@@ -2285,7 +2298,6 @@ function cff_style_page() {
                     </tr>
                 </tbody>
             </table>
-            <?php submit_button(); ?>
 
 
             <hr />

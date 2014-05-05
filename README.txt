@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.9
-Stable tag: 1.9.4
+Stable tag: 1.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -269,6 +269,14 @@ Credit [iMarketing Factory](http://www.imarketingfactory.com/facebook/ "The Impo
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+= 1.9.5 =
+* New: Added an option to set a height on the Like box. This allows you to display more faces of your fans if you have that option selected.
+* Tweak: Added a few stricter CSS styles to help minimize the chance of theme stylesheets distorting post formatting
+* Tweak: Added a span to the header text to allow CSS to be applied
+* Fix: Fixed a bug with the post author text bumping down below the author image in the Firefox browser
+* Fix: Corrected a bug which caused some links not to have the color applied
+* Fix: Fixed a float issue in Firefox which sometimes caused the feed to be pushed off the page
+
 = 1.9.4 =
 * New: Added background and border styling options to shared links
 * Tweak: Reduced the clickable area of the post author
