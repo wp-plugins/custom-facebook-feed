@@ -114,7 +114,7 @@ function cff_settings_page() {
         ?>
         <h2 class="nav-tab-wrapper">
             <a href="?page=cff-top&amp;tab=configuration" class="nav-tab <?php echo $active_tab == 'configuration' ? 'nav-tab-active' : ''; ?>"><?php _e('Configuration'); ?></a>
-            <a href="?page=cff-style" class="nav-tab <?php echo $active_tab == 'support' ? 'nav-tab-active' : ''; ?>"><?php _e('Customize'); ?></a>
+            <a href="?page=cff-style" class="nav-tab <?php echo $active_tab == 'customize' ? 'nav-tab-active' : ''; ?>"><?php _e('Customize'); ?></a>
             <a href="?page=cff-top&amp;tab=support" class="nav-tab <?php echo $active_tab == 'support' ? 'nav-tab-active' : ''; ?>"><?php _e('Support'); ?></a>
         </h2>
 
@@ -318,6 +318,9 @@ function cff_settings_page() {
         <p><?php _e("Use the <a href='admin.php?page=cff-style'>Customize</a> page to customize your feed. If you're displaying multiple feeds then you can override your settings directly in the shortcode like so:"); ?></p>
         <p>[custom-facebook-feed <b><span style='color: green;'>id=some-other-page-id num=3 height=500px</span></b>]</p>
         <p><a href="http://smashballoon.com/custom-facebook-feed/docs/shortcodes/" target="_blank"><?php _e('See a full list of shortcode options'); ?></a></p>
+
+        <br />
+        <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
 
     <?php } //End config tab ?>
 
