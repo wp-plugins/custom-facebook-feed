@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.9.5
+Version: 1.9.6
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -590,6 +590,7 @@ function display_cff($atts) {
     if ($cff_like_box_position == 'top' && $cff_show_like_box && $cff_like_box_outside) $cff_content .= $like_box;
 
     //Create CFF container HTML
+    $cff_content .= '<div class="cff-wrapper">';
     $cff_content .= '<div id="cff" rel="'.$title_limit.'" class="';
     if( !empty($cff_class) ) $cff_content .= $cff_class . ' ';
     if ( !empty($cff_feed_height) ) $cff_content .= 'cff-fixed-height ';
@@ -1109,6 +1110,8 @@ function display_cff($atts) {
     ( $ajax_theme == 'on' || $ajax_theme == 'true' || $ajax_theme == true ) ? $ajax_theme = true : $ajax_theme = false;
     if( $atts[ 'ajax' ] == 'false' ) $ajax_theme = false;
     if ($ajax_theme) $cff_content .= '<script type="text/javascript" src="' . plugins_url( '/js/cff-scripts.js?8' , __FILE__ ) . '"></script>';
+
+    $cff_content .= '</div>';
 
     //Return our feed HTML to display
     return $cff_content;
