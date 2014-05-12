@@ -368,8 +368,18 @@ function cff_settings_page() {
 
     <?php } ?>
         
-
-    <?php 
+        
+<?php 
+} //End Settings_Page 
+//Create Style page
+function cff_style_page() {
+    //Declare variables for fields
+    $style_hidden_field_name                = 'cff_style_submit_hidden';
+    $style_general_hidden_field_name        = 'cff_style_general_submit_hidden';
+    $style_post_layout_hidden_field_name    = 'cff_style_post_layout_submit_hidden';
+    $style_typography_hidden_field_name     = 'cff_style_typography_submit_hidden';
+    $style_misc_hidden_field_name           = 'cff_style_misc_submit_hidden';
+    $style_custom_text_hidden_field_name    = 'cff_style_custom_text_submit_hidden';
 
     //Defaults need to be here on the Settings page so that they're saved when the initial settings are saved
     $defaults = array(
@@ -521,23 +531,6 @@ function cff_settings_page() {
     //Save layout option in an array
     $options = wp_parse_args(get_option('cff_style_settings'), $defaults);
     add_option( 'cff_style_settings', $options );
-
-    ?>
-
-        
-<?php 
-} //End Settings_Page 
-//Create Style page
-function cff_style_page() {
-    //Declare variables for fields
-    $style_hidden_field_name                = 'cff_style_submit_hidden';
-    $style_general_hidden_field_name        = 'cff_style_general_submit_hidden';
-    $style_post_layout_hidden_field_name    = 'cff_style_post_layout_submit_hidden';
-    $style_typography_hidden_field_name     = 'cff_style_typography_submit_hidden';
-    $style_misc_hidden_field_name           = 'cff_style_misc_submit_hidden';
-    $style_custom_text_hidden_field_name    = 'cff_style_custom_text_submit_hidden';
-    
-    $options = get_option('cff_style_settings');
 
     //Set the page variables
     //Post types

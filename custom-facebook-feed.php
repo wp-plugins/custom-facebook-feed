@@ -1520,27 +1520,27 @@ function cff_scripts_method() {
     wp_enqueue_script('cffscripts');
 }
 
-// function cff_activate() {
-//     $options = get_option('cff_style_settings');
-//     $options[ 'cff_show_links_type' ] = true;
-//     $options[ 'cff_show_event_type' ] = true;
-//     $options[ 'cff_show_video_type' ] = true;
-//     $options[ 'cff_show_photos_type' ] = true;
-//     $options[ 'cff_show_status_type' ] = true;
-//     $options[ 'cff_show_author' ] = true;
-//     $options[ 'cff_show_text' ] = true;
-//     $options[ 'cff_show_desc' ] = true;
-//     $options[ 'cff_show_shared_links' ] = true;
-//     $options[ 'cff_show_date' ] = true;
-//     $options[ 'cff_show_media' ] = true;
-//     $options[ 'cff_show_event_title' ] = true;
-//     $options[ 'cff_show_event_details' ] = true;
-//     $options[ 'cff_show_meta' ] = true;
-//     $options[ 'cff_show_link' ] = true;
-//     $options[ 'cff_show_like_box' ] = true;
-//     update_option( 'cff_style_settings', $options );
-// }
-// register_activation_hook( __FILE__, 'cff_activate' );
+function cff_activate() {
+    $options = get_option('cff_style_settings');
+    $options[ 'cff_show_links_type' ] = true;
+    $options[ 'cff_show_event_type' ] = true;
+    $options[ 'cff_show_video_type' ] = true;
+    $options[ 'cff_show_photos_type' ] = true;
+    $options[ 'cff_show_status_type' ] = true;
+    $options[ 'cff_show_author' ] = true;
+    $options[ 'cff_show_text' ] = true;
+    $options[ 'cff_show_desc' ] = true;
+    $options[ 'cff_show_shared_links' ] = true;
+    $options[ 'cff_show_date' ] = true;
+    $options[ 'cff_show_media' ] = true;
+    $options[ 'cff_show_event_title' ] = true;
+    $options[ 'cff_show_event_details' ] = true;
+    $options[ 'cff_show_meta' ] = true;
+    $options[ 'cff_show_link' ] = true;
+    $options[ 'cff_show_like_box' ] = true;
+    update_option( 'cff_style_settings', $options );
+}
+register_activation_hook( __FILE__, 'cff_activate' );
 //Uninstall
 function cff_uninstall()
 {
