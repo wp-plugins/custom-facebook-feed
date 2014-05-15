@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.9.6
+Version: 1.9.7
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -808,7 +808,7 @@ function display_cff($atts) {
                         $cff_html_check_array = array('&lt;', '’', '“', '&quot;', '&amp;');
 
                         //always use the text replace method
-                        if( stripos_arr($post_text, $cff_html_check_array) !== false ) {
+                        if( cff_stripos_arr($post_text, $cff_html_check_array) !== false ) {
                             //Loop through the tags
                             foreach($text_tags as $message_tag ) {
                                 $tag_name = $message_tag[0]->name;
@@ -824,7 +824,7 @@ function display_cff($atts) {
                             $i = 0;
                             foreach($text_tags as $message_tag ) {
                                 $i++;
-                                $message_tags_arr = array_push_assoc(
+                                $message_tags_arr = cff_array_push_assoc(
                                     $message_tags_arr,
                                     $i,
                                     array(
@@ -843,7 +843,7 @@ function display_cff($atts) {
                                 $c = $message_tags_arr[$i]['offset'];
                                 $d = $message_tags_arr[$i]['length'];
 
-                                $post_text = mb_substr_replace( $post_text, $b, $c, $d);
+                                $post_text = cff_mb_substr_replace( $post_text, $b, $c, $d);
 
                             }   
 
@@ -1049,7 +1049,7 @@ function display_cff($atts) {
                 if ($cff_post_type == 'status') $cff_post_item .= 'cff-status-post';
                 if ($cff_post_type == 'offer') $cff_post_item .= 'cff-offer-post';
                 if ($cff_album) $cff_post_item .= ' cff-album';
-                $cff_post_item .=  ' author-'. to_slug($news->from->name) .'" id="'. $news->id .'" ' . $cff_item_styles . '>';
+                $cff_post_item .=  ' author-'. cff_to_slug($news->from->name) .'" id="'. $news->id .'" ' . $cff_item_styles . '>';
                 
                     //POST AUTHOR
                     if($cff_show_author) $cff_post_item .= $cff_author;
@@ -1072,7 +1072,7 @@ function display_cff($atts) {
                 $cff_post_item .= '</div>';
 
                 //PUSH TO ARRAY
-                $cff_posts_array = array_push_assoc($cff_posts_array, strtotime($post_time), $cff_post_item);
+                $cff_posts_array = cff_array_push_assoc($cff_posts_array, strtotime($post_time), $cff_post_item);
 
             } // End post type check
 
@@ -1443,14 +1443,14 @@ if(!is_callable('stripos')){
         return strpos($haystack, stristr( $haystack, $needle ));
     }
 }
-function stripos_arr($haystack, $needle) {
+function cff_stripos_arr($haystack, $needle) {
     if(!is_array($needle)) $needle = array($needle);
     foreach($needle as $what) {
         if(($pos = stripos($haystack, ltrim($what) ))!==false) return $pos;
     }
     return false;
 }
-function mb_substr_replace($string, $replacement, $start, $length=NULL) {
+function cff_mb_substr_replace($string, $replacement, $start, $length=NULL) {
     if (is_array($string)) {
         $num = count($string);
         // $replacement
@@ -1487,12 +1487,12 @@ function mb_substr_replace($string, $replacement, $start, $length=NULL) {
 }
 
 //Push to assoc array
-function array_push_assoc($array, $key, $value){
+function cff_array_push_assoc($array, $key, $value){
     $array[$key] = $value;
     return $array;
 }
 //Convert string to slug
-function to_slug($string){
+function cff_to_slug($string){
     return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string)));
 }
 
@@ -1520,27 +1520,27 @@ function cff_scripts_method() {
     wp_enqueue_script('cffscripts');
 }
 
-// function cff_activate() {
-//     $options = get_option('cff_style_settings');
-//     $options[ 'cff_show_links_type' ] = true;
-//     $options[ 'cff_show_event_type' ] = true;
-//     $options[ 'cff_show_video_type' ] = true;
-//     $options[ 'cff_show_photos_type' ] = true;
-//     $options[ 'cff_show_status_type' ] = true;
-//     $options[ 'cff_show_author' ] = true;
-//     $options[ 'cff_show_text' ] = true;
-//     $options[ 'cff_show_desc' ] = true;
-//     $options[ 'cff_show_shared_links' ] = true;
-//     $options[ 'cff_show_date' ] = true;
-//     $options[ 'cff_show_media' ] = true;
-//     $options[ 'cff_show_event_title' ] = true;
-//     $options[ 'cff_show_event_details' ] = true;
-//     $options[ 'cff_show_meta' ] = true;
-//     $options[ 'cff_show_link' ] = true;
-//     $options[ 'cff_show_like_box' ] = true;
-//     update_option( 'cff_style_settings', $options );
-// }
-// register_activation_hook( __FILE__, 'cff_activate' );
+function cff_activate() {
+    $options = get_option('cff_style_settings');
+    $options[ 'cff_show_links_type' ] = true;
+    $options[ 'cff_show_event_type' ] = true;
+    $options[ 'cff_show_video_type' ] = true;
+    $options[ 'cff_show_photos_type' ] = true;
+    $options[ 'cff_show_status_type' ] = true;
+    $options[ 'cff_show_author' ] = true;
+    $options[ 'cff_show_text' ] = true;
+    $options[ 'cff_show_desc' ] = true;
+    $options[ 'cff_show_shared_links' ] = true;
+    $options[ 'cff_show_date' ] = true;
+    $options[ 'cff_show_media' ] = true;
+    $options[ 'cff_show_event_title' ] = true;
+    $options[ 'cff_show_event_details' ] = true;
+    $options[ 'cff_show_meta' ] = true;
+    $options[ 'cff_show_link' ] = true;
+    $options[ 'cff_show_like_box' ] = true;
+    update_option( 'cff_style_settings', $options );
+}
+register_activation_hook( __FILE__, 'cff_activate' );
 //Uninstall
 function cff_uninstall()
 {
