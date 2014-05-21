@@ -5,23 +5,6 @@ jQuery(document).ready(function() {
 		jQuery(this).closest('tr').find('.cff-tooltip').slideToggle();
 	});
 
-	//Check Access Token length
-	jQuery("#cff_access_token").change(function() {
-		checkAccessTokenLength();
-	});
-	function checkAccessTokenLength(){
-		var cff_token_string = jQuery('#cff_access_token').val(),
-			cff_token_check = cff_token_string.indexOf('|');
-
-  		if ( (cff_token_check == -1) && (cff_token_string.length < 50) && (cff_token_string.length !== 0) ) {
-  			jQuery('.cff-profile-error.cff-access-token').fadeIn();
-  		} else {
-  			jQuery('.cff-profile-error.cff-access-token').fadeOut();
-  		}
-	}
-	checkAccessTokenLength();
-	
-
 	//Toggle Access Token field
 	if( jQuery('#cff_show_access_token').is(':checked') ) jQuery('.cff-access-token-hidden').show();
 	jQuery('#cff_show_access_token').change(function(){

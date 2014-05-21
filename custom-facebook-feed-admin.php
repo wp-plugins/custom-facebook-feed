@@ -2460,7 +2460,7 @@ function cff_admin_style() {
 add_action( 'admin_enqueue_scripts', 'cff_admin_style' );
 //Enqueue admin scripts
 function cff_admin_scripts() {
-    wp_enqueue_script( 'cff_admin_script', plugin_dir_url( __FILE__ ) . 'js/cff-admin-scripts.js?5' );
+    wp_enqueue_script( 'cff_admin_script', plugin_dir_url( __FILE__ ) . 'js/cff-admin-scripts.js?6' );
     if( !wp_script_is('jquery-ui-draggable') ) { 
         wp_enqueue_script(
             array(

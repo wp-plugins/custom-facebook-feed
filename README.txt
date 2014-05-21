@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.9.1
-Stable tag: 1.9.8
+Stable tag: 1.9.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -269,6 +269,9 @@ Credit [iMarketing Factory](http://www.imarketingfactory.com/facebook/ "The Impo
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+= 1.9.8.1 =
+* Fix: Fixed an admin JavaScript error introduced by the last update
+
 = 1.9.8 =
 * Tweak: The Access Token field is now hidden by default and is revealed by a checkbox
 * Fix: Fixed an issue with link colors not being applied to all links
