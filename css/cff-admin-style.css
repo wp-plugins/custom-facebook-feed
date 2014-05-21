@@ -224,3 +224,8 @@
     background: #f6f6f6;
     cursor: default;
 }
+
+/* Access Token field */
+#cff-admin .cff-access-token-hidden{
+	display: none;
+}

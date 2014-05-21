@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.9.7
+Version: 1.9.8
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -997,14 +997,34 @@ function display_cff($atts) {
                 }
 
                 /* VIDEO */
+
+                //Check to see whether it's an embedded video so that we can show the name above the post text if necessary
                 $cff_is_video_embed = false;
+                if ($news->type == 'video'){
+                    $url = $news->source;
+                    //Embeddable video strings
+                    $youtube = 'youtube';
+                    $youtu = 'youtu';
+                    $vimeo = 'vimeo';
+                    $youtubeembed = 'youtube.com/embed';
+                    //Check whether it's a youtube video
+                    $youtube = stripos($url, $youtube);
+                    $youtu = stripos($url, $youtu);
+                    $youtubeembed = stripos($url, $youtubeembed);
+                    //Check whether it's a youtube video
+                    if($youtube || $youtu || $youtubeembed || (stripos($url, $vimeo) !== false)) {
+                        $cff_is_video_embed = true;
+                    }
+                }
+
+
                 $cff_media = '';
                 if ($news->type == 'video') {
-                    $cff_is_video_embed = true;
                     //Add the name to the description if it's a video embed
                     if($cff_is_video_embed) {
                         isset($news->name) ? $video_name = $news->name : $video_name = $link;
                         isset($news->description) ? $description_text = $news->description : $description_text = '';
+                        //Add the 'cff-shared-link' class so that embedded videos display in a box
                         $cff_description = '<div class="cff-desc-wrap cff-shared-link ';
                         if (empty($picture)) $cff_description .= 'cff-no-image';
                         if($cff_disable_link_box) $cff_description .= ' cff-no-styles"';
@@ -1018,6 +1038,9 @@ function display_cff($atts) {
                         }
 
                         $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_autolink( htmlspecialchars($description_text) ) . '</span></p></div>';
+                    } else {
+                        isset($news->name) ? $video_name = $news->name : $video_name = $link;
+                        if( isset($news->name) ) $cff_description .= '<'.$cff_link_title_format.' class="cff-link-title" '.$cff_link_title_styles.'><a href="'.$link.'" '.$target.' style="color:#' . str_replace('#', '', $cff_link_title_color) . ';">'. $news->name . '</a></'.$cff_link_title_format.'>';
                     }
                 }
 
@@ -1539,6 +1562,9 @@ function cff_activate() {
     $options[ 'cff_show_link' ] = true;
     $options[ 'cff_show_like_box' ] = true;
     update_option( 'cff_style_settings', $options );
+
+    get_option('cff_show_access_token');
+    update_option( 'cff_show_access_token', false );
 }
 register_activation_hook( __FILE__, 'cff_activate' );
 //Uninstall
@@ -1547,6 +1573,7 @@ function cff_uninstall()
     if ( ! current_user_can( 'activate_plugins' ) )
         return;
     //Settings
+    delete_option( 'cff_show_access_token' );
     delete_option( 'cff_access_token' );
     delete_option( 'cff_page_id' );
     delete_option( 'cff_num_show' );
@@ -1611,15 +1638,15 @@ $GLOBALS['autolink_options'] = array(
 
 function cff_autolink($text, $link_color='', $span_tag = false, $limit=100, $tagfill='class="cff-break-word"', $auto_title = true){
 
-    $text = cff_autolink_do($text, '![a-z][a-z-]+://!i',    $limit, $tagfill, $auto_title, $span_tag, $link_color);
-    $text = cff_autolink_do($text, '!(mailto|skype):!i',    $limit, $tagfill, $auto_title, $span_tag, $link_color);
-    $text = cff_autolink_do($text, '!www\\.!i',         $limit, $tagfill, $auto_title, 'http://', $span_tag, $link_color);
+    $text = cff_autolink_do($text, $link_color, '![a-z][a-z-]+://!i',    $limit, $tagfill, $auto_title, $span_tag);
+    $text = cff_autolink_do($text, $link_color, '!(mailto|skype):!i',    $limit, $tagfill, $auto_title, $span_tag);
+    $text = cff_autolink_do($text, $link_color, '!www\\.!i',         $limit, $tagfill, $auto_title, 'http://', $span_tag);
     return $text;
 }
 
 ####################################################################
 
-function cff_autolink_do($text, $sub, $limit, $tagfill, $auto_title, $span_tag,  $link_color, $force_prefix=null){
+function cff_autolink_do($text, $link_color, $sub, $limit, $tagfill, $auto_title, $span_tag, $force_prefix=null){
 
     $text_l = StrToLower($text);
     $cursor = 0;
@@ -1753,11 +1780,9 @@ function cff_autolink_do($text, $sub, $limit, $tagfill, $auto_title, $span_tag, 
                 $link_url_enc = HtmlSpecialChars($link_url);
                 $display_url_enc = HtmlSpecialChars($display_url);
 
-                if($span_tag == true){
-                    $buffer .= "<span $tagfill>{$display_url_enc}</span>";
-                } else {
-                    $buffer .= "<a target='_blank' style='color: #".$link_color."' href=\"{$link_url_enc}\"$tagfill>{$display_url_enc}</a>";
-                }
+                
+                if( substr( $link_url_enc, 0, 4 ) !== "http" ) $link_url_enc = 'http://' . $link_url_enc;
+                $buffer .= "<a target='_blank' style='color: #".$link_color."' href=\"{$link_url_enc}\"$tagfill>{$display_url_enc}</a>";
                 
             
             }else{

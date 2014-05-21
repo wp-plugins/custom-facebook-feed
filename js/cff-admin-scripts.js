@@ -7,7 +7,9 @@ jQuery(document).ready(function() {
 
 	//Check Access Token length
 	jQuery("#cff_access_token").change(function() {
-
+		checkAccessTokenLength();
+	});
+	function checkAccessTokenLength(){
 		var cff_token_string = jQuery('#cff_access_token').val(),
 			cff_token_check = cff_token_string.indexOf('|');
 
@@ -16,8 +18,16 @@ jQuery(document).ready(function() {
   		} else {
   			jQuery('.cff-profile-error.cff-access-token').fadeOut();
   		}
+	}
+	checkAccessTokenLength();
+	
 
+	//Toggle Access Token field
+	if( jQuery('#cff_show_access_token').is(':checked') ) jQuery('.cff-access-token-hidden').show();
+	jQuery('#cff_show_access_token').change(function(){
+		jQuery('.cff-access-token-hidden').fadeToggle();
 	});
+
 
 	//Is this a page, group or profile?
 	var cff_page_type = jQuery('.cff-page-type select').val(),

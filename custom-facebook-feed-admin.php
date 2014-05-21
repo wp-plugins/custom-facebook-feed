@@ -35,6 +35,7 @@ add_action('admin_menu', 'cff_styling_menu');
 function cff_settings_page() {
     //Declare variables for fields
     $hidden_field_name      = 'cff_submit_hidden';
+    $show_access_token      = 'cff_show_access_token';
     $access_token           = 'cff_access_token';
     $page_id                = 'cff_page_id';
     $cff_page_type          = 'cff_page_type';
@@ -45,6 +46,7 @@ function cff_settings_page() {
     $cff_cache_time_unit    = 'cff_cache_time_unit';
     $cff_locale             = 'cff_locale';
     // Read in existing option value from database
+    $show_access_token_val = get_option( $show_access_token );
     $access_token_val = get_option( $access_token );
     $page_id_val = get_option( $page_id );
     $cff_page_type_val = get_option( $cff_page_type, 'page' );
@@ -57,6 +59,7 @@ function cff_settings_page() {
     // See if the user has posted us some information. If they did, this hidden field will be set to 'Y'.
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
         // Read their posted value
+        $show_access_token_val = $_POST[ $show_access_token ];
         $access_token_val = $_POST[ $access_token ];
         $page_id_val = $_POST[ $page_id ];
         $cff_page_type_val = $_POST[ $cff_page_type ];
@@ -67,6 +70,7 @@ function cff_settings_page() {
         $cff_cache_time_unit_val = $_POST[ $cff_cache_time_unit ];
         $cff_locale_val = $_POST[ $cff_locale ];
         // Save the posted value in the database
+        update_option( $show_access_token, $show_access_token_val );
         update_option( $access_token, $access_token_val );
         update_option( $page_id, $page_id_val );
         update_option( $cff_page_type, $cff_page_type_val );
@@ -143,16 +147,21 @@ function cff_settings_page() {
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row" style="padding-bottom: 10px;"><?php _e('Facebook Access Token <i style="font-weight: normal; font-size: 12px;">(Optional)</i>'); ?></th>
+                        <th scope="row" style="padding-bottom: 10px;"><?php _e('Enter my own Access Token <i style="font-weight: normal; font-size: 12px;">This is Optional</i>'); ?></th>
+                        <td>
+                            <input name="cff_show_access_token" type="checkbox" id="cff_show_access_token" <?php if($show_access_token_val == true) echo "checked"; ?> />&nbsp;<a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e("What is this?"); ?></a>
+                            <p class="cff-tooltip cff-more-info"><?php _e("A Facebook Access Token is not required to use this plugin, but if you have your own that you'd like to use then you can check this box and enter it here. To get your own Access Token you can follow these <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>"); ?>.</p>
+                        </td>
+                    </tr>
+
+                    <tr valign="top" class="cff-access-token-hidden">
+                        <th scope="row" style="padding-bottom: 10px;"><?php _e('Facebook Access Token'); ?></th>
                         <td>
                             <input name="cff_access_token" id="cff_access_token" type="text" value="<?php esc_attr_e( $access_token_val ); ?>" size="45" />
-                            &nbsp;<a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e("What is this?"); ?></a>
 
                             <div class="cff-notice cff-profile-error cff-access-token">
                                 <?php _e("<p>This doesn't appear to be an Access Token. Please be sure that you didn't enter your App Secret instead of your Access Token.<br />Your App ID and App Secret are used to obtain your Access Token; simply paste them into the fields in the last step of the <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>Access Token instructions</a> and click '<b>Get my Access Token</b>'.</p>"); ?>
                             </div>
-
-                            <p class="cff-tooltip cff-more-info"><?php _e("This is optional. If you have your own Facebook Access Token then you can enter it here. To get your own Access Token you can follow these <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>"); ?>.</p>
                         </td>
                     </tr>
                 </tbody>
@@ -2443,7 +2452,7 @@ function cff_style_page() {
 } //End Style_Page
 //Enqueue admin styles
 function cff_admin_style() {
-        wp_register_style( 'custom_wp_admin_css', plugin_dir_url( __FILE__ ) . 'css/cff-admin-style.css?4', false, '1.0.0' );
+        wp_register_style( 'custom_wp_admin_css', plugin_dir_url( __FILE__ ) . 'css/cff-admin-style.css?5', false, '1.0.0' );
         wp_enqueue_style( 'custom_wp_admin_css' );
         wp_enqueue_style( 'cff-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), '4.0.3' );
         wp_enqueue_style( 'wp-color-picker' );
@@ -2451,7 +2460,7 @@ function cff_admin_style() {
 add_action( 'admin_enqueue_scripts', 'cff_admin_style' );
 //Enqueue admin scripts
 function cff_admin_scripts() {
-    wp_enqueue_script( 'cff_admin_script', plugin_dir_url( __FILE__ ) . 'js/cff-admin-scripts.js?4' );
+    wp_enqueue_script( 'cff_admin_script', plugin_dir_url( __FILE__ ) . 'js/cff-admin-scripts.js?5' );
     if( !wp_script_is('jquery-ui-draggable') ) { 
         wp_enqueue_script(
             array(
