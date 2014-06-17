@@ -229,3 +229,8 @@
 #cff-admin .cff-access-token-hidden{
 	display: none;
 }
+
+/* Add Facebook dashicon to CFF admin menu */
+#toplevel_page_cff-top .toplevel_page_cff-top .wp-menu-image:before{
+	content: "\f305";
+}

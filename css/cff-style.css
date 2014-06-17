@@ -221,8 +221,8 @@
 .cff-likebox{
   float: left;
   width: 100%;
-  /*margin-left: -10px;*/
   position: relative;
+  margin-left: -10px;
 }
 .cff-likebox .fb_iframe_widget{
   width: 100%;

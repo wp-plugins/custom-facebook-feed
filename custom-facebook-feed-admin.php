@@ -324,8 +324,8 @@ function cff_settings_page() {
         <input type="text" value="[custom-facebook-feed]" size="22" readonly="readonly" onclick="this.focus();this.select()" title="<?php _e('To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac).'); ?>" />
         <hr />
         <h3><?php _e('Customizing your Feed'); ?></h3>
-        <p><?php _e("Use the <a href='admin.php?page=cff-style'>Customize</a> page to customize your feed. If you're displaying multiple feeds then you can override your settings directly in the shortcode like so:"); ?></p>
-        <p>[custom-facebook-feed <b><span style='color: green;'>id=some-other-page-id num=3 height=500px</span></b>]</p>
+        <p><?php _e("Use the <a href='admin.php?page=cff-style'>Customize</a> page to customize your feed. If you're displaying multiple feeds then you can override your settings and customizations by using options directly in the shortcode, like so:"); ?></p>
+        <p>[custom-facebook-feed id=some-other-page-id num=3 height=500px]</p>
         <p><a href="http://smashballoon.com/custom-facebook-feed/docs/shortcodes/" target="_blank"><?php _e('See a full list of shortcode options'); ?></a></p>
 
         <br />
@@ -491,6 +491,7 @@ function cff_style_page() {
         'cff_custom_js'             => '',
         'cff_title_link'            => false,
         'cff_post_tags'             => true,
+        'cff_link_hashtags'         => true,
         'cff_event_title_link'      => false,
         'cff_video_action'          => 'post',
         'cff_sep_color'             => '',
@@ -682,6 +683,7 @@ function cff_style_page() {
     $cff_custom_js = $options[ 'cff_custom_js' ];
     $cff_title_link = $options[ 'cff_title_link' ];
     $cff_post_tags = $options[ 'cff_post_tags' ];
+    $cff_link_hashtags = $options[ 'cff_link_hashtags' ];
     $cff_event_title_link = $options[ 'cff_event_title_link' ];
     $cff_video_action = $options[ 'cff_video_action' ];
     $cff_sep_color = $options[ 'cff_sep_color' ];
@@ -788,6 +790,8 @@ function cff_style_page() {
 
             (isset($_POST[ 'cff_title_link' ]) ) ? $cff_title_link = $_POST[ 'cff_title_link' ] : $cff_title_link = '';
             (isset($_POST[ 'cff_post_tags' ]) ) ? $cff_post_tags = $_POST[ 'cff_post_tags' ] : $cff_post_tags = '';
+            (isset($_POST[ 'cff_link_hashtags' ]) ) ? $cff_link_hashtags = $_POST[ 'cff_link_hashtags' ] : $cff_link_hashtags = '';
+
             $cff_body_size = $_POST[ 'cff_body_size' ];
             if (isset($_POST[ 'cff_body_weight' ]) ) $cff_body_weight = $_POST[ 'cff_body_weight' ];
             if (isset($_POST[ 'cff_body_color' ]) ) $cff_body_color = $_POST[ 'cff_body_color' ];
@@ -879,6 +883,7 @@ function cff_style_page() {
             $options[ 'cff_posttext_link_color' ] = $cff_posttext_link_color;
             $options[ 'cff_title_link' ] = $cff_title_link;
             $options[ 'cff_post_tags' ] = $cff_post_tags;
+            $options[ 'cff_link_hashtags' ] = $cff_link_hashtags;
             $options[ 'cff_body_size' ] = $cff_body_size;
             $options[ 'cff_body_weight' ] = $cff_body_weight;
             $options[ 'cff_body_color' ] = $cff_body_color;
@@ -1554,6 +1559,13 @@ function cff_style_page() {
                                         <input type="checkbox" name="cff_post_tags" id="cff_post_tags" <?php if($cff_post_tags == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
                                         <a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('What are Post Tags?'); ?></a>
                                         <p class="cff-tooltip cff-more-info"><?php _e("When you tag another Facebook page or user in your post using the @ symbol it creates a post tag, which is a link to either that Facebook page or user profile."); ?></p>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <th><label for="cff_link_hashtags" class="bump-left"><?php _e('Link Hashtags?'); ?></label></th>
+                                    <td>
+                                        <input type="checkbox" name="cff_link_hashtags" id="cff_link_hashtags" <?php if($cff_link_hashtags == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
                                     </td>
                                 </tr>
                                 
