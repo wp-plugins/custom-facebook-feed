@@ -59,7 +59,7 @@ jQuery(document).ready(function() {
 		//Link hashtags
 		if(cfflinkhashtags == 'true'){
 			var str = $self.find('.cff-text').html(),
-				regex = /\B#\w*[a-zA-Z]+\w*/gi,
+				regex = /(?:\s|^)(?:#(?!\d+(?:\s|$)))(\w+)(?=\s|$)/gi,
 				linkcolor = $self.find('.cff-text').attr('rel');
 
 			function replacer(hash){
