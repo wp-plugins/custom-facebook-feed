@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social
 Requires at least: 3.0
 Tested up to: 3.9.1
-Stable tag: 1.9.9.1
+Stable tag: 1.9.9.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -269,6 +269,9 @@ Credit [iMarketing Factory](http://www.imarketingfactory.com/facebook/ "The Impo
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+= 1.9.9.2 =
+* Fix: Removed a couple of stray PHP notices
+
 = 1.9.9.1 =
 * Fix: Fixed an occasional issue with hashtags in inline CSS inadvertently being linked
 

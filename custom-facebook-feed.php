@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.9.9.1
+Version: 1.9.9.2
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -969,6 +969,7 @@ function display_cff($atts) {
                         isset( $event_object->start_time ) ? $event_time = $event_object->start_time : $event_time = '';
                         //If timezone migration is enabled then remove last 5 characters
                         if ( strlen($event_time) == 24 ) $event_time = substr($event_time, 0, -5);
+                        $cff_event_date = '';
                         if (!empty($event_time)) $cff_event_date = '<p class="cff-date" '.$cff_event_date_styles.'>' . cff_eventdate(strtotime($event_time), $cff_event_date_formatting, $cff_event_date_custom) . '</p>';
                         //EVENT
                         //Display the event details
@@ -1617,7 +1618,7 @@ add_action( 'wp_footer', 'cff_js' );
 function cff_js() {
     $options = get_option('cff_style_settings');
     $cff_custom_js = isset($options[ 'cff_custom_js' ]) ? $options[ 'cff_custom_js' ] : '';
-    $cff_link_hashtags = $options[ 'cff_link_hashtags' ];
+    isset($options[ 'cff_link_hashtags' ]) ? $cff_link_hashtags = $options[ 'cff_link_hashtags' ] : $cff_link_hashtags = 'true';
     ($cff_link_hashtags == 'true' || $cff_link_hashtags == 'on') ? $cff_link_hashtags = 'true' : $cff_link_hashtags = 'false';
 
     echo '<!-- Custom Facebook Feed JS -->';
@@ -1960,5 +1961,5 @@ function cff_autolink_email($text, $tagfill=''){
 
 
 //Comment out the line below to view errors
-// error_reporting(0);
+error_reporting(0);
 ?>
