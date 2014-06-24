@@ -1961,5 +1961,5 @@ function cff_autolink_email($text, $tagfill=''){
 
 
 //Comment out the line below to view errors
-error_reporting(0);
+//error_reporting(0);
 ?>
