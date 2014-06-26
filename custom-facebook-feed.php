@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.9.9.2
+Version: 1.9.9.3
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -1141,6 +1141,7 @@ function display_cff($atts) {
     if ($ajax_theme) {
         $cff_link_hashtags = $atts['linkhashtags'];
         ($cff_link_hashtags == 'true' || $cff_link_hashtags == 'on') ? $cff_link_hashtags = 'true' : $cff_link_hashtags = 'false';
+        if ($cff_title_link) $cff_link_hashtags = 'false';
         $cff_content .= '<script type="text/javascript">var cfflinkhashtags = "' . $cff_link_hashtags . '";</script>';
         $cff_content .= '<script type="text/javascript" src="' . plugins_url( '/js/cff-scripts.js?8' , __FILE__ ) . '"></script>';
     }
@@ -1618,9 +1619,17 @@ add_action( 'wp_footer', 'cff_js' );
 function cff_js() {
     $options = get_option('cff_style_settings');
     $cff_custom_js = isset($options[ 'cff_custom_js' ]) ? $options[ 'cff_custom_js' ] : '';
+
+    //Link hashtags?
     isset($options[ 'cff_link_hashtags' ]) ? $cff_link_hashtags = $options[ 'cff_link_hashtags' ] : $cff_link_hashtags = 'true';
     ($cff_link_hashtags == 'true' || $cff_link_hashtags == 'on') ? $cff_link_hashtags = 'true' : $cff_link_hashtags = 'false';
 
+    //If linking the post text then don't link the hashtags
+    isset($options[ 'cff_title_link' ]) ? $cff_title_link = $options[ 'cff_title_link' ] : $cff_title_link = false;
+    ($cff_title_link == 'true' || $cff_title_link == 'on') ? $cff_title_link = true : $cff_title_link = false;
+    if ($cff_title_link) $cff_link_hashtags = 'false';
+
+    
     echo '<!-- Custom Facebook Feed JS -->';
     echo "\r\n";
     echo '<script type="text/javascript">';
