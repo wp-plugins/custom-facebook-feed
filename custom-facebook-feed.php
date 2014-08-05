@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 1.9.9.3
+Version: 2.0
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -68,6 +68,10 @@ function display_cff($atts) {
         'layout' => isset($options[ 'cff_preset_layout' ]) ? $options[ 'cff_preset_layout' ] : '',
         'include' => $include_string,
         'exclude' => '',
+        //Post Style
+        'postbgcolor' => isset($options[ 'cff_post_bg_color' ]) ? $options[ 'cff_post_bg_color' ] : '',
+        'postcorners' => isset($options[ 'cff_post_rounded' ]) ? $options[ 'cff_post_rounded' ] : '',
+
         //Typography
         'textformat' => isset($options[ 'cff_title_format' ]) ? $options[ 'cff_title_format' ] : '',
         'textsize' => isset($options[ 'cff_title_size' ]) ? $options[ 'cff_title_size' ] : '',
@@ -167,6 +171,7 @@ function display_cff($atts) {
         'facebooklinktext' => isset($options[ 'cff_facebook_link_text' ]) ? $options[ 'cff_facebook_link_text' ] : '',
         'photostext' => isset($options[ 'cff_translate_photos_text' ]) ? $options[ 'cff_translate_photos_text' ] : ''
     ), $atts);
+
     /********** GENERAL **********/
     $cff_page_type = $atts[ 'pagetype' ];
     ($cff_page_type == 'group') ? $cff_is_group = true : $cff_is_group = false;
@@ -454,10 +459,20 @@ function display_cff($atts) {
         //Need to set a color otherwise the CSS is invalid
         $cff_sep_color = 'fff';
     }
+
+    $cff_post_bg_color = $atts['postbgcolor'];
+    $cff_post_rounded = $atts['postcorners'];
+    ($cff_post_bg_color !== '#' && $cff_post_bg_color !== '') ? $cff_post_bg_color_check = true : $cff_post_bg_color_check = false;
+    ($cff_sep_color !== '#' && $cff_sep_color !== '') ? $cff_sep_color_check = true : $cff_sep_color_check = false;
+    
     //CFF item styles
-    $cff_item_styles = 'style="';
-    $cff_item_styles .= 'border-bottom: ' . $cff_sep_size . 'px solid #' . str_replace('#', '', $cff_sep_color) . '; ';
-    $cff_item_styles .= '"';
+    if( $cff_sep_color_check || $cff_post_bg_color_check ){
+        $cff_item_styles = 'style="';
+        if($cff_sep_color_check && !$cff_post_bg_color_check) $cff_item_styles .= 'border-bottom: ' . $cff_sep_size . 'px solid #' . str_replace('#', '', $cff_sep_color) . '; ';
+        if($cff_post_bg_color_check) $cff_item_styles .= 'background-color: ' . $cff_post_bg_color . '; ';
+        if(isset($cff_post_rounded)) $cff_item_styles .= '-webkit-border-radius: ' . $cff_post_rounded . 'px; -moz-border-radius: ' . $cff_post_rounded . 'px; border-radius: ' . $cff_post_rounded . 'px; ';
+        $cff_item_styles .= '"';
+    }
    
     //Text limits
     $title_limit = $atts['textlength'];
@@ -485,8 +500,12 @@ function display_cff($atts) {
     $show_posts = $atts['num'];
     if (empty($show_posts)) $show_posts = 25;
     if ( $show_posts == 0 || $show_posts == 'undefined' ) $show_posts = 25;
+    
+    //If the 'Enter my own Access Token' box is unchecked then don't use the user's access token, even if there's one in the field
+    get_option('cff_show_access_token') ? $cff_show_access_token = true : $cff_show_access_token = false;
+
     //If there's no Access Token then use the default
-    if ($access_token == '') $access_token = '1436737606570258|MGh1BX4_b_D9HzJtKe702cwMRPI';
+    if ($access_token == '' || !$cff_show_access_token) $access_token = '1436737606570258|MGh1BX4_b_D9HzJtKe702cwMRPI';
     //Check whether a Page ID has been defined
     if ($page_id == '') {
         echo "Please enter the Page ID of the Facebook feed you'd like to display. You can do this in either the Custom Facebook Feed plugin settings or in the shortcode itself. For example, [custom-facebook-feed id=YOUR_PAGE_ID_HERE].<br /><br />";
@@ -624,8 +643,13 @@ function display_cff($atts) {
             if ( false === ( $posts_json = get_transient( $transient_name ) ) || $posts_json === null ) {
                 //Get the contents of the Facebook page
                 $posts_json = cff_fetchUrl($cff_posts_json_url);
-                //Cache the JSON
-                set_transient( $transient_name, $posts_json, $cache_seconds );
+
+                //Check whether any data is returned from the API. If it isn't then don't cache the error response and instead keep checking the API on every page load until data is returned.
+                $FBdata = json_decode($posts_json);
+                if( !empty($FBdata->data) ) {
+                    //Cache the JSON
+                    set_transient( $transient_name, $posts_json, $cache_seconds );
+                }
             } else {
                 $posts_json = get_transient( $transient_name );
                 //If we can't find the transient then fall back to just getting the json from the api
@@ -635,10 +659,16 @@ function display_cff($atts) {
             $posts_json = cff_fetchUrl($cff_posts_json_url);
         }
 
-
         
         //Interpret data with JSON
         $FBdata = json_decode($posts_json);
+
+        //If there's no data then show a pretty error message
+        if( empty($FBdata->data) ) {
+            $cff_content .= 'Unable to display Facebook posts. For solutions, please refer to the 1st question on our <a href="https://smashballoon.com/custom-facebook-feed/faq/troubleshooting/">Troubleshooting page</a>.';
+            return $cff_content;
+        }
+
         //***STARTS POSTS LOOP***
         foreach ($FBdata->data as $news )
         {
@@ -751,15 +781,31 @@ function display_cff($atts) {
                     }
                 }
 
+                //DATE
+                $cff_date_formatting = $atts[ 'dateformat' ];
+                $cff_date_custom = $atts[ 'datecustom' ];
+
+                $post_time = $news->created_time;
+                $cff_date = '<p class="cff-date" '.$cff_date_styles.'>'. $cff_date_before . ' ' . cff_getdate(strtotime($post_time), $cff_date_formatting, $cff_date_custom) . ' ' . $cff_date_after;
+                if($cff_date_position == 'below') $cff_date .= '<span class="cff-date-dot">&nbsp;&middot;&nbsp;&nbsp;</span>';
+                $cff_date .= '</p>';
+                
                 //POST AUTHOR
                 $cff_author = '<div class="cff-author"><a href="https://facebook.com/' . $news->from->id . '" '.$target.' title="'.$news->from->name.' on Facebook" '.$cff_author_styles.'>';
-
                 //Set the author image as a variable. If it already exists then don't query the api for it again.
                 $cff_author_img_var = '$cff_author_img_' . $news->from->id;
                 if ( !isset($$cff_author_img_var) ) $$cff_author_img_var = 'https://graph.facebook.com/' . $news->from->id . '/picture?type=square';
                 $cff_author .= '<img src="'.$$cff_author_img_var.'" title="'.$news->from->name.'" alt="'.$news->from->name.'" width=50 height=50>';
-                $cff_author .= '<span class="cff-page-name">'.$news->from->name.'</span>';
+                
+                if($cff_date_position !== 'above' && $cff_date_position !== 'below'){
+                    $cff_author .= '<p class="cff-page-name cff-author-date">'.$news->from->name.'</p>';
+                    $cff_author .= $cff_date;
+                } else {
+                    $cff_author .= '<span class="cff-page-name">'.$news->from->name.'</span>';
+                }
+
                 $cff_author .= '</a></div>';
+
 
                 //POST TEXT
                 $cff_translate_photos_text = $atts['photostext'];
@@ -891,7 +937,7 @@ function display_cff($atts) {
                     if (!empty($body_limit)) {
                         if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
                     }
-                    $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_autolink( htmlspecialchars($description_text) )  . '</span></p>';
+                    $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_autolink( htmlspecialchars($description_text) )  . ' </span></p>';
 
                     //If the post text and description/caption are the same then don't show the description
                     if($post_text == $description_text) $cff_description = '';
@@ -924,12 +970,6 @@ function display_cff($atts) {
                     $cff_shared_link .= '</div>';
                 }
 
-                //DATE
-                $cff_date_formatting = $atts[ 'dateformat' ];
-                $cff_date_custom = $atts[ 'datecustom' ];
-
-                $post_time = $news->created_time;
-                $cff_date = '<p class="cff-date" '.$cff_date_styles.'>'. $cff_date_before . ' ' . cff_getdate(strtotime($post_time), $cff_date_formatting, $cff_date_custom) . ' ' . $cff_date_after . '</p>';
                 //EVENT
                 $cff_event = '';
                 if ($cff_show_event_title || $cff_show_event_details) {
@@ -965,12 +1005,15 @@ function display_cff($atts) {
 
                         //Interpret data with JSON
                         $event_object = json_decode($event_json);
+
                         //Event date
-                        isset( $event_object->start_time ) ? $event_time = $event_object->start_time : $event_time = '';
+                        $event_time = $event_object->start_time;
+                        isset($event_object->end_time) ? $event_end_time = ' - ' . cff_eventdate(strtotime($event_object->end_time), $cff_event_date_formatting, $cff_event_date_custom) : $event_end_time = '';
                         //If timezone migration is enabled then remove last 5 characters
                         if ( strlen($event_time) == 24 ) $event_time = substr($event_time, 0, -5);
-                        $cff_event_date = '';
-                        if (!empty($event_time)) $cff_event_date = '<p class="cff-date" '.$cff_event_date_styles.'>' . cff_eventdate(strtotime($event_time), $cff_event_date_formatting, $cff_event_date_custom) . '</p>';
+                        if (!empty($event_time)) $cff_event_date = '<p class="cff-date" '.$cff_event_date_styles.'>' . cff_eventdate(strtotime($event_time), $cff_event_date_formatting, $cff_event_date_custom) . $event_end_time.'</p>';
+
+
                         //EVENT
                         //Display the event details
                         $cff_event .= '<div class="cff-details">';
@@ -1078,6 +1121,7 @@ function display_cff($atts) {
                 if ($cff_post_type == 'status') $cff_post_item .= 'cff-status-post';
                 if ($cff_post_type == 'offer') $cff_post_item .= 'cff-offer-post';
                 if ($cff_album) $cff_post_item .= ' cff-album';
+                if ($cff_post_bg_color_check) $cff_post_item .= ' cff-box';
                 $cff_post_item .=  ' author-'. cff_to_slug($news->from->name) .'" id="'. $news->id .'" ' . $cff_item_styles . '>';
                 
                     //POST AUTHOR
@@ -1143,7 +1187,7 @@ function display_cff($atts) {
         ($cff_link_hashtags == 'true' || $cff_link_hashtags == 'on') ? $cff_link_hashtags = 'true' : $cff_link_hashtags = 'false';
         if ($cff_title_link) $cff_link_hashtags = 'false';
         $cff_content .= '<script type="text/javascript">var cfflinkhashtags = "' . $cff_link_hashtags . '";</script>';
-        $cff_content .= '<script type="text/javascript" src="' . plugins_url( '/js/cff-scripts.js?8' , __FILE__ ) . '"></script>';
+        $cff_content .= '<script type="text/javascript" src="' . plugins_url( '/js/cff-scripts.js?10' , __FILE__ ) . '"></script>';
     }
 
     $cff_content .= '</div>';

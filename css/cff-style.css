@@ -29,6 +29,15 @@
 #cff .cff-item:first-child{
   padding-top: 0;
 }
+#cff .cff-item.cff-box,
+#cff .cff-item.cff-box:first-child{
+  padding: 15px;
+  margin: 5px 0;
+  border: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 /* Feed Header */
 .cff-header{
   width: 100%;
@@ -115,6 +124,26 @@
 #cff .cff-author a{
   text-decoration: none;
 }
+
+/* Author Date */
+#cff .cff-author .cff-page-name.cff-author-date,
+#cff .cff-author .cff-date{
+  float: none;
+  width: auto;
+  clear: none;
+  margin: 0;
+  font-weight: bold;
+}
+#cff .cff-author .cff-date{
+  float: none;
+  color: #9197a3;
+  font-weight: normal;
+  margin-top: 3px;
+}
+#cff .cff-author .cff-page-name.cff-author-date{
+  padding-top: 5px;
+}
+
 /*************/
 /*** MEDIA ***/
 /*************/
@@ -173,7 +202,7 @@
   clear: none;
   width: 72%;
   margin-left: 3%;
-  padding: 5px 0 10px 0;
+  padding: 5px 0;
 }
 #cff .cff-link-caption{
   font-size: 12px;
@@ -210,9 +239,9 @@
 /* View on Facebook / View Link text */
 #cff .cff-viewpost-link,
 #cff .cff-viewpost-facebook{
-  float: right;
+  float: left;
   clear: none;
-  padding: 4px 0 0 4px;
+  padding: 4px 0 0 0;
   margin: 0;
   font-size: 11px;
 }

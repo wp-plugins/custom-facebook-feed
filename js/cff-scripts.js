@@ -57,21 +57,24 @@ jQuery(document).ready(function() {
 		}
 
 		//Link hashtags
-		if(cfflinkhashtags == 'true'){
-			var str = $self.find('.cff-text').html(),
-				descstr = $self.find('.cff-post-desc').html(),
-				regex = /(?:\s|^)(?:#(?!\d+(?:\s|$)))(\w+)(?=\s|$)/gi,
-				linkcolor = $self.find('.cff-text').attr('rel');
+		var cffTextStr = $self.find('.cff-text').html(),
+			cffDescStr = $self.find('.cff-post-desc').html(),
+			regex = /(?:\s|^)(?:#(?!\d+(?:\s|$)))(\w+)(?=\s|$)/gi,
+			linkcolor = $self.find('.cff-text').attr('rel');
 
-			function replacer(hash){
-				var replacementString = jQuery.trim(hash);
-				return ' <a href="https://www.facebook.com/hashtag/'+ replacementString.substring(1) +'" target="_blank" style="color: #' + linkcolor + '">' + replacementString + '</a>';
-			}
-			//Replace hashtags in text
-			$self.find('.cff-text').html( str.replace( regex , replacer ) );
-			//Replace hashtags in desc
-			if( $self.find('.cff-post-desc').length ) $self.find('.cff-post-desc').html( descstr.replace( regex , replacer ) );
+		function replacer(hash){
+			var replacementString = jQuery.trim(hash);
+			return ' <a href="https://www.facebook.com/hashtag/'+ replacementString.substring(1) +'" target="_blank" style="color: #' + linkcolor + '">' + replacementString + '</a>';
 		}
+
+		if(cfflinkhashtags == 'true'){
+			//Replace hashtags in text
+			var $cffText = $self.find('.cff-text');
+			if($cffText.length > 0) $cffText.html( cffTextStr.replace( regex , replacer ) );
+		}
+
+		//Replace hashtags in desc
+		if( $self.find('.cff-post-desc').length > 0 ) $self.find('.cff-post-desc').html( cffDescStr.replace( regex , replacer ) );
 		
 	});
 });
