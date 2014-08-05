@@ -277,6 +277,7 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 * New: If your Facebook event has an end date then it will now be displayed after the start date
 * New: Hashtags in the post descriptions are now also linked
 * New: Tested and approved for the upcoming WordPress 4.0 release
+* Tweak: Moved the 'View on Facebook' link to the left side
 * Tweak: Added error handling to improve user experience
 * Tweak: If the Facebook API can't be reached by the plugin for some reason then it no longer caches the empty response and instead keeps trying to retrieve the posts from Facebook until it is successful
 * Fix: Removed some redundant inline CSS used on the posts
