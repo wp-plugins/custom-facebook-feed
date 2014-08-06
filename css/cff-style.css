@@ -301,3 +301,13 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+
+#cff .cff-error-msg{
+  font-size: 12px;
+  font-family: sans-serif;
+}
+#cff #cff-error-reason{
+  display: none;
+  padding: 5px 0 0 0;
+  clear: both;
+}

@@ -665,7 +665,24 @@ function display_cff($atts) {
 
         //If there's no data then show a pretty error message
         if( empty($FBdata->data) ) {
-            $cff_content .= 'Unable to display Facebook posts. For solutions, please refer to the 1st question on our <a href="https://smashballoon.com/custom-facebook-feed/faq/troubleshooting/">Troubleshooting page</a>.';
+            $cff_content .= '<div class="cff-error-msg"><p>Unable to display Facebook posts.<br/><a href="javascript:void(0);" id="cff-show-error" onclick="showError()">Show error</a>';
+            $cff_content .= '<script type="text/javascript">function showError() { document.getElementById("cff-error-reason").style.display = "block"; document.getElementById("cff-show-error").style.display = "none"; }</script>';
+            $cff_content .= '</p><div id="cff-error-reason">';
+            
+            if( isset($FBdata->error->message) ) $cff_content .= 'Error: ' . $FBdata->error->message;
+            if( isset($FBdata->error->type) ) $cff_content .= '<br />Type: ' . $FBdata->error->type;
+            if( isset($FBdata->error->code) ) $cff_content .= '<br />Code: ' . $FBdata->error->code;
+            if( isset($FBdata->error->error_subcode) ) $cff_content .= '<br />Subcode: ' . $FBdata->error->error_subcode;
+
+            if( isset($FBdata->error_msg) ) $cff_content .= 'Error: ' . $FBdata->error_msg;
+            if( isset($FBdata->error_code) ) $cff_content .= '<br />Code: ' . $FBdata->error_code;
+            
+            if($FBdata == null) $cff_content .= 'Error: Server configuration issue';
+
+            if( empty($FBdata->error) && empty($FBdata->error_msg) && $FBdata !== null ) $cff_content .= 'Error: No posts available for this Facebook ID';
+
+            $cff_content .= '<br />Please refer to our <a href="https://smashballoon.com/custom-facebook-feed/docs/errors/" target="_blank">Error Message Reference</a>.</div>';
+
             return $cff_content;
         }
 
