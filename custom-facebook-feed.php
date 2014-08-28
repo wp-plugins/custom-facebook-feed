@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 2.0.1
+Version: 2.1
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -465,6 +465,7 @@ function display_cff($atts) {
     ($cff_post_bg_color !== '#' && $cff_post_bg_color !== '') ? $cff_post_bg_color_check = true : $cff_post_bg_color_check = false;
     ($cff_sep_color !== '#' && $cff_sep_color !== '') ? $cff_sep_color_check = true : $cff_sep_color_check = false;
     
+    $cff_item_styles = '';
     //CFF item styles
     if( $cff_sep_color_check || $cff_post_bg_color_check ){
         $cff_item_styles = 'style="';
@@ -571,10 +572,12 @@ function display_cff($atts) {
     if ( !isset($cff_like_box_faces) || empty($cff_like_box_faces) ) $cff_like_box_faces = 'false';
 
     //Set like box variable
+    isset( $options[ 'cff_app_id' ] ) ? $cff_app_id = $options[ 'cff_app_id' ] : $cff_app_id = '';
+    ( isset($cff_app_id) && !empty($cff_app_id) ) ? $cff_like_box_params = '&appId=' .$cff_app_id : $cff_like_box_params = '';
     $like_box = '<div class="cff-likebox';
     if ($cff_like_box_outside) $like_box .= ' cff-outside';
     $like_box .= ($cff_like_box_position == 'top') ? ' top' : ' bottom';
-    $like_box .= '" ' . $cff_likebox_styles . '><script src="https://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" show_faces="'.$cff_like_box_faces.'" stream="false" header="false" colorscheme="'. $cff_like_box_colorscheme .'" show_border="'. $cff_like_box_border .'" data-height="'.$cff_likebox_height.'"></fb:like-box></div>';
+    $like_box .= '" ' . $cff_likebox_styles . '><script src="https://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1 '.$cff_like_box_params.'"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" show_faces="'.$cff_like_box_faces.'" stream="false" header="false" colorscheme="'. $cff_like_box_colorscheme .'" show_border="'. $cff_like_box_border .'" data-height="'.$cff_likebox_height.'"></fb:like-box><div id="fb-root"></div></div>';
     //Don't show like box if it's a group
     if($cff_is_group) $like_box = '';
 
@@ -665,8 +668,8 @@ function display_cff($atts) {
 
         //If there's no data then show a pretty error message
         if( empty($FBdata->data) ) {
-            $cff_content .= '<div class="cff-error-msg"><p>Unable to display Facebook posts.<br/><a href="javascript:void(0);" id="cff-show-error" onclick="showError()">Show error</a>';
-            $cff_content .= '<script type="text/javascript">function showError() { document.getElementById("cff-error-reason").style.display = "block"; document.getElementById("cff-show-error").style.display = "none"; }</script>';
+            $cff_content .= '<div class="cff-error-msg"><p>Unable to display Facebook posts.<br/><a href="javascript:void(0);" id="cff-show-error" onclick="cffShowError()">Show error</a>';
+            $cff_content .= '<script type="text/javascript">function cffShowError() { document.getElementById("cff-error-reason").style.display = "block"; document.getElementById("cff-show-error").style.display = "none"; }</script>';
             $cff_content .= '</p><div id="cff-error-reason">';
             
             if( isset($FBdata->error->message) ) $cff_content .= 'Error: ' . $FBdata->error->message;
@@ -804,24 +807,29 @@ function display_cff($atts) {
 
                 $post_time = $news->created_time;
                 $cff_date = '<p class="cff-date" '.$cff_date_styles.'>'. $cff_date_before . ' ' . cff_getdate(strtotime($post_time), $cff_date_formatting, $cff_date_custom) . ' ' . $cff_date_after;
-                if($cff_date_position == 'below') $cff_date .= '<span class="cff-date-dot">&nbsp;&middot;&nbsp;&nbsp;</span>';
+                if($cff_date_position == 'below' || (!$cff_show_author && $cff_date_position == 'author') ) $cff_date .= '<span class="cff-date-dot">&nbsp;&middot;&nbsp;&nbsp;</span>';
                 $cff_date .= '</p>';
                 
                 //POST AUTHOR
-                $cff_author = '<div class="cff-author"><a href="https://facebook.com/' . $news->from->id . '" '.$target.' title="'.$news->from->name.' on Facebook" '.$cff_author_styles.'>';
-                //Set the author image as a variable. If it already exists then don't query the api for it again.
-                $cff_author_img_var = '$cff_author_img_' . $news->from->id;
-                if ( !isset($$cff_author_img_var) ) $$cff_author_img_var = 'https://graph.facebook.com/' . $news->from->id . '/picture?type=square';
-                $cff_author .= '<img src="'.$$cff_author_img_var.'" title="'.$news->from->name.'" alt="'.$news->from->name.'" width=50 height=50>';
+                $cff_author = '<div class="cff-author">';
                 
+                //Author text
+                $cff_author .= '<a href="https://facebook.com/' . $news->from->id . '" '.$target.' title="'.$news->from->name.' on Facebook" '.$cff_author_styles.'><div class="cff-author-text">';
                 if($cff_date_position !== 'above' && $cff_date_position !== 'below'){
                     $cff_author .= '<p class="cff-page-name cff-author-date">'.$news->from->name.'</p>';
                     $cff_author .= $cff_date;
                 } else {
                     $cff_author .= '<span class="cff-page-name">'.$news->from->name.'</span>';
                 }
+                $cff_author .= '</div>';
 
-                $cff_author .= '</a></div>';
+                //Author image
+                //Set the author image as a variable. If it already exists then don't query the api for it again.
+                $cff_author_img_var = '$cff_author_img_' . $news->from->id;
+                if ( !isset($$cff_author_img_var) ) $$cff_author_img_var = 'https://graph.facebook.com/' . $news->from->id . '/picture?type=square';
+                $cff_author .= '<div class="cff-author-img"><img src="'.$$cff_author_img_var.'" title="'.$news->from->name.'" alt="'.$news->from->name.'" width=40 height=40></div>';
+
+                $cff_author .= '</a></div>'; //End .cff-author
 
 
                 //POST TEXT
@@ -829,7 +837,7 @@ function display_cff($atts) {
                 if (!isset($cff_translate_photos_text) || empty($cff_translate_photos_text)) $cff_translate_photos_text = 'photos';
                 $cff_post_text = '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
                 $cff_post_text .= '<span class="cff-text">';
-                if ($cff_title_link) $cff_post_text .= '<a class="cff-post-text-link" href="'.$link.'" '.$target.'>';
+                if ($cff_title_link) $cff_post_text .= '<a class="cff-post-text-link" '.$cff_title_styles.' href="'.$link.'" '.$target.'>';
                 //Which content should we use?
                 $cff_post_text_type = '';
                 //Use the story
@@ -1152,7 +1160,7 @@ function display_cff($atts) {
                     //LINK
                     if($cff_show_shared_links) $cff_post_item .= $cff_shared_link;
                     //DATE BELOW
-                    if ($cff_show_date && $cff_date_position == 'below') $cff_post_item .= $cff_date;
+                    if ( (!$cff_show_author && $cff_date_position == 'author') || $cff_show_date && $cff_date_position == 'below') $cff_post_item .= $cff_date;
                     //EVENT
                     if($cff_show_event_title || $cff_show_event_details) $cff_post_item .= $cff_event;
                     //VIEW ON FACEBOOK LINK
@@ -1202,9 +1210,9 @@ function display_cff($atts) {
     if ($ajax_theme) {
         $cff_link_hashtags = $atts['linkhashtags'];
         ($cff_link_hashtags == 'true' || $cff_link_hashtags == 'on') ? $cff_link_hashtags = 'true' : $cff_link_hashtags = 'false';
-        if ($cff_title_link) $cff_link_hashtags = 'false';
+        if($cff_title_link == 'true' || $cff_title_link == 'on') $cff_link_hashtags = 'false';
         $cff_content .= '<script type="text/javascript">var cfflinkhashtags = "' . $cff_link_hashtags . '";</script>';
-        $cff_content .= '<script type="text/javascript" src="' . plugins_url( '/js/cff-scripts.js?10' , __FILE__ ) . '"></script>';
+        $cff_content .= '<script type="text/javascript" src="' . plugins_url( '/js/cff-scripts.js?11' , __FILE__ ) . '"></script>';
     }
 
     $cff_content .= '</div>';
@@ -1603,7 +1611,7 @@ add_filter('widget_text', 'do_shortcode');
 add_action( 'wp_enqueue_scripts', 'cff_add_my_stylesheet' );
 function cff_add_my_stylesheet() {
     // Respects SSL, Style.css is relative to the current file
-    wp_register_style( 'cff', plugins_url('css/cff-style.css?6', __FILE__) );
+    wp_register_style( 'cff', plugins_url('css/cff-style.css?7', __FILE__) );
     wp_enqueue_style( 'cff' );
     wp_enqueue_style( 'cff-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), '4.0.3' );
 }
@@ -1611,7 +1619,7 @@ function cff_add_my_stylesheet() {
 add_action( 'wp_enqueue_scripts', 'cff_scripts_method' );
 function cff_scripts_method() {
     //Register the script to make it available
-    wp_register_script( 'cffscripts', plugins_url( '/js/cff-scripts.js?6' , __FILE__ ), array('jquery'), '1.8', true );
+    wp_register_script( 'cffscripts', plugins_url( '/js/cff-scripts.js?7' , __FILE__ ), array('jquery'), '1.9', true );
     //Enqueue it to load it onto the page
     wp_enqueue_script('cffscripts');
 }
@@ -1645,6 +1653,11 @@ function cff_uninstall()
 {
     if ( ! current_user_can( 'activate_plugins' ) )
         return;
+
+    //If the user is preserving the settings then don't delete them
+    $cff_preserve_settings = get_option('cff_preserve_settings');
+    if($cff_preserve_settings) return;
+
     //Settings
     delete_option( 'cff_show_access_token' );
     delete_option( 'cff_access_token' );
@@ -1655,6 +1668,8 @@ function cff_uninstall()
     delete_option('cff_cache_time');
     delete_option('cff_cache_time_unit');
     delete_option( 'cff_locale' );
+    delete_option( 'cff_ajax' );
+    delete_option( 'cff_preserve_settings' );
     //Style & Layout
     delete_option( 'cff_title_length' );
     delete_option( 'cff_body_length' );

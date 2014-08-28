@@ -421,7 +421,7 @@ function cff_style_page() {
         'cff_title_weight'          => 'inherit',
         'cff_title_color'           => '',
         'cff_posttext_link_color'   => '',
-        'cff_body_size'             => 'inherit',
+        'cff_body_size'             => '12',
         'cff_body_weight'           => 'inherit',
         'cff_body_color'            => '',
         'cff_link_title_format'     => 'p',
@@ -498,6 +498,7 @@ function cff_style_page() {
         'cff_link_hashtags'         => true,
         'cff_event_title_link'      => false,
         'cff_video_action'          => 'post',
+        'cff_app_id'                => '',
         'cff_sep_color'             => '',
         'cff_sep_size'              => '1',
 
@@ -668,6 +669,9 @@ function cff_style_page() {
     $cff_show_author = $options[ 'cff_show_author' ];
     $cff_class = $options[ 'cff_class' ];
     $cff_open_links = $options[ 'cff_open_links' ];
+    $cff_app_id = $options[ 'cff_app_id' ];
+    $cff_preserve_settings   = 'cff_preserve_settings';
+    $cff_preserve_settings_val = get_option( $cff_preserve_settings );
 
     //Page Header
     $cff_show_header = $options[ 'cff_show_header' ];
@@ -701,8 +705,8 @@ function cff_style_page() {
 	$cff_title_length   = 'cff_title_length';
     $cff_body_length    = 'cff_body_length';
     // Read in existing option value from database
-    $cff_title_length_val = get_option( $cff_title_length );
-    $cff_body_length_val = get_option( $cff_body_length );
+    $cff_title_length_val = get_option( $cff_title_length, '400' );
+    $cff_body_length_val = get_option( $cff_body_length, '200' );
 
     //Ajax
     $cff_ajax = 'cff_ajax';
@@ -996,7 +1000,9 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_video_action' ])) $cff_video_action = $_POST[ 'cff_video_action' ];
             if (isset($_POST[ 'cff_open_links' ])) $cff_open_links = $_POST[ 'cff_open_links' ];
 
-            $cff_ajax_val = $_POST[ $cff_ajax ];
+            (isset($_POST[ $cff_ajax ])) ? $cff_ajax_val = $_POST[ 'cff_ajax' ] : $cff_ajax_val = '';
+            if (isset($_POST[ 'cff_app_id' ])) $cff_app_id = $_POST[ 'cff_app_id' ];
+            $cff_preserve_settings_val = $_POST[ $cff_preserve_settings ];
 
             //Meta
             $options[ 'cff_icon_style' ] = $cff_icon_style;
@@ -1024,6 +1030,8 @@ function cff_style_page() {
             $options[ 'cff_open_links' ] = $cff_open_links;
 
             update_option( $cff_ajax, $cff_ajax_val );
+            $options[ 'cff_app_id' ] = $cff_app_id;
+            update_option( $cff_preserve_settings, $cff_preserve_settings_val );
         }
         //Update the Custom Text / Translate options
         if( isset($_POST[ $style_custom_text_hidden_field_name ]) && $_POST[ $style_custom_text_hidden_field_name ] == 'Y' ) {
@@ -2370,12 +2378,29 @@ function cff_style_page() {
             <table class="form-table">
                 <tbody>
                     <tr>
-                        <th><label for="cff_ajax" class="bump-left"><?php _e('Is your theme loading the Facebook feed via Ajax?'); ?></label></th>
+                        <th class="bump-left"><label for="cff_ajax" class="bump-left"><?php _e('Is your theme loading the Facebook feed via Ajax?'); ?></label></th>
                         <td>
                             <input name="cff_ajax" type="checkbox" id="cff_ajax" <?php if($cff_ajax_val == true) echo "checked"; ?> />
                             <label for="cff_ajax"><?php _e('Yes'); ?></label>
                             <a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('What does this mean?'); ?></a>
                             <p class="cff-tooltip cff-more-info"><?php _e('Some modern WordPress themes use Ajax to load content into the page after it has loaded. If your theme uses Ajax to load the Custom Facebook Feed content into the page then check this box. If you are not sure then please check with the theme author.'); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="bump-left"><label for="cff_app_id" class="bump-left"><?php _e('Facebook App ID'); ?></label></th>
+                        <td>
+                            <input name="cff_app_id" type="text" value="<?php esc_attr_e( $cff_app_id ); ?>" size="18" />
+                            <a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('What is this?'); ?></a>
+                            <p class="cff-tooltip cff-more-info"><?php _e("If you've registered as a Facebook developer and have an App ID then you can enter it here. You can add your website to your Facebook App by going to your App Settings, clicking 'Add Platform' and then entering your website URL."); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="bump-left"><label for="cff_preserve_settings" class="bump-left"><?php _e("Preserve settings when plugin is removed"); ?></label></th>
+                        <td>
+                            <input name="cff_preserve_settings" type="checkbox" id="cff_preserve_settings" <?php if($cff_preserve_settings_val == true) echo "checked"; ?> />
+                            <label for="cff_preserve_settings"><?php _e('Yes'); ?></label>
+                            <a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e('What does this mean?'); ?></a>
+                            <p class="cff-tooltip cff-more-info"><?php _e('When removing the plugin your settings are automatically deleted from your database. Checking this box will prevent any settings from being deleted. This means that you can uninstall and reinstall the plugin without losing your settings.'); ?></p>
                         </td>
                     </tr>
                 </tbody>
@@ -2438,7 +2463,7 @@ function cff_style_page() {
                             <input name="cff_translate_second" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_seconds"><?php _e("seconds"); ?></label>
-                            <input name="cff_translate_seconds" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="20" />
+                            <input name="cff_translate_seconds" type="text" value="<?php esc_attr_e( $cff_translate_seconds ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_minute"><?php _e("minute"); ?></label>
                             <input name="cff_translate_minute" type="text" value="<?php esc_attr_e( $cff_translate_minute ); ?>" size="20" />
@@ -2493,7 +2518,7 @@ function cff_style_page() {
 } //End Style_Page
 //Enqueue admin styles
 function cff_admin_style() {
-        wp_register_style( 'custom_wp_admin_css', plugin_dir_url( __FILE__ ) . 'css/cff-admin-style.css?5', false, '1.0.0' );
+        wp_register_style( 'custom_wp_admin_css', plugin_dir_url( __FILE__ ) . 'css/cff-admin-style.css?7', false, '1.0.0' );
         wp_enqueue_style( 'custom_wp_admin_css' );
         wp_enqueue_style( 'cff-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), '4.0.3' );
         wp_enqueue_style( 'wp-color-picker' );
@@ -2501,7 +2526,7 @@ function cff_admin_style() {
 add_action( 'admin_enqueue_scripts', 'cff_admin_style' );
 //Enqueue admin scripts
 function cff_admin_scripts() {
-    wp_enqueue_script( 'cff_admin_script', plugin_dir_url( __FILE__ ) . 'js/cff-admin-scripts.js?6' );
+    wp_enqueue_script( 'cff_admin_script', plugin_dir_url( __FILE__ ) . 'js/cff-admin-scripts.js?7' );
     if( !wp_script_is('jquery-ui-draggable') ) { 
         wp_enqueue_script(
             array(
@@ -2519,4 +2544,16 @@ function cff_admin_scripts() {
     );
 }
 add_action( 'admin_enqueue_scripts', 'cff_admin_scripts' );
+
+// Add a Settings link to the plugin on the Plugins page
+$cff_plugin_file = 'custom-facebook-feed/custom-facebook-feed.php';
+add_filter( "plugin_action_links_{$cff_plugin_file}", 'cff_add_settings_link', 10, 2 );
+ 
+//modify the link by unshifting the array
+function cff_add_settings_link( $links, $file ) {
+    $cff_settings_link = '<a href="' . admin_url( 'admin.php?page=cff-top' ) . '">' . __( 'Settings', 'cff-top' ) . '</a>';
+    array_unshift( $links, $cff_settings_link );
+ 
+    return $links;
+}
 ?>

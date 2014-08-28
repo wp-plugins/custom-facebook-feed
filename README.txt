@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social media
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 2.0.1
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,20 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+= 2.1 =
+* New: Added an option to preserve/save your plugin options after uninstalling the plugin. This makes manually updating the plugin much easier.
+* New: Added a 'Settings' link to the plugin on the Plugins page
+* New: Added a field to the Misc settings page which allows users to enter their Facebook App ID in order to remove a couple of browser console warnings caused by the Facebook Like box widget
+* Tweak: Reduced the size of the author's Facebook profile picture from 50px to 40px to match Facebook
+* Tweak: The link description text is now 12px in size by default
+* Tweak: Added some default character limits to the post text and descriptions
+* Tweak: If the post author is being hidden then change the default date position to be the bottom of the post
+* Fix: The post author link is no longer the full width of the post and is only wrapped around the author image and name which helps prevent inadvertently clicking on the post author
+* Fix: Added a fb-root element to the Like box to prevent a browser console warning
+* Fix: Renamed the ShowError function to prevent conflicts
+* Fix: Fixed an issue with the 'seconds' custom text string not being saved correctly
+* Fix: When linking the post text to the Facebook post the correct text color is now applied
+
 = 2.0.1 =
 * Tweak: Improved error handling and added an [Error Message reference](https://smashballoon.com/custom-facebook-feed/docs/errors/) to the website
 
