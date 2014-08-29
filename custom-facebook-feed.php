@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 2.1
+Version: 2.1.1
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -815,12 +815,14 @@ function display_cff($atts) {
                 
                 //Author text
                 $cff_author .= '<a href="https://facebook.com/' . $news->from->id . '" '.$target.' title="'.$news->from->name.' on Facebook" '.$cff_author_styles.'><div class="cff-author-text">';
-                if($cff_date_position !== 'above' && $cff_date_position !== 'below'){
+
+                if($cff_show_date && $cff_date_position !== 'above' && $cff_date_position !== 'below'){
                     $cff_author .= '<p class="cff-page-name cff-author-date">'.$news->from->name.'</p>';
                     $cff_author .= $cff_date;
                 } else {
                     $cff_author .= '<span class="cff-page-name">'.$news->from->name.'</span>';
                 }
+
                 $cff_author .= '</div>';
 
                 //Author image
@@ -1160,9 +1162,15 @@ function display_cff($atts) {
                     //LINK
                     if($cff_show_shared_links) $cff_post_item .= $cff_shared_link;
                     //DATE BELOW
-                    if ( (!$cff_show_author && $cff_date_position == 'author') || $cff_show_date && $cff_date_position == 'below') $cff_post_item .= $cff_date;
+                    if ( (!$cff_show_author && $cff_date_position == 'author') || $cff_show_date && $cff_date_position == 'below') {
+                        if($cff_show_date && $cff_post_type !== 'event') $cff_post_item .= $cff_date;
+                    }
                     //EVENT
                     if($cff_show_event_title || $cff_show_event_details) $cff_post_item .= $cff_event;
+                    //DATE BELOW (only for Event posts)
+                    if ( (!$cff_show_author && $cff_date_position == 'author') || $cff_show_date && $cff_date_position == 'below') {
+                        if($cff_show_date && $cff_post_type == 'event') $cff_post_item .= $cff_date;
+                    }
                     //VIEW ON FACEBOOK LINK
                     if($cff_show_link) $cff_post_item .= $cff_link;
                 
@@ -1611,7 +1619,7 @@ add_filter('widget_text', 'do_shortcode');
 add_action( 'wp_enqueue_scripts', 'cff_add_my_stylesheet' );
 function cff_add_my_stylesheet() {
     // Respects SSL, Style.css is relative to the current file
-    wp_register_style( 'cff', plugins_url('css/cff-style.css?7', __FILE__) );
+    wp_register_style( 'cff', plugins_url('css/cff-style.css?8', __FILE__) );
     wp_enqueue_style( 'cff' );
     wp_enqueue_style( 'cff-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), '4.0.3' );
 }
