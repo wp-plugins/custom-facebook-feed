@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social media
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,9 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+= 2.1.2 =
+* Fix: Added in a missing closing div tag to the feed when an error is being displayed
+
 = 2.1.1 =
 * Fix: Fixed an issue with the date not being hidden when unchecked in the Show/Hide section
 * Fix: Fixed an issue with the date not being displayed below event posts when the date position was set to 'At the bottom of the post'
