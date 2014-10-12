@@ -684,7 +684,7 @@ function display_cff($atts) {
 
             if( empty($FBdata->error) && empty($FBdata->error_msg) && $FBdata !== null ) $cff_content .= 'Error: No posts available for this Facebook ID';
 
-            $cff_content .= '<br />Please refer to our <a href="https://smashballoon.com/custom-facebook-feed/docs/errors/" target="_blank">Error Message Reference</a>.';
+            $cff_content .= '<br />Please refer to our <a href="http://smashballoon.com/custom-facebook-feed/docs/errors/" target="_blank">Error Message Reference</a>.';
             $cff_content .= '</div></div>'; //End .cff-error-msg and #cff-error-reason
             $cff_content .= '</div></div>'; //End #cff and .cff-wrapper
 

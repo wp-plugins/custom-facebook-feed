@@ -45,7 +45,7 @@ Display a **completely customizable**, **responsive** and **search engine crawla
 * Create a customizable header with a range of icons for your Custom Facebook Feed
 * Localization/i18n support to allow every part of the feed to be displayed in your language
 
-To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options, post filtering by type or #hashtag/string and more then [upgrade to the Pro version](https://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). Try out the [Pro demo](https://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
+To display photos, videos, the number of likes, shares and comments for each Facebook post, multiple layout options, post filtering by type or #hashtag/string and more then [upgrade to the Pro version](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). Try out the [Pro demo](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo").
 
 = Benefits =
 
@@ -70,15 +70,15 @@ To display photos, videos, the number of likes, shares and comments for each Fac
 
 == Frequently Asked Questions ==
 
-For a full list of FAQs and help with troubleshooting please visit the **[FAQ & Troubleshooting](https://smashballoon.com/custom-facebook-feed/faq/)** section of the Smash Balloon website
+For a full list of FAQs and help with troubleshooting please visit the **[FAQ & Troubleshooting](http://smashballoon.com/custom-facebook-feed/faq/)** section of the Smash Balloon website
 
 = How do I find the Page ID of my Facebook page or group? =
 
-If you have a Facebook **page** with a URL like this: `https://www.facebook.com/smashballoon` then the Page ID is just `smashballoon`. If your page URL is structured like this: `https://www.facebook.com/pages/smashballoon/123654123654123` then the Page ID is actually the number at the end, so in this case `123654123654123`.
+If you have a Facebook **page** with a URL like this: `http://www.facebook.com/smashballoon` then the Page ID is just `smashballoon`. If your page URL is structured like this: `http://www.facebook.com/pages/smashballoon/123654123654123` then the Page ID is actually the number at the end, so in this case `123654123654123`.
 
 If you have a Facebook **group** then use [this tool](http://lookup-id.com/ "Look Up my ID") to find your Group ID.
 
-Copy and paste the ID into the [Pro demo](https://smashballoon.com/custom-facebook-feed/demo/) to test it.
+Copy and paste the ID into the [Pro demo](http://smashballoon.com/custom-facebook-feed/demo/) to test it.
 
 = Are there any limitations on which Facebook page or group feeds I can display? =
 
@@ -86,7 +86,7 @@ The Facebook feed you're trying to display has to be from a publicly accessible 
 
 If your Facebook page has any restrictions on it (age, for example) then it means that people have to be signed into Facebook in order to view your page. This isn't desirable for most Facebook pages as it means that it isn't accessible by people who don't have a Facebook account and that your Facebook page can't be crawled and indexed by search engines.
 
-An easy way to determine whether your Facebook page is set to public is to sign out of your Facebook account and try to visit your page. If Facebook forces you to sign in to view your page then it isn't public. You can change your Facebook page to public in your Facebook page settings simply by removing any age or location restrictions you have on it ([screenshot](https://smashballoon.com/wp-content/uploads/2013/06/facebook-page-restrictions.png)), which will then allow the Custom Facebook Feed plugin to access and display your feed.
+An easy way to determine whether your Facebook page is set to public is to sign out of your Facebook account and try to visit your page. If Facebook forces you to sign in to view your page then it isn't public. You can change your Facebook page to public in your Facebook page settings simply by removing any age or location restrictions you have on it ([screenshot](http://smashballoon.com/wp-content/uploads/2013/06/facebook-page-restrictions.png)), which will then allow the Custom Facebook Feed plugin to access and display your feed.
 
 = Can I display feeds from multiple Facebook pages or groups? =
 
@@ -102,11 +102,11 @@ Once you've done so, the plugin will be able to retrieve and display all of your
 
 = Can I show photos and videos in my Custom Facebook feed? =
 
-This free plugin only allows you to display text from your Facebook posts. To display photos and videos in your feed you would need to upgrade to the Pro version of the plugin. Try out a demo of the Pro version on the [Custom Facebook Feed website](https://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the Pro version [here](https://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
+This free plugin only allows you to display text from your Facebook posts. To display photos and videos in your feed you would need to upgrade to the Pro version of the plugin. Try out a demo of the Pro version on the [Custom Facebook Feed website](http://smashballoon.com/custom-facebook-feed/demo "Custom Facebook Feed Demo"), and find out more about the Pro version [here](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro").
 
 = Can I show the comments, shares and likes associated with each Facebook post? =
 
-This is a feature of the [Pro version of the plugin](https://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). To display comments, shares and likes you would need to upgrade from the free version to the Pro version.
+This is a feature of the [Pro version of the plugin](http://smashballoon.com/custom-facebook-feed/ "Custom Facebook Feed Pro"). To display comments, shares and likes you would need to upgrade from the free version to the Pro version.
 
 = Is the content of my Custom Facebook Feed crawlable by search engines? =
 
@@ -147,7 +147,7 @@ We understand that sometimes you need help, have issues or just have questions. 
 
 = How to get a Facebook Access Token =
 
-**For step-by-step instructions and screenshots on how to get a Facebook Access Token just follow the [Facebook Access Token instructions](https://smashballoon.com/custom-facebook-feed/access-token/ "Facebook Access Token instructions") on the Smash Balloon website.**
+**For step-by-step instructions and screenshots on how to get a Facebook Access Token just follow the [Facebook Access Token instructions](http://smashballoon.com/custom-facebook-feed/access-token/ "Facebook Access Token instructions") on the Smash Balloon website.**
 
 You no longer need your own Access Token to use the Custom Facebook Feed Plugin, but if you'd like to use your own then you will need to obtain one from Facebook.  Don't worry though, this is really easy to do.  Just follow the steps below:
 
@@ -177,11 +177,11 @@ You no longer need your own Access Token to use the Custom Facebook Feed Plugin,
 
 **11)** Fill in Facebook's Security Check and click Continue.
 
-**12)** Your Facebook App should now be set up. Copy and paste your Facebook App ID and Facebook App Secret into the fields in the last step of the [Access Token instructions](https://smashballoon.com/custom-facebook-feed/access-token/ "How to get a Facebook Access Token") to retrieve your Facebook Access Token.
+**12)** Your Facebook App should now be set up. Copy and paste your Facebook App ID and Facebook App Secret into the fields in the last step of the [Access Token instructions](http://smashballoon.com/custom-facebook-feed/access-token/ "How to get a Facebook Access Token") to retrieve your Facebook Access Token.
 
 = What some of our users think =
 
-**See all of the reviews [here](https://smashballoon.com/custom-facebook-feed/#support "Custom Facebook Feed customer reviews")**
+**See all of the reviews [here](http://smashballoon.com/custom-facebook-feed/#support "Custom Facebook Feed customer reviews")**
 
 "Loving the Facebook feed plugin from @smashballoon. It's gonna transform my work's website! Great customer service too :)" - Grace Snow
 
@@ -293,7 +293,7 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 * Fix: When linking the post text to the Facebook post the correct text color is now applied
 
 = 2.0.1 =
-* Tweak: Improved error handling and added an [Error Message reference](https://smashballoon.com/custom-facebook-feed/docs/errors/) to the website
+* Tweak: Improved error handling and added an [Error Message reference](http://smashballoon.com/custom-facebook-feed/docs/errors/) to the website
 
 = 2.0 =
 * New: Added an option to display the post date immediately below the author name - as it is on Facebook. This is now the default date position.

@@ -138,9 +138,9 @@ function cff_settings_page() {
                             <br /><i style="color: #666; font-size: 11px;">Eg. 1234567890123 or smashballoon</i>
                             <div class="cff-tooltip cff-more-info">
                                 <ul>
-                                    <li><?php _e('If you have a Facebook <b>page</b> with a URL like this: <code>https://www.facebook.com/your_page_name</code> then the Page ID is just <b>your_page_name</b>. If your page URL is structured like this: <code>https://www.facebook.com/pages/your_page_name/123654123654123</code> then the Page ID is actually the number at the end, so in this case <b>123654123654123</b>.</li>'); ?>
+                                    <li><?php _e('If you have a Facebook <b>page</b> with a URL like this: <code>http://www.facebook.com/your_page_name</code> then the Page ID is just <b>your_page_name</b>. If your page URL is structured like this: <code>http://www.facebook.com/pages/your_page_name/123654123654123</code> then the Page ID is actually the number at the end, so in this case <b>123654123654123</b>.</li>'); ?>
                                     <li><?php _e('If you have a Facebook <b>group</b> then use <a href="http://lookup-id.com/" target="_blank" title="Find my ID">this tool</a> to find your ID.'); ?></li>
-                                    <li><?php _e('You can copy and paste your ID into the <a href="https://smashballoon.com/custom-facebook-feed/demo/" target="_blank">demo</a> to test it.'); ?></li>
+                                    <li><?php _e('You can copy and paste your ID into the <a href="http://smashballoon.com/custom-facebook-feed/demo/" target="_blank">demo</a> to test it.'); ?></li>
                                 </ul>
                             </div>
                         </td>
@@ -150,7 +150,7 @@ function cff_settings_page() {
                         <th scope="row" style="padding-bottom: 10px;"><?php _e('Enter my own Access Token <i style="font-weight: normal; font-size: 12px;">This is Optional</i>'); ?></th>
                         <td>
                             <input name="cff_show_access_token" type="checkbox" id="cff_show_access_token" <?php if($show_access_token_val == true) echo "checked"; ?> />&nbsp;<a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e("What is this?"); ?></a>
-                            <p class="cff-tooltip cff-more-info"><?php _e("A Facebook Access Token is not required to use this plugin, but if you have your own that you'd like to use then you can check this box and enter it here. To get your own Access Token you can follow these <a href='https://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>"); ?>.</p>
+                            <p class="cff-tooltip cff-more-info"><?php _e("A Facebook Access Token is not required to use this plugin, but if you have your own that you'd like to use then you can check this box and enter it here. To get your own Access Token you can follow these <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>"); ?>.</p>
                         </td>
                     </tr>
 
@@ -160,7 +160,7 @@ function cff_settings_page() {
                             <input name="cff_access_token" id="cff_access_token" type="text" value="<?php esc_attr_e( $access_token_val ); ?>" size="45" />
 
                             <div class="cff-notice cff-profile-error cff-access-token">
-                                <?php _e("<p>This doesn't appear to be an Access Token. Please be sure that you didn't enter your App Secret instead of your Access Token.<br />Your App ID and App Secret are used to obtain your Access Token; simply paste them into the fields in the last step of the <a href='https://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>Access Token instructions</a> and click '<b>Get my Access Token</b>'.</p>"); ?>
+                                <?php _e("<p>This doesn't appear to be an Access Token. Please be sure that you didn't enter your App Secret instead of your Access Token.<br />Your App ID and App Secret are used to obtain your Access Token; simply paste them into the fields in the last step of the <a href='http://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>Access Token instructions</a> and click '<b>Get my Access Token</b>'.</p>"); ?>
                             </div>
                         </td>
                     </tr>
@@ -326,10 +326,10 @@ function cff_settings_page() {
         <h3><?php _e('Customizing your Feed'); ?></h3>
         <p><?php _e("Use the <a href='admin.php?page=cff-style'>Customize</a> page to customize your feed. If you're displaying multiple feeds then you can override your settings and customizations by using options directly in the shortcode, like so:"); ?></p>
         <p>[custom-facebook-feed id=some-other-page-id num=3 height=500px]</p>
-        <p><a href="https://smashballoon.com/custom-facebook-feed/docs/shortcodes/" target="_blank"><?php _e('See a full list of shortcode options'); ?></a></p>
+        <p><a href="http://smashballoon.com/custom-facebook-feed/docs/shortcodes/" target="_blank"><?php _e('See a full list of shortcode options'); ?></a></p>
 
         <br />
-        <a href="https://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
+        <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
 
     <?php } //End config tab ?>
 
@@ -340,21 +340,21 @@ function cff_settings_page() {
         <h3><?php _e('FAQs and Troubleshooting'); ?></h3>
         <p>Having trouble getting the plugin to work? Try the links below:</p>
         <ul>
-        <li>- <?php _e('<a href="https://smashballoon.com/custom-facebook-feed/faq/general/" target="_blank">General Questions</a>'); ?></li>
-        <li>- <?php _e('<a href="https://smashballoon.com/custom-facebook-feed/faq/setup/" target="_blank">Setting Up &amp; Displaying your Feed</a>'); ?></li>
-        <li>- <?php _e('<a href="https://smashballoon.com/custom-facebook-feed/faq/troubleshooting/" target="_blank">Troubleshooting &amp; Common Support Questions</a>'); ?></li>
+        <li>- <?php _e('<a href="http://smashballoon.com/custom-facebook-feed/faq/general/" target="_blank">General Questions</a>'); ?></li>
+        <li>- <?php _e('<a href="http://smashballoon.com/custom-facebook-feed/faq/setup/" target="_blank">Setting Up &amp; Displaying your Feed</a>'); ?></li>
+        <li>- <?php _e('<a href="http://smashballoon.com/custom-facebook-feed/faq/troubleshooting/" target="_blank">Troubleshooting &amp; Common Support Questions</a>'); ?></li>
         </ul>
         <br />
         <h3>Documentation</h3>
         <p>Need help setting up, configuring or customizing the plugin? Check out the links below:</p>
         <ul>
-        <li>- <?php _e('<a href="https://smashballoon.com/custom-facebook-feed/docs/wordpress/" target="_blank">Installation and Configuration</a>'); ?></li>
-        <li>- <?php _e('<a href="https://smashballoon.com/custom-facebook-feed/docs/shortcodes/" target="_blank">Shortcode Reference</a>'); ?></li>
-        <li>- <?php _e('<a href="https://smashballoon.com/custom-facebook-feed/docs/snippets/" target="_blank">Custom CSS and JavaScript Snippets</a>'); ?></li>
+        <li>- <?php _e('<a href="http://smashballoon.com/custom-facebook-feed/docs/wordpress/" target="_blank">Installation and Configuration</a>'); ?></li>
+        <li>- <?php _e('<a href="http://smashballoon.com/custom-facebook-feed/docs/shortcodes/" target="_blank">Shortcode Reference</a>'); ?></li>
+        <li>- <?php _e('<a href="http://smashballoon.com/custom-facebook-feed/docs/snippets/" target="_blank">Custom CSS and JavaScript Snippets</a>'); ?></li>
         </ul>
 
         <br />
-        <p><?php _e('Still need help? <a href="https://smashballoon.com/custom-facebook-feed/support/" target="_blank">Request support</a>.'); ?></p>
+        <p><?php _e('Still need help? <a href="http://smashballoon.com/custom-facebook-feed/support/" target="_blank">Request support</a>.'); ?></p>
 
         <br />
         <h3><?php _e('System Info'); ?></h3>
@@ -371,7 +371,7 @@ function cff_settings_page() {
             $access_token = get_option( $access_token );
             if ( $access_token == '' || empty($access_token) ) $access_token = '1436737606570258|MGh1BX4_b_D9HzJtKe702cwMRPI';
             ?>
-            <?php $posts_json = cff_fetchUrl("https://graph.facebook.com/".get_option( trim($page_id) )."/feed?access_token=". trim($access_token) ."&limit=1"); ?>
+            <?php $posts_json = cff_fetchUrl("http://graph.facebook.com/".get_option( trim($page_id) )."/feed?access_token=". trim($access_token) ."&limit=1"); ?>
             <textarea readonly="readonly" onclick="this.focus();this.select()" title="To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo $posts_json; ?></textarea>
         </div>
 
@@ -1157,7 +1157,7 @@ function cff_style_page() {
                     <h3><?php _e('Post Types'); ?></h3>
                     <tr valign="top">
                         <th scope="row"><?php _e('Only show these types of posts:'); ?><br />
-                            <i style="color: #666; font-size: 11px;"><a href="https://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable post types, photos, videos and more'); ?></a></i></th>
+                            <i style="color: #666; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable post types, photos, videos and more'); ?></a></i></th>
                         <td>
                             <div>
                                 <input name="cff_show_status_type" type="checkbox" id="cff_show_status_type" disabled checked />
@@ -1189,7 +1189,7 @@ function cff_style_page() {
             </table>
             <?php submit_button(); ?>
             
-            <a href="https://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
+            <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
             <?php } //End General tab ?>
             <?php if( $active_tab == 'post_layout' ) { //Start Post Layout tab ?>
             <input type="hidden" name="<?php echo $style_post_layout_hidden_field_name; ?>" value="Y">
@@ -1201,7 +1201,7 @@ function cff_style_page() {
                     <tr>
                         <td>
                             <p><?php _e("Choose a layout from the 3 below."); ?>
-                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><a href="https://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable post layouts'); ?></a></i>
+                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable post layouts'); ?></a></i>
                             </p>
                         </td>
                     </tr>
@@ -1256,7 +1256,7 @@ function cff_style_page() {
                     <tbody>
                     <tr valign="top">
                         <th scope="row"><?php _e('Include the following in posts: <i style="font-size: 11px;">(when applicable)</i>'); ?>
-                            <br /><i style="color: #666; font-size: 11px;"><a href="https://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable all of these options'); ?></a></i></th>
+                            <br /><i style="color: #666; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable all of these options'); ?></a></i></th>
                         <td>
                             <div>
                                 <input name="cff_show_author" type="checkbox" id="cff_show_author" <?php if($cff_show_author == true) echo "checked"; ?> />
@@ -1335,7 +1335,7 @@ function cff_style_page() {
             </table>
             
             <?php submit_button(); ?>
-            <a href="https://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
+            <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
             <?php } //End Post Layout tab ?>
             <?php if( $active_tab == 'typography' ) { //Start Typography tab ?>
             <input type="hidden" name="<?php echo $style_typography_hidden_field_name; ?>" value="Y">
@@ -1872,7 +1872,7 @@ function cff_style_page() {
                                 <th><label for="cff_date_custom" class="bump-left"><?php _e('Custom format'); ?></label></th>
                                 <td>
                                     <input name="cff_date_custom" type="text" value="<?php esc_attr_e( $cff_date_custom ); ?>" size="10" placeholder="Eg. F j, Y" />
-                                    <a href="https://smashballoon.com/custom-facebook-feed/docs/date/" class="cff-external-link" target="_blank"><?php _e('Examples'); ?></a>
+                                    <a href="http://smashballoon.com/custom-facebook-feed/docs/date/" class="cff-external-link" target="_blank"><?php _e('Examples'); ?></a>
                                 </td>
                             </tr>
                             <tr>
@@ -2123,7 +2123,7 @@ function cff_style_page() {
                                 <th><label for="cff_event_date_custom" class="bump-left"><?php _e('Custom event date format'); ?></label></th>
                                 <td>
                                     <input name="cff_event_date_custom" type="text" value="<?php esc_attr_e( $cff_event_date_custom ); ?>" size="10" placeholder="Eg. F j, Y - g:ia" />
-                                    <a href="https://smashballoon.com/custom-facebook-feed/docs/date/" class="cff-external-link" target="_blank"><?php _e('Examples'); ?></a>
+                                    <a href="http://smashballoon.com/custom-facebook-feed/docs/date/" class="cff-external-link" target="_blank"><?php _e('Examples'); ?></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -2252,13 +2252,13 @@ function cff_style_page() {
                 <?php submit_button(); ?>
             </div>
 
-            <a href="https://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
+            <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
             
             <?php } //End Typography tab ?>
             <?php if( $active_tab == 'misc' ) { //Start Misc tab ?>
             <input type="hidden" name="<?php echo $style_misc_hidden_field_name; ?>" value="Y">
             <br />
-            <h3><?php _e('Likes, Shares and Comments'); ?></h3><i style="color: #666; font-size: 11px;"><a href="https://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable likes, shares and comments'); ?></a></i>
+            <h3><?php _e('Likes, Shares and Comments'); ?></h3><i style="color: #666; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/" target="_blank"><?php _e('Upgrade to Pro to enable likes, shares and comments'); ?></a></i>
             
             <hr />
             <h3><?php _e('Like Box'); ?></h3>
@@ -2345,7 +2345,7 @@ function cff_style_page() {
                     <tr valign="top">
                         <td>
                         <?php _e('Enter your own custom CSS in the box below'); ?>
-                        <i style="margin-left: 5px; font-size: 11px;"><a href="https://smashballoon.com/custom-facebook-feed/docs/snippets/" target="_blank"><?php _e('See some examples'); ?></a></i>
+                        <i style="margin-left: 5px; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/docs/snippets/" target="_blank"><?php _e('See some examples'); ?></a></i>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -2361,7 +2361,7 @@ function cff_style_page() {
                     <tr valign="top">
                         <td>
                         <?php _e('Enter your own custom JavaScript/jQuery in the box below'); ?>
-                        <i style="margin-left: 5px; font-size: 11px;"><a href="https://smashballoon.com/custom-facebook-feed/docs/snippets/" target="_blank"><?php _e('See some examples'); ?></a></i>
+                        <i style="margin-left: 5px; font-size: 11px;"><a href="http://smashballoon.com/custom-facebook-feed/docs/snippets/" target="_blank"><?php _e('See some examples'); ?></a></i>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -2407,7 +2407,7 @@ function cff_style_page() {
             </table>
 
             <?php submit_button(); ?>
-            <a href="https://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
+            <a href="http://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
             <?php } //End Misc tab ?>
 
 
