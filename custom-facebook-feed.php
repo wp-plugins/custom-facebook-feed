@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 2.1.2
+Version: 2.1.3
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -506,7 +506,18 @@ function display_cff($atts) {
     get_option('cff_show_access_token') ? $cff_show_access_token = true : $cff_show_access_token = false;
 
     //If there's no Access Token then use the default
-    if ($access_token == '' || !$cff_show_access_token) $access_token = '1436737606570258|MGh1BX4_b_D9HzJtKe702cwMRPI';
+    // if ($access_token == '' || !$cff_show_access_token) $access_token = '1436737606570258|MGh1BX4_b_D9HzJtKe702cwMRPI';
+    $access_token_array = array(
+        '1489500477999288|KFys5ppNi3sreihdreqPkU2ChIE',
+        '859332767418162|BR-YU8zjzvonNrszlll_1a4y_xE',
+        '360558880785446|4jyruti_VkxxK7gS7JeyX-EuSXs',
+        '1487072591579718|0KQzP-O2E4mvFCPxTLWP1b87I4Q',
+        '640861236031365|2rENQzxtWtG12DtlZwqfZ6Vu6BE'
+    );
+    if ($access_token == '' || !$cff_show_access_token) $access_token = $access_token_array[rand(0, 4)];
+
+
+
     //Check whether a Page ID has been defined
     if ($page_id == '') {
         echo "Please enter the Page ID of the Facebook feed you'd like to display. You can do this in either the Custom Facebook Feed plugin settings or in the shortcode itself. For example, [custom-facebook-feed id=YOUR_PAGE_ID_HERE].<br /><br />";
@@ -684,7 +695,7 @@ function display_cff($atts) {
 
             if( empty($FBdata->error) && empty($FBdata->error_msg) && $FBdata !== null ) $cff_content .= 'Error: No posts available for this Facebook ID';
 
-            $cff_content .= '<br />Please refer to our <a href="https://smashballoon.com/custom-facebook-feed/docs/errors/" target="_blank">Error Message Reference</a>.';
+            $cff_content .= '<br />Please refer to our <a href="http://smashballoon.com/custom-facebook-feed/docs/errors/" target="_blank">Error Message Reference</a>.';
             $cff_content .= '</div></div>'; //End .cff-error-msg and #cff-error-reason
             $cff_content .= '</div></div>'; //End #cff and .cff-wrapper
 
