@@ -286,10 +286,10 @@
   height: 100%;
 }
 /*Like box is not inside of #cff*/
-.cff-likebox.top.cff-outside{
+.cff-likebox.cff-top.cff-outside{
   margin-bottom: 10px;
 }
-.cff-likebox.bottom.cff-outside{
+.cff-likebox.cff-bottom.cff-outside{
   margin-top: 10px;
 }
 
@@ -327,4 +327,16 @@
   display: none;
   padding: 5px 0 0 0;
   clear: both;
+}
+
+/* Credit link */
+#cff .cff-credit{
+  font-size: 11px;
+}
+#cff .cff-credit a{
+  text-decoration: none;
+}
+#cff .cff-credit .fa{
+  padding-right: 5px;
+  font-size: 13px;
 }

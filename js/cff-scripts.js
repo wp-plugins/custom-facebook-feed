@@ -48,6 +48,7 @@ jQuery(document).ready(function() {
 				$more.show();
 				$less.hide();
 			}
+			cffLinkHashtags();
 		});
 
 		//Hide the shared link box if it's empty
@@ -56,25 +57,36 @@ jQuery(document).ready(function() {
 			$sharedLink.remove();
 		}
 
-		//Link hashtags
-		var cffTextStr = $self.find('.cff-text').html(),
-			cffDescStr = $self.find('.cff-post-desc').html(),
-			regex = /(?:\s|^)(?:#(?!\d+(?:\s|$)))(\w+)(?=\s|$)/gi,
-			linkcolor = $self.find('.cff-text').attr('rel');
+		function cffLinkHashtags(){
+			//Link hashtags
+			var cffTextStr = $self.find('.cff-text').html(),
+				cffDescStr = $self.find('.cff-post-desc').html(),
+				regex = /(^|\s)#(\w*[a-zA-Z_]+\w*)/gi,
+				linkcolor = $self.find('.cff-text').attr('rel');
 
-		function replacer(hash){
-			var replacementString = jQuery.trim(hash);
-			return ' <a href="https://www.facebook.com/hashtag/'+ replacementString.substring(1) +'" target="_blank" style="color: #' + linkcolor + '">' + replacementString + '</a>';
+			function replacer(hash){
+				//Remove white space at beginning of hash
+				var replacementString = jQuery.trim(hash);
+				//If the hash is a hex code then don't replace it with a link as it's likely in the style attr, eg: "color: #ff0000"
+				if ( /^#[0-9A-F]{6}$/i.test( replacementString ) ){
+					return replacementString;
+				} else {
+					return ' <a href="https://www.facebook.com/hashtag/'+ replacementString.substring(1) +'" target="_blank" style="color:#' + linkcolor + '">' + replacementString + '</a>';
+				}
+			}
+
+			if(cfflinkhashtags == 'true'){
+				//Replace hashtags in text
+				var $cffText = $self.find('.cff-text');
+				//Add a space after all <br> tags so that #hashtags immediatelly after them are also converted to hashtag links. Without the space they aren't captured by the regex.
+				cffTextStr = cffTextStr.replace(/<br>/g, "<br> ");
+				if($cffText.length > 0) $cffText.html( cffTextStr.replace( regex , replacer ) );
+			}
+
+			//Replace hashtags in desc
+			if( $self.find('.cff-post-desc').length > 0 ) $self.find('.cff-post-desc').html( cffDescStr.replace( regex , replacer ) );
 		}
-
-		if(cfflinkhashtags == 'true'){
-			//Replace hashtags in text
-			var $cffText = $self.find('.cff-text');
-			if($cffText.length > 0) $cffText.html( cffTextStr.replace( regex , replacer ) );
-		}
-
-		//Replace hashtags in desc
-		if( $self.find('.cff-post-desc').length > 0 ) $self.find('.cff-post-desc').html( cffDescStr.replace( regex , replacer ) );
+		cffLinkHashtags();
 		
 	});
 });

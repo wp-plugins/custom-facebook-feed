@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 2.1.3
+Version: 2.2
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -146,6 +146,7 @@ function display_cff($atts) {
         'likeboxheight' => isset($options[ 'cff_likebox_height' ]) ? $options[ 'cff_likebox_height' ] : '',
         'likeboxfaces' => isset($options[ 'cff_like_box_faces' ]) ? $options[ 'cff_like_box_faces' ] : '',
         'likeboxborder' => isset($options[ 'cff_like_box_border' ]) ? $options[ 'cff_like_box_border' ] : '',
+        'credit' => isset($options[ 'cff_show_credit' ]) ? $options[ 'cff_show_credit' ] : '',
 
         //Page Header
         'showheader' => isset($options[ 'cff_show_header' ]) ? $options[ 'cff_show_header' ] : '',
@@ -176,9 +177,15 @@ function display_cff($atts) {
     $cff_page_type = $atts[ 'pagetype' ];
     ($cff_page_type == 'group') ? $cff_is_group = true : $cff_is_group = false;
 
-    $cff_feed_width = $atts['width'];
+    $cff_feed_width = $atts[ 'width' ];
+    if ( is_numeric(substr($cff_feed_width, -1, 1)) ) $cff_feed_width = $cff_feed_width . 'px';
+
     $cff_feed_height = $atts[ 'height' ];
+    if ( is_numeric(substr($cff_feed_height, -1, 1)) ) $cff_feed_height = $cff_feed_height . 'px';
+
     $cff_feed_padding = $atts[ 'padding' ];
+    if ( is_numeric(substr($cff_feed_padding, -1, 1)) ) $cff_feed_padding = $cff_feed_padding . 'px';
+
     $cff_bg_color = $atts[ 'bgcolor' ];
     $cff_show_author = $atts[ 'showauthornew' ];
     $cff_cache_time = $atts[ 'cachetime' ];
@@ -404,6 +411,8 @@ function display_cff($atts) {
     if ($cff_like_box_text_color == 'white') $cff_like_box_colorscheme = 'dark';
 
     $cff_likebox_width = $atts[ 'likeboxwidth' ];
+    if ( is_numeric(substr($cff_likebox_width, -1, 1)) ) $cff_likebox_width = $cff_likebox_width . 'px';
+
     $cff_likebox_height = $atts[ 'likeboxheight' ];
     $cff_likebox_height = preg_replace('/px$/', '', $cff_likebox_height);
 
@@ -429,6 +438,8 @@ function display_cff($atts) {
     //Get feed header settings
     $cff_header_bg_color = $atts['headerbg'];
     $cff_header_padding = $atts['headerpadding'];
+    if ( is_numeric(substr($cff_header_padding, -1, 1)) ) $cff_header_padding = $cff_header_padding . 'px';
+
     $cff_header_text_size = $atts['headertextsize'];
     $cff_header_text_weight = $atts['headertextweight'];
     $cff_header_text_color = $atts['headertextcolor'];
@@ -500,7 +511,7 @@ function display_cff($atts) {
     //Get show posts attribute. If not set then default to 25
     $show_posts = $atts['num'];
     if (empty($show_posts)) $show_posts = 25;
-    if ( $show_posts == 0 || $show_posts == 'undefined' ) $show_posts = 25;
+    if ( $show_posts == 'undefined' ) $show_posts = 25;
     
     //If the 'Enter my own Access Token' box is unchecked then don't use the user's access token, even if there's one in the field
     get_option('cff_show_access_token') ? $cff_show_access_token = true : $cff_show_access_token = false;
@@ -587,7 +598,7 @@ function display_cff($atts) {
     ( isset($cff_app_id) && !empty($cff_app_id) ) ? $cff_like_box_params = '&appId=' .$cff_app_id : $cff_like_box_params = '';
     $like_box = '<div class="cff-likebox';
     if ($cff_like_box_outside) $like_box .= ' cff-outside';
-    $like_box .= ($cff_like_box_position == 'top') ? ' top' : ' bottom';
+    $like_box .= ($cff_like_box_position == 'top') ? ' cff-top' : ' cff-bottom';
     $like_box .= '" ' . $cff_likebox_styles . '><script src="https://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1 '.$cff_like_box_params.'"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" show_faces="'.$cff_like_box_faces.'" stream="false" header="false" colorscheme="'. $cff_like_box_colorscheme .'" show_border="'. $cff_like_box_border .'" data-height="'.$cff_likebox_height.'"></fb:like-box><div id="fb-root"></div></div>';
     //Don't show like box if it's a group
     if($cff_is_group) $like_box = '';
@@ -607,7 +618,7 @@ function display_cff($atts) {
 
     $cff_header = '<h3 class="cff-header';
     if ($cff_header_outside) $cff_header .= ' cff-outside';
-    $cff_header .= '"' . $cff_header_styles . '>';
+    $cff_header .= '" ' . $cff_header_styles . '>';
     $cff_header .= '<i class="fa fa-' . $cff_header_icon . '"';
     if(!empty($cff_header_icon_color) || !empty($cff_header_icon_size)) $cff_header .= ' style="';
     if(!empty($cff_header_icon_color)) $cff_header .= 'color: #' . str_replace('#', '', $cff_header_icon_color) . ';';
@@ -617,6 +628,11 @@ function display_cff($atts) {
     $cff_header .= '<span class="header-text" style="height: '.$cff_header_icon_size.'px;">' . $cff_header_text . '</span>';
     $cff_header .= '</h3>';
 
+    //If the number of posts is set to zero then don't show any and set limit to one
+    if ( ($atts['num'] == '0' || $atts['num'] == 0) && $atts['num'] !== ''){
+        $show_posts = 0;
+        $cff_post_limit = 1;
+    }
 
     //***START FEED***
     $cff_content = '';
@@ -851,8 +867,11 @@ function display_cff($atts) {
                 $cff_translate_photos_text = $atts['photostext'];
                 if (!isset($cff_translate_photos_text) || empty($cff_translate_photos_text)) $cff_translate_photos_text = 'photos';
                 $cff_post_text = '<' . $cff_title_format . ' class="cff-post-text" ' . $cff_title_styles . '>';
-                $cff_post_text .= '<span class="cff-text">';
+
+                //Start HTML for post text
+                $cff_post_text .= '<span class="cff-text" rel="'.str_replace('#', '', $atts['textlinkcolor'] ).'">';
                 if ($cff_title_link) $cff_post_text .= '<a class="cff-post-text-link" '.$cff_title_styles.' href="'.$link.'" '.$target.'>';
+
                 //Which content should we use?
                 $cff_post_text_type = '';
                 //Use the story
@@ -977,7 +996,7 @@ function display_cff($atts) {
                     if (!empty($body_limit)) {
                         if (strlen($description_text) > $body_limit) $description_text = substr($description_text, 0, $body_limit) . '...';
                     }
-                    $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_autolink( htmlspecialchars($description_text) )  . ' </span></p>';
+                    $cff_description .= '<p class="cff-post-desc" '.$cff_body_styles.'><span>' . cff_autolink( htmlspecialchars($description_text), $link_color=str_replace('#', '', $atts['textlinkcolor']) )  . ' </span></p>';
 
                     //If the post text and description/caption are the same then don't show the description
                     if($post_text == $description_text) $cff_description = '';
@@ -1000,9 +1019,10 @@ function display_cff($atts) {
                         //The link title:
                         $cff_shared_link .= '"><'.$cff_link_title_format.' class="cff-link-title" '.$cff_link_title_styles.'><a href="'.$link.'" '.$target.' style="color:#' . str_replace('#', '', $cff_link_title_color) . ';">'. $news->name . '</a></'.$cff_link_title_format.'>';
                         //The link source:
-                        if(!empty($news->caption)) $cff_shared_link .= '<p class="cff-link-caption" style="color:#' . str_replace('#', '', $cff_link_url_color) . ';">'.$news->caption.'</p>';
+                        (!empty($news->caption)) ? $cff_link_caption = $news->caption : $cff_link_caption = '';
+                        if(!empty($cff_link_caption)) $cff_shared_link .= '<p class="cff-link-caption" style="color:#' . str_replace('#', '', $cff_link_url_color) . ';">'.$cff_link_caption.'</p>';
                         if ($cff_show_desc) {
-                            $cff_shared_link .= $cff_description;
+                            if( $description_text != $cff_link_caption ) $cff_shared_link .= $cff_description;
                         }
                         $cff_shared_link .= '</div>';
                     }
@@ -1219,6 +1239,11 @@ function display_cff($atts) {
     date_default_timezone_set( $cff_orig_timezone );
     //Add the Like Box inside
     if ($cff_like_box_position == 'bottom' && $cff_show_like_box && !$cff_like_box_outside) $cff_content .= $like_box;
+    /* Credit link */
+    $cff_show_credit = $atts['credit'];
+    ($cff_show_credit == 'true' || $cff_show_credit == 'on') ? $cff_show_credit = true : $cff_show_credit = false;
+
+    if($cff_show_credit) $cff_content .= '<p class="cff-credit"><a href="https://smashballoon.com/custom-facebook-feed/" target="_blank" style="color: #'.$link_color=str_replace('#', '', $atts['textlinkcolor'] ).'"><i class="fa fa-facebook-square"></i>The Custom Facebook Feed plugin</a></p>';
     //End the feed
     $cff_content .= '</div><div class="cff-clear"></div>';
     //Add the Like Box outside
@@ -1632,7 +1657,7 @@ add_filter('widget_text', 'do_shortcode');
 add_action( 'wp_enqueue_scripts', 'cff_add_my_stylesheet' );
 function cff_add_my_stylesheet() {
     // Respects SSL, Style.css is relative to the current file
-    wp_register_style( 'cff', plugins_url('css/cff-style.css?8', __FILE__) );
+    wp_register_style( 'cff', plugins_url('css/cff-style.css?10', __FILE__) );
     wp_enqueue_style( 'cff' );
     wp_enqueue_style( 'cff-font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css', array(), '4.0.3' );
 }
@@ -1640,7 +1665,7 @@ function cff_add_my_stylesheet() {
 add_action( 'wp_enqueue_scripts', 'cff_scripts_method' );
 function cff_scripts_method() {
     //Register the script to make it available
-    wp_register_script( 'cffscripts', plugins_url( '/js/cff-scripts.js?7' , __FILE__ ), array('jquery'), '1.9', true );
+    wp_register_script( 'cffscripts', plugins_url( '/js/cff-scripts.js?10' , __FILE__ ), array('jquery'), '1.9', true );
     //Enqueue it to load it onto the page
     wp_enqueue_script('cffscripts');
 }
@@ -1902,7 +1927,7 @@ function cff_autolink_do($text, $link_color, $sub, $limit, $tagfill, $auto_title
 
                 
                 if( substr( $link_url_enc, 0, 4 ) !== "http" ) $link_url_enc = 'http://' . $link_url_enc;
-                $buffer .= "<a target='_blank' style='color: #".$link_color."' href=\"{$link_url_enc}\"$tagfill>{$display_url_enc}</a>";
+                $buffer .= "<a target='_blank' style='color:#".$link_color."' href=\"{$link_url_enc}\"$tagfill>{$display_url_enc}</a>";
                 
             
             }else{

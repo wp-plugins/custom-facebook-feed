@@ -331,6 +331,38 @@ function cff_settings_page() {
         <br />
         <a href="https://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
 
+        <hr />
+        <h3><?php _e('Like the plugin? Help spread the word!'); ?></h3>
+
+        <!-- TWITTER -->
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://wordpress.org/plugins/custom-facebook-feed/" data-text="Display your Facebook posts on your site your way using the Custom Facebook Feed WordPress plugin!" data-via="smashballoon" data-dnt="true">Tweet</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <style type="text/css">
+        #twitter-widget-0{ float: left; width: 100px !important; }
+        .IN-widget{ margin-right: 20px; }
+        </style>
+
+        <!-- FACEBOOK -->
+        <div id="fb-root" style="display: none;"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&appId=640861236031365&version=v2.0";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+        <div class="fb-like" data-href="https://wordpress.org/plugins/custom-facebook-feed/" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" style="display: block; float: left; margin-right: 20px;"></div>
+
+        <!-- LINKEDIN -->
+        <script src="//platform.linkedin.com/in.js" type="text/javascript">
+          lang: en_US
+        </script>
+        <script type="IN/Share" data-url="https://wordpress.org/plugins/custom-facebook-feed/"></script>
+
+        <!-- GOOGLE + -->
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <div class="g-plusone" data-size="medium" data-href="https://wordpress.org/plugins/custom-facebook-feed/"></div>
+
     <?php } //End config tab ?>
 
 
@@ -354,26 +386,74 @@ function cff_settings_page() {
         </ul>
 
         <br />
-        <p><?php _e('Still need help? <a href="https://smashballoon.com/custom-facebook-feed/support/" target="_blank">Request support</a>.'); ?></p>
+        <p><?php _e('Still need help? <a href="http://smashballoon.com/custom-facebook-feed/support/" target="_blank">Request support</a>. Please include your <b>System Info</b> below with all support requests.'); ?></p>
 
         <br />
-        <h3><?php _e('System Info'); ?></h3>
-        <p>PHP Version:          <b><?php echo PHP_VERSION . "\n"; ?></b></p>
-        <p>Web Server Info:      <b><?php echo $_SERVER['SERVER_SOFTWARE'] . "\n"; ?></b></p>
-        <p>PHP allow_url_fopen:  <b><?php echo ini_get( 'allow_url_fopen' ) ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>"; ?></b></p>
-        <p>PHP cURL:             <b><?php echo is_callable('curl_init') ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>" ?></b></p>
-        <p>JSON:                 <b><?php echo function_exists("json_decode") ? "<span style='color: green;'>Yes</span>" : "<span style='color: red;'>No</span>" ?></b></p>
+        <h3><?php _e('System Info &nbsp; <i style="color: #666; font-size: 11px; font-weight: normal;">Click the text below to select all</i>'); ?></h3>
 
-        <button class="button secondary-button" id="cff-api-test">Test connection to Facebook API</button>
-        
-        <div id="cff-api-test-result">
-            <?php
-            $access_token = get_option( $access_token );
-            if ( $access_token == '' || empty($access_token) ) $access_token = '1436737606570258|MGh1BX4_b_D9HzJtKe702cwMRPI';
-            ?>
-            <?php $posts_json = cff_fetchUrl("https://graph.facebook.com/".get_option( trim($page_id) )."/feed?access_token=". trim($access_token) ."&limit=1"); ?>
-            <textarea readonly="readonly" onclick="this.focus();this.select()" title="To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac)."><?php echo $posts_json; ?></textarea>
-        </div>
+        <?php
+        $access_token = get_option( $access_token );
+        if ( $access_token == '' || empty($access_token) ) $access_token = '611606915581035|RdRHbHtrHseQw4C7SDUBFWIrJLA';
+        ?>
+        <?php $posts_json = cff_fetchUrl("https://graph.facebook.com/".get_option( trim($page_id) )."/feed?access_token=". trim($access_token) ."&limit=1"); ?>
+
+
+        <textarea readonly="readonly" onclick="this.focus();this.select()" title="To copy, click the field then press Ctrl + C (PC) or Cmd + C (Mac)." style="width: 70%; height: 500px; white-space: pre; font-family: Menlo,Monaco,monospace;">
+## SITE/SERVER INFO: ##
+Site URL:                 <?php echo site_url() . "\n"; ?>
+Home URL:                 <?php echo home_url() . "\n"; ?>
+WordPress Version:        <?php echo get_bloginfo( 'version' ) . "\n"; ?>
+PHP Version:              <?php echo PHP_VERSION . "\n"; ?>
+Web Server Info:          <?php echo $_SERVER['SERVER_SOFTWARE'] . "\n"; ?>
+PHP allow_url_fopen:      <?php echo ini_get( 'allow_url_fopen' ) ? "Yes" . "\n" : "No" . "\n"; ?>
+PHP cURL:                 <?php echo is_callable('curl_init') ? "Yes" . "\n" : "No" . "\n"; ?>
+JSON:                     <?php echo function_exists("json_decode") ? "Yes" . "\n" : "No" . "\n" ?>
+
+## ACTIVE PLUGINS: ##
+<?php
+$plugins = get_plugins();
+$active_plugins = get_option( 'active_plugins', array() );
+
+foreach ( $plugins as $plugin_path => $plugin ) {
+    // If the plugin isn't active, don't show it.
+    if ( ! in_array( $plugin_path, $active_plugins ) )
+        continue;
+
+    echo $plugin['Name'] . ': ' . $plugin['Version'] ."\n";
+}
+?>
+
+## PLUGIN SETTINGS: ##
+Use own Access Token:   <?php echo get_option( 'cff_show_access_token' ) ."\n"; ?>
+Access Token:           <?php echo get_option( 'cff_access_token' ) ."\n"; ?>
+Page ID:                <?php echo get_option( 'cff_page_id' ) ."\n"; ?>
+Page Type:              <?php echo get_option( 'cff_page_type' ) ."\n"; ?>
+Number of Posts:        <?php echo get_option( 'cff_num_show' ) ."\n"; ?>
+Post Limit:             <?php echo get_option( 'cff_post_limit' ) ."\n"; ?>
+Show Posts by:          <?php echo get_option( 'cff_show_others' ) ."\n"; ?>
+Cache Time:             <?php echo get_option( 'cff_cache_time' ) ."\n"; ?>
+Cache Unit:             <?php echo get_option( 'cff_cache_time_unit' ) ."\n"; ?>
+Locale:                 <?php echo get_option( 'cff_locale' ) ."\n"; ?>
+Timezone:               <?php $options = get_option( 'cff_style_settings', array() );
+                        echo $options[ 'cff_timezone' ] ."\n"; ?>
+
+## EXTENSIONS: ##
+Extensions Plugin:      <?php echo get_option('cff_extensions_status') ."\n"; ?>
+Date Range From:        <?php echo get_option( 'cff_date_from' ) ."\n"; ?>
+Date Range Until:       <?php echo get_option( 'cff_date_until' ) ."\n"; ?>
+Featured Post:          <?php echo get_option( 'cff_featured_post_id' ) ."\n"; ?>
+Lightbox:               <?php echo get_option( 'cff_lightbox' ) ."\n"; ?>
+
+## CUSTOMIZE: ##
+<?php 
+while (list($key, $val) = each($options)) {
+    echo "$key => $val\n";
+}
+?>
+
+## FACEBOOK API RESPONSE: ##
+<?php echo $posts_json; ?>
+        </textarea>
 
     <?php } ?>
         
@@ -499,6 +579,7 @@ function cff_style_page() {
         'cff_event_title_link'      => false,
         'cff_video_action'          => 'post',
         'cff_app_id'                => '',
+        'cff_show_credit'           => '',
         'cff_sep_color'             => '',
         'cff_sep_size'              => '1',
 
@@ -670,6 +751,7 @@ function cff_style_page() {
     $cff_class = $options[ 'cff_class' ];
     $cff_open_links = $options[ 'cff_open_links' ];
     $cff_app_id = $options[ 'cff_app_id' ];
+    $cff_show_credit = $options[ 'cff_show_credit' ];
     $cff_preserve_settings   = 'cff_preserve_settings';
     $cff_preserve_settings_val = get_option( $cff_preserve_settings );
 
@@ -1002,6 +1084,7 @@ function cff_style_page() {
 
             (isset($_POST[ $cff_ajax ])) ? $cff_ajax_val = $_POST[ 'cff_ajax' ] : $cff_ajax_val = '';
             if (isset($_POST[ 'cff_app_id' ])) $cff_app_id = $_POST[ 'cff_app_id' ];
+            (isset($_POST[ 'cff_show_credit' ])) ? $cff_show_credit = $_POST[ 'cff_show_credit' ] : $cff_show_credit = '';
             $cff_preserve_settings_val = $_POST[ $cff_preserve_settings ];
 
             //Meta
@@ -1031,6 +1114,7 @@ function cff_style_page() {
 
             update_option( $cff_ajax, $cff_ajax_val );
             $options[ 'cff_app_id' ] = $cff_app_id;
+            $options[ 'cff_show_credit' ] = $cff_show_credit;
             update_option( $cff_preserve_settings, $cff_preserve_settings_val );
         }
         //Update the Custom Text / Translate options
@@ -2403,6 +2487,14 @@ function cff_style_page() {
                             <p class="cff-tooltip cff-more-info"><?php _e('When removing the plugin your settings are automatically deleted from your database. Checking this box will prevent any settings from being deleted. This means that you can uninstall and reinstall the plugin without losing your settings.'); ?></p>
                         </td>
                     </tr>
+                    <tr>
+                        <th class="bump-left"><label for="cff_show_credit" class="bump-left"><?php _e("Display credit link"); ?></label></th>
+                        <td>
+                            <input name="cff_show_credit" type="checkbox" id="cff_show_credit" <?php if($cff_show_credit == true) echo "checked"; ?> />
+                            <label for="cff_show_credit"><?php _e('Yes'); ?></label>
+                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Display a link at the bottom of the feed to help promote the plugin'); ?></i>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -2511,9 +2603,43 @@ function cff_style_page() {
             </table>
             
             <?php submit_button(); ?>
+            <a href="https://smashballoon.com/custom-facebook-feed/demo" target="_blank"><img src="<?php echo plugins_url( 'img/pro.png' , __FILE__ ) ?>" /></a>
             <?php } //End Custom Text tab ?>
 
         </form>
+
+        <hr />
+        <h3><?php _e('Like the plugin? Help spread the word!'); ?></h3>
+
+        <!-- TWITTER -->
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://wordpress.org/plugins/custom-facebook-feed/" data-text="Display your Facebook posts on your site your way using the Custom Facebook Feed WordPress plugin!" data-via="smashballoon" data-dnt="true">Tweet</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        <style type="text/css">
+        #twitter-widget-0{ float: left; width: 100px !important; }
+        .IN-widget{ margin-right: 20px; }
+        </style>
+
+        <!-- FACEBOOK -->
+        <div id="fb-root" style="display: none;"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&appId=640861236031365&version=v2.0";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+        <div class="fb-like" data-href="https://wordpress.org/plugins/custom-facebook-feed/" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" style="display: block; float: left; margin-right: 20px;"></div>
+
+        <!-- LINKEDIN -->
+        <script src="//platform.linkedin.com/in.js" type="text/javascript">
+          lang: en_US
+        </script>
+        <script type="IN/Share" data-url="https://wordpress.org/plugins/custom-facebook-feed/"></script>
+
+        <!-- GOOGLE + -->
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <div class="g-plusone" data-size="medium" data-href="https://wordpress.org/plugins/custom-facebook-feed/"></div>
+
 <?php 
 } //End Style_Page
 //Enqueue admin styles
