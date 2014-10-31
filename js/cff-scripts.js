@@ -78,9 +78,11 @@ jQuery(document).ready(function() {
 			if(cfflinkhashtags == 'true'){
 				//Replace hashtags in text
 				var $cffText = $self.find('.cff-text');
-				//Add a space after all <br> tags so that #hashtags immediatelly after them are also converted to hashtag links. Without the space they aren't captured by the regex.
-				cffTextStr = cffTextStr.replace(/<br>/g, "<br> ");
-				if($cffText.length > 0) $cffText.html( cffTextStr.replace( regex , replacer ) );
+				if($cffText.length > 0){
+					//Add a space after all <br> tags so that #hashtags immediately after them are also converted to hashtag links. Without the space they aren't captured by the regex.
+					cffTextStr = cffTextStr.replace(/<br>/g, "<br> ");
+					$cffText.html( cffTextStr.replace( regex , replacer ) );
+				}
 			}
 
 			//Replace hashtags in desc
