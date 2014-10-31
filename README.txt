@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social media
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 2.2
+Stable tag: 2.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,9 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+= 2.2.1 =
+* Fix: Fixed a minor JavaScript error which occurs if a Facebook post doesn't contain any text
+
 = 2.2 =
 * New: Added a text area to the Support tab which contains all of the plugin settings and site info for easier troubleshooting
 * New: You can now set the number of Facebook posts to '0' if you just want to show the Facebook Like box widget and no posts
