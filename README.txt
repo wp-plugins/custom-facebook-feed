@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social media
 Requires at least: 3.0
 Tested up to: 4.1
-Stable tag: 2.2.1
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,21 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+= 2.3 =
+* Happy New Year!
+* New: Added a share link which allows you to share posts to Facebook, Twitter, Google+ or LinkedIn. This can be disabled at the very bottom of the Typography tab, or by using `showsharelink=false` in the shortcode.
+* Tweak: Using your own Facebook Access Token in the plugin is still optional but is now recommended in order to protect yourself against future Access Token related issues
+* Tweak: Increased the accuracy of the character count when links are included in the Facebook text
+* Tweak: Improved the efficiency of the post caching
+* Tweak: Replaced the rel attribute with the HTML5 data attribute when storing data on an element
+* Tweak: Added HTTPS stream wrapper check to the System Info to aid in troubleshooting
+* Tweak: Updated the plugin's icon font to the latest version
+* Tweak: Added the Smash Balloon logo to the credit link which can be optionally displayed at the bottom of your feed. The setting for this is at the bottom of the Misc tab on the Customize page.
+* Tweak: Added a shortcode option to only show the Smash Balloon credit link on certain feeds: `[custom-facebook-feed credit=true]`
+* Fix: Fixed an issue with quotes being escaped in custom/translated text
+* Fix: Display an error message if WPHTTP function isn't working correctly
+* Fix: The `postbgcolor` shortcode option is now working correctly
+
 = 2.2.1 =
 * Fix: Fixed a minor JavaScript error which occurs if a Facebook post doesn't contain any text
 

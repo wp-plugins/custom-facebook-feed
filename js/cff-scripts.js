@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
 		//Expand post
 		var expanded = false,
 			$post_text = $self.find('.cff-post-text .cff-text'),
-			text_limit = $self.closest('#cff').attr('rel');
+			text_limit = $self.closest('#cff').attr('data-char');
 		if (typeof text_limit === 'undefined' || text_limit == '') text_limit = 99999;
 		
 		//If the text is linked then use the text within the link
@@ -62,7 +62,7 @@ jQuery(document).ready(function() {
 			var cffTextStr = $self.find('.cff-text').html(),
 				cffDescStr = $self.find('.cff-post-desc').html(),
 				regex = /(^|\s)#(\w*[a-zA-Z_]+\w*)/gi,
-				linkcolor = $self.find('.cff-text').attr('rel');
+				linkcolor = $self.find('.cff-text').attr('data-color');
 
 			function replacer(hash){
 				//Remove white space at beginning of hash
@@ -89,6 +89,16 @@ jQuery(document).ready(function() {
 			if( $self.find('.cff-post-desc').length > 0 ) $self.find('.cff-post-desc').html( cffDescStr.replace( regex , replacer ) );
 		}
 		cffLinkHashtags();
+
+		//Add target attr to post text links via JS so aren't included in char count
+		$self.find('.cff-text a').attr('target', '_blank');
+
+
+		//Share toolip function
+        $self.find('.cff-share-link').unbind().bind('click', function(){
+            $self.find('.cff-share-tooltip').toggle();
+        });
+
 		
-	});
+	}); //End .cff-item each
 });

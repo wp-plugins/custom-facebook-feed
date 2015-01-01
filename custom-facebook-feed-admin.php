@@ -147,10 +147,10 @@ function cff_settings_page() {
                     </tr>
 
                     <tr valign="top">
-                        <th scope="row" style="padding-bottom: 10px;"><?php _e('Enter my own Access Token <i style="font-weight: normal; font-size: 12px;">This is Optional</i>'); ?></th>
+                        <th scope="row" style="padding-bottom: 10px;"><?php _e('Enter my own Access Token <i style="font-weight: normal; font-size: 12px;">This is Recommended</i>'); ?></th>
                         <td>
                             <input name="cff_show_access_token" type="checkbox" id="cff_show_access_token" <?php if($show_access_token_val == true) echo "checked"; ?> />&nbsp;<a class="cff-tooltip-link" href="JavaScript:void(0);"><?php _e("What is this?"); ?></a>
-                            <p class="cff-tooltip cff-more-info"><?php _e("A Facebook Access Token is not required to use this plugin, but if you have your own that you'd like to use then you can check this box and enter it here. To get your own Access Token you can follow these <a href='https://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>"); ?>.</p>
+                            <p class="cff-tooltip cff-more-info"><?php _e("A Facebook Access Token is not required to use this plugin, but we recommend it so that you're not reliant on the token built into the plugin. If you have your own token then you can check this box and enter it here. To get your own Access Token you can follow these <a href='https://smashballoon.com/custom-facebook-feed/access-token/' target='_blank'>step-by-step instructions</a>"); ?>.</p>
                         </td>
                     </tr>
 
@@ -408,6 +408,7 @@ Web Server Info:          <?php echo $_SERVER['SERVER_SOFTWARE'] . "\n"; ?>
 PHP allow_url_fopen:      <?php echo ini_get( 'allow_url_fopen' ) ? "Yes" . "\n" : "No" . "\n"; ?>
 PHP cURL:                 <?php echo is_callable('curl_init') ? "Yes" . "\n" : "No" . "\n"; ?>
 JSON:                     <?php echo function_exists("json_decode") ? "Yes" . "\n" : "No" . "\n" ?>
+SSL Stream:               <?php echo in_array('https', stream_get_wrappers()) ? "Yes" . "\n" : "No" . "\n" ?>
 
 ## ACTIVE PLUGINS: ##
 <?php
@@ -604,6 +605,9 @@ function cff_style_page() {
         'cff_see_more_text'         => 'See More',
         'cff_see_less_text'         => 'See Less',
         'cff_facebook_link_text'    => 'View on Facebook',
+        'cff_facebook_share_text'   => 'Share',
+        'cff_show_facebook_link'    => true,
+        'cff_show_facebook_share'   => true,
 
         'cff_translate_photos_text' => 'photos',
 
@@ -725,6 +729,9 @@ function cff_style_page() {
     $cff_facebook_link_text = $options[ 'cff_facebook_link_text' ];
     $cff_view_link_text = $options[ 'cff_view_link_text' ];
     $cff_link_to_timeline = $options[ 'cff_link_to_timeline' ];
+    $cff_facebook_share_text = $options[ 'cff_facebook_share_text' ];
+    $cff_show_facebook_link = $options[ 'cff_show_facebook_link' ];
+    $cff_show_facebook_share = $options[ 'cff_show_facebook_share' ];
     //Meta
     $cff_icon_style = $options[ 'cff_icon_style' ];
     $cff_meta_text_color = $options[ 'cff_meta_text_color' ];
@@ -907,7 +914,8 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_link_url_color' ]) ) $cff_link_url_color = $_POST[ 'cff_link_url_color' ];
             if (isset($_POST[ 'cff_link_bg_color' ]) ) $cff_link_bg_color = $_POST[ 'cff_link_bg_color' ];
             if (isset($_POST[ 'cff_link_border_color' ]) ) $cff_link_border_color = $_POST[ 'cff_link_border_color' ];
-            $cff_disable_link_box = $_POST[ 'cff_disable_link_box' ];
+            (isset($_POST[ 'cff_disable_link_box' ]) ) ? $cff_disable_link_box = $_POST[ 'cff_disable_link_box' ] : $cff_disable_link_box = '';
+
 
             //Event title
             if (isset($_POST[ 'cff_event_title_format' ]) ) $cff_event_title_format = $_POST[ 'cff_event_title_format' ];
@@ -960,6 +968,9 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_link_weight' ]) ) $cff_link_weight = $_POST[ 'cff_link_weight' ];
             if (isset($_POST[ 'cff_link_color' ]) ) $cff_link_color = $_POST[ 'cff_link_color' ];
             if (isset($_POST[ 'cff_facebook_link_text' ]) ) $cff_facebook_link_text = $_POST[ 'cff_facebook_link_text' ];
+            if (isset($_POST[ 'cff_facebook_share_text' ]) ) $cff_facebook_share_text = $_POST[ 'cff_facebook_share_text' ];
+            (isset($_POST[ 'cff_show_facebook_link' ]) ) ? $cff_show_facebook_link = $_POST[ 'cff_show_facebook_link' ] : $cff_show_facebook_link = '';
+            (isset($_POST[ 'cff_show_facebook_share' ]) ) ? $cff_show_facebook_share = $_POST[ 'cff_show_facebook_share' ] : $cff_show_facebook_share = '';
             if (isset($_POST[ 'cff_view_link_text' ]) ) $cff_view_link_text = $_POST[ 'cff_view_link_text' ];
             if (isset($_POST[ 'cff_link_to_timeline' ]) ) $cff_link_to_timeline = $_POST[ 'cff_link_to_timeline' ];
 
@@ -1052,6 +1063,9 @@ function cff_style_page() {
             $options[ 'cff_link_weight' ] = $cff_link_weight;
             $options[ 'cff_link_color' ] = $cff_link_color;
             $options[ 'cff_facebook_link_text' ] = $cff_facebook_link_text;
+            $options[ 'cff_facebook_share_text' ] = $cff_facebook_share_text;
+            $options[ 'cff_show_facebook_link' ] = $cff_show_facebook_link;
+            $options[ 'cff_show_facebook_share' ] = $cff_show_facebook_share;
             $options[ 'cff_view_link_text' ] = $cff_view_link_text;
             $options[ 'cff_link_to_timeline' ] = $cff_link_to_timeline;
         }
@@ -1124,6 +1138,7 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_see_more_text' ])) $cff_see_more_text = $_POST[ 'cff_see_more_text' ];
             if (isset($_POST[ 'cff_see_less_text' ])) $cff_see_less_text = $_POST[ 'cff_see_less_text' ];
             if (isset($_POST[ 'cff_facebook_link_text' ])) $cff_facebook_link_text = $_POST[ 'cff_facebook_link_text' ];
+            if (isset($_POST[ 'cff_facebook_share_text' ])) $cff_facebook_share_text = $_POST[ 'cff_facebook_share_text' ];
 
             //Social translate
             if (isset($_POST[ 'cff_translate_photos_text' ])) $cff_translate_photos_text = $_POST[ 'cff_translate_photos_text' ];
@@ -1149,6 +1164,8 @@ function cff_style_page() {
             $options[ 'cff_see_more_text' ] = $cff_see_more_text;
             $options[ 'cff_see_less_text' ] = $cff_see_less_text;
             $options[ 'cff_facebook_link_text' ] = $cff_facebook_link_text;
+            $options[ 'cff_facebook_share_text' ] = $cff_facebook_share_text;
+
             //Social translate
             $options[ 'cff_translate_photos_text' ] = $cff_translate_photos_text;
 
@@ -2322,7 +2339,28 @@ function cff_style_page() {
                             <tr>
                                 <th><label for="cff_facebook_link_text" class="bump-left"><?php _e('Text'); ?></label></th>
                                 <td>
-                                    <input name="cff_facebook_link_text" type="text" value="<?php esc_attr_e( $cff_facebook_link_text ); ?>" size="25" />
+                                    <input name="cff_facebook_link_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_facebook_link_text ) ); ?>" size="25" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th><label for="cff_facebook_share_text" class="bump-left"><?php _e('"Share" Text'); ?></label></th>
+                                <td>
+                                    <input name="cff_facebook_share_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_facebook_share_text ) ); ?>" size="25" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th><label for="cff_show_facebook_link" class="bump-left"><?php _e('Show "View on Facebook" link'); ?></label></th>
+                                <td>
+                                    <input type="checkbox" name="cff_show_facebook_link" id="cff_show_facebook_link" <?php if($cff_show_facebook_link == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th><label for="cff_show_facebook_share" class="bump-left"><?php _e('Show "Share" link'); ?></label></th>
+                                <td>
+                                    <input type="checkbox" name="cff_show_facebook_share" id="cff_show_facebook_share" <?php if($cff_show_facebook_share == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
                                 </td>
                             </tr>
                             
@@ -2522,29 +2560,33 @@ function cff_style_page() {
                     <tr class="cff-table-header"><th colspan="3"><?php _e('Post Text'); ?></th></tr>
                     <tr>
                         <td><label for="cff_see_more_text" class="bump-left"><?php _e('See More'); ?></label></td>
-                        <td><input name="cff_see_more_text" type="text" value="<?php esc_attr_e( $cff_see_more_text ); ?>" /></td>
+                        <td><input name="cff_see_more_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_see_more_text ) ); ?>" /></td>
                         <td class="cff-context"><?php _e('Used when truncating the post text'); ?></td>
                     </tr>
 
                     <tr>
                         <td><label for="cff_see_less_text" class="bump-left"><?php _e('See Less'); ?></label></td>
-                        <td><input name="cff_see_less_text" type="text" value="<?php esc_attr_e( $cff_see_less_text ); ?>" /></td>
+                        <td><input name="cff_see_less_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_see_less_text ) ); ?>" /></td>
                         <td class="cff-context"><?php _e('Used when truncating the post text'); ?></td>
+                    </tr>
+
+                    <tr class="cff-table-header"><th colspan="3"><?php _e('Post Action Links'); ?></th></tr>
+                    <tr>
+                        <td><label for="cff_facebook_link_text" class="bump-left"><?php _e('View on Facebook'); ?></label></td>
+                        <td><input name="cff_facebook_link_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_facebook_link_text ) ); ?>" /></td>
+                        <td class="cff-context"><?php _e('Used for the link to the post on Facebook'); ?></td>
+                    </tr>
+                    <tr>
+                        <td><label for="cff_facebook_share_text" class="bump-left"><?php _e('Share'); ?></label></td>
+                        <td><input name="cff_facebook_share_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_facebook_share_text ) ); ?>" /></td>
+                        <td class="cff-context"><?php _e('Used for sharing the Facebook post via Social Media'); ?></td>
                     </tr>
 
                     <tr>
                         <td><label for="cff_translate_photos_text" class="bump-left"><?php _e('photos'); ?></label></td>
-                        <td><input name="cff_translate_photos_text" type="text" value="<?php esc_attr_e( $cff_translate_photos_text ); ?>" /></td>
+                        <td><input name="cff_translate_photos_text" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_photos_text ) ); ?>" /></td>
                         <td class="cff-context"><?php _e('Added to the end of an album name. Eg. (6 photos)'); ?></td>
                     </tr>
-
-                    <tr class="cff-table-header"><th colspan="3"><?php _e('Link to Facebook'); ?></th></tr>
-                    <tr>
-                        <td><label for="cff_facebook_link_text" class="bump-left"><?php _e('View on Facebook'); ?></label></td>
-                        <td><input name="cff_facebook_link_text" type="text" value="<?php esc_attr_e( $cff_facebook_link_text ); ?>" /></td>
-                        <td class="cff-context"><?php _e('Links to the post on Facebook'); ?></td>
-                    </tr>
-
                     
                     <tr class="cff-table-header"><th colspan="3"><?php _e('Date'); ?></th></tr>
                     <tr>
@@ -2552,49 +2594,49 @@ function cff_style_page() {
                         <td class="cff-translate-date">
 
                             <label for="cff_translate_second"><?php _e("second"); ?></label>
-                            <input name="cff_translate_second" type="text" value="<?php esc_attr_e( $cff_translate_second ); ?>" size="20" />
+                            <input name="cff_translate_second" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_second ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_seconds"><?php _e("seconds"); ?></label>
-                            <input name="cff_translate_seconds" type="text" value="<?php esc_attr_e( $cff_translate_seconds ); ?>" size="20" />
+                            <input name="cff_translate_seconds" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_seconds ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_minute"><?php _e("minute"); ?></label>
-                            <input name="cff_translate_minute" type="text" value="<?php esc_attr_e( $cff_translate_minute ); ?>" size="20" />
+                            <input name="cff_translate_minute" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_minute ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_minutes"><?php _e("minutes"); ?></label>
-                            <input name="cff_translate_minutes" type="text" value="<?php esc_attr_e( $cff_translate_minutes ); ?>" size="20" />
+                            <input name="cff_translate_minutes" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_minutes ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_hour"><?php _e("hour"); ?></label>
-                            <input name="cff_translate_hour" type="text" value="<?php esc_attr_e( $cff_translate_hour ); ?>" size="20" />
+                            <input name="cff_translate_hour" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_hour ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_hours"><?php _e("hours"); ?></label>
-                            <input name="cff_translate_hours" type="text" value="<?php esc_attr_e( $cff_translate_hours ); ?>" size="20" />
+                            <input name="cff_translate_hours" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_hours ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_day"><?php _e("day"); ?></label>
-                            <input name="cff_translate_day" type="text" value="<?php esc_attr_e( $cff_translate_day ); ?>" size="20" />
+                            <input name="cff_translate_day" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_day ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_days"><?php _e("days"); ?></label>
-                            <input name="cff_translate_days" type="text" value="<?php esc_attr_e( $cff_translate_days ); ?>" size="20" />
+                            <input name="cff_translate_days" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_days ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_week"><?php _e("week"); ?></label>
-                            <input name="cff_translate_week" type="text" value="<?php esc_attr_e( $cff_translate_week ); ?>" size="20" />
+                            <input name="cff_translate_week" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_week ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_weeks"><?php _e("weeks"); ?></label>
-                            <input name="cff_translate_weeks" type="text" value="<?php esc_attr_e( $cff_translate_weeks ); ?>" size="20" />
+                            <input name="cff_translate_weeks" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_weeks ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_month"><?php _e("month"); ?></label>
-                            <input name="cff_translate_month" type="text" value="<?php esc_attr_e( $cff_translate_month ); ?>" size="20" />
+                            <input name="cff_translate_month" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_month ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_months"><?php _e("months"); ?></label>
-                            <input name="cff_translate_months" type="text" value="<?php esc_attr_e( $cff_translate_months ); ?>" size="20" />
+                            <input name="cff_translate_months" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_months ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_year"><?php _e("year"); ?></label>
-                            <input name="cff_translate_year" type="text" value="<?php esc_attr_e( $cff_translate_year ); ?>" size="20" />
+                            <input name="cff_translate_year" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_year ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_years"><?php _e("years"); ?></label>
-                            <input name="cff_translate_years" type="text" value="<?php esc_attr_e( $cff_translate_years ); ?>" size="20" />
+                            <input name="cff_translate_years" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_years ) ); ?>" size="20" />
                             <br />
                             <label for="cff_translate_ago"><?php _e("ago"); ?></label>
-                            <input name="cff_translate_ago" type="text" value="<?php esc_attr_e( $cff_translate_ago ); ?>" size="20" />
+                            <input name="cff_translate_ago" type="text" value="<?php echo stripslashes( esc_attr( $cff_translate_ago ) ); ?>" size="20" />
                         </td>
                         <td class="cff-context"><?php _e('Used to translate the "Posted _ days ago" date text'); ?></td>
                     </tr>
