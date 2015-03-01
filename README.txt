@@ -282,7 +282,7 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 * Fix: Added a workaround for Facebook changing the event URLs in their API from absolute to relative URLs
 * Fix: Facebook removed the 'relevant_count' parameter from their API so added a workaround to get the number of photos attached to a post
 * Fix: Fixed a minor bug in the WP_Http fallback method
-* Fix: Removed duplicate IDs on the share icons
+* Fix: Removed duplicate IDs on the share icons and replaced with classes
 * Fix: Added a check to the file_get_contents data retrieval method to check whether the Open SSL wrapper is enabled
 * Fix: The `eventtitlelink` shortcode option now works correctly
 * Fix: Added a workaround for 'story_tags' which Facebook deprecated from their API
