@@ -71,7 +71,7 @@ jQuery(document).ready(function() {
 				if ( /^#[0-9A-F]{6}$/i.test( replacementString ) ){
 					return replacementString;
 				} else {
-					return ' <a href="https://www.facebook.com/hashtag/'+ replacementString.substring(1) +'" target="_blank" style="color:#' + linkcolor + '">' + replacementString + '</a>';
+					return ' <a href="https://www.facebook.com/hashtag/'+ replacementString.substring(1) +'" target="_blank" rel="nofollow" style="color:#' + linkcolor + '">' + replacementString + '</a>';
 				}
 			}
 
@@ -91,7 +91,10 @@ jQuery(document).ready(function() {
 		cffLinkHashtags();
 
 		//Add target attr to post text links via JS so aren't included in char count
-		$self.find('.cff-text a').attr('target', '_blank');
+		$self.find('.cff-text a').attr({
+			'target' : '_blank',
+			'rel' : 'nofollow'
+		});
 
 
 		//Share toolip function

@@ -288,8 +288,8 @@
   position: absolute;
   z-index: 1000;
   bottom: 22px;
-  right: -41px;
-  width: 110px;
+  right: -51px;
+  width: 135px;
   padding: 5px 5px 4px 5px;
   margin: 0;
   background: #333;
@@ -334,11 +334,12 @@
 #cff .cff-share-tooltip a:hover{
   color: #fff;
 }
-#cff .cff-share-tooltip #cff-facebook-icon:hover{ background: #3b5998; }
-#cff .cff-share-tooltip #cff-twitter-icon:hover{ background: #00aced; }
-#cff .cff-share-tooltip #cff-google-icon:hover{ background: #dd4b39; }
-#cff .cff-share-tooltip #cff-linkedin-icon:hover{ background: #007bb6; }
-#cff .cff-share-tooltip #cff-pinterest-icon:hover{ background: #cb2027; }
+#cff .cff-share-tooltip .cff-facebook-icon:hover{ background: #3b5998; }
+#cff .cff-share-tooltip .cff-twitter-icon:hover{ background: #00aced; }
+#cff .cff-share-tooltip .cff-google-icon:hover{ background: #dd4b39; }
+#cff .cff-share-tooltip .cff-linkedin-icon:hover{ background: #007bb6; }
+#cff .cff-share-tooltip .cff-pinterest-icon:hover{ background: #cb2027; }
+#cff .cff-share-tooltip .cff-email-icon:hover{ background: #666; }
 
 /* Like box */
 .cff-likebox{

@@ -2,8 +2,8 @@
 Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social media
 Requires at least: 3.0
-Tested up to: 4.1
-Stable tag: 2.3
+Tested up to: 4.1.1
+Stable tag: 2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,23 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+= 2.3.1 =
+* New: Added a shortcode option to allow you to offset the number of posts to be shown. Eg: offset=2
+* New: Added an email link to the sharing icons
+* New: Added a setting to load a local copy of the icon font instead of the CDN version. This can be found at the bottom of the 'Misc' settings page.
+* Tweak: Added a prefix to the IDs on all posts so that they can now be targeted via CSS
+* Tweak: Added "nofollow" to all links by default. This can be disabled by using `nofollow=false` in the shortcode.
+* Tweak: Added some missing settings to the System Info section
+* Tweak: Added the 'Timezone' setting to the main Settings page so that it's easier to find
+* Fix: Added a workaround for Facebook changing the event URLs in their API from absolute to relative URLs
+* Fix: Facebook removed the 'relevant_count' parameter from their API so added a workaround to get the number of photos attached to a post
+* Fix: Fixed a minor bug in the WP_Http fallback method
+* Fix: Removed duplicate IDs on the share icons
+* Fix: Added a check to the file_get_contents data retrieval method to check whether the Open SSL wrapper is enabled
+* Fix: The `eventtitlelink` shortcode option now works correctly
+* Fix: Added a workaround for 'story_tags' which Facebook deprecated from their API
+* Fix: Removed query string from the end of CSS and JavaScript file references and replaced it with the wp_enqueue_script 'ver' parameter instead
+
 = 2.3 =
 * Happy New Year!
 * New: Added a share link which allows you to share posts to Facebook, Twitter, Google+ or LinkedIn. This can be disabled at the very bottom of the Typography tab, or by using `showsharelink=false` in the shortcode.
