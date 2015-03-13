@@ -67,16 +67,16 @@ function cff_settings_page() {
     // See if the user has posted us some information. If they did, this hidden field will be set to 'Y'.
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
         // Read their posted value
-        $show_access_token_val = $_POST[ $show_access_token ];
-        $access_token_val = $_POST[ $access_token ];
-        $page_id_val = $_POST[ $page_id ];
-        $cff_page_type_val = $_POST[ $cff_page_type ];
-        $num_show_val = $_POST[ $num_show ];
-        $cff_post_limit_val = $_POST[ $cff_post_limit ];
-        $cff_show_others_val = $_POST[ $cff_show_others ];
-        $cff_cache_time_val = $_POST[ $cff_cache_time ];
-        $cff_cache_time_unit_val = $_POST[ $cff_cache_time_unit ];
-        $cff_locale_val = $_POST[ $cff_locale ];
+        isset( $_POST[ $show_access_token ] ) ? $show_access_token_val = $_POST[ $show_access_token ] : $show_access_token_val = '';
+        isset( $_POST[ $access_token ] ) ? $access_token_val = $_POST[ $access_token ] : $access_token_val = '';
+        isset( $_POST[ $page_id ] ) ? $page_id_val = $_POST[ $page_id ] : $page_id_val = '';
+        isset( $_POST[ $cff_page_type ] ) ? $cff_page_type_val = $_POST[ $cff_page_type ] : $cff_page_type_val = '';
+        isset( $_POST[ $num_show ] ) ? $num_show_val = $_POST[ $num_show ] : $num_show_val = '';
+        isset( $_POST[ $cff_post_limit ] ) ? $cff_post_limit_val = $_POST[ $cff_post_limit ] : $cff_post_limit_val = '';
+        isset( $_POST[ $cff_show_others ] ) ? $cff_show_others_val = $_POST[ $cff_show_others ] : $cff_show_others_val = '';
+        isset( $_POST[ $cff_cache_time ] ) ? $cff_cache_time_val = $_POST[ $cff_cache_time ] : $cff_cache_time_val = '';
+        isset( $_POST[ $cff_cache_time_unit ] ) ? $cff_cache_time_unit_val = $_POST[ $cff_cache_time_unit ] : $cff_cache_time_unit_val = '';
+        isset( $_POST[ $cff_locale ] ) ? $cff_locale_val = $_POST[ $cff_locale ] : $cff_locale_val = '';
         if (isset($_POST[ 'cff_timezone' ]) ) $cff_timezone = $_POST[ 'cff_timezone' ];
 
         // Save the posted value in the database
@@ -1211,7 +1211,7 @@ function cff_style_page() {
             if (isset($_POST[ 'cff_app_id' ])) $cff_app_id = $_POST[ 'cff_app_id' ];
             (isset($_POST[ 'cff_show_credit' ])) ? $cff_show_credit = $_POST[ 'cff_show_credit' ] : $cff_show_credit = '';
             (isset($_POST[ 'cff_font_source' ])) ? $cff_font_source = $_POST[ 'cff_font_source' ] : $cff_font_source = '';
-            $cff_preserve_settings_val = $_POST[ $cff_preserve_settings ];
+            (isset($_POST[ $cff_preserve_settings ])) ? $cff_preserve_settings_val = $_POST[ 'cff_preserve_settings' ] : $cff_preserve_settings_val = '';
 
             //Meta
             $options[ 'cff_icon_style' ] = $cff_icon_style;
@@ -2653,6 +2653,7 @@ function cff_style_page() {
                             <select name="cff_font_source">
                                 <option value="cdn" <?php if($cff_font_source == "cdn") echo 'selected="selected"' ?> ><?php _e('CDN'); ?></option>
                                 <option value="local" <?php if($cff_font_source == "local") echo 'selected="selected"' ?> ><?php _e('Local copy'); ?></option>
+                                <option value="none" <?php if($cff_font_source == "none") echo 'selected="selected"' ?> ><?php _e("Don't load"); ?></option>
                             </select>
                         </td>
                     </tr>

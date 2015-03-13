@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 2.3.1
+Version: 2.3.2
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //Include admin
 include dirname( __FILE__ ) .'/custom-facebook-feed-admin.php';
 
-define('CFFVER', '2.3.1');
+define('CFFVER', '2.3.2');
 
 // Add shortcodes
 add_shortcode('custom-facebook-feed', 'display_cff');
@@ -875,9 +875,11 @@ function display_cff($atts) {
                 }
 
                 //If it's an event then check whether the URL contains facebook.com
-                if( stripos($news->link, "events/") && $cff_post_type == 'event' ){
-                    //Facebook changed the event link from absolute to relative, and so if the link isn't absolute then add facebook.com to front
-                    ( stripos($link, 'facebook.com') ) ? $link = $link : $link = 'https://facebook.com' . $link;
+                if(isset($news->link)){
+                    if( stripos($news->link, "events/") && $cff_post_type == 'event' ){
+                        //Facebook changed the event link from absolute to relative, and so if the link isn't absolute then add facebook.com to front
+                        ( stripos($link, 'facebook.com') ) ? $link = $link : $link = 'https://facebook.com' . $link;
+                    }
                 }
 
                 //Is it an album?
@@ -885,9 +887,9 @@ function display_cff($atts) {
 
                 if( $news->status_type == 'added_photos' ){
                     //Check 'story' to see whether it contains a number
-                    $str = $news->story;
+                    (isset($news->story)) ? $str = $news->story : $str = '';
                     preg_match('!\d+!', $str, $matches);
-                    $num_photos = $matches[0];
+                    (isset($matches[0])) ? $num_photos = $matches[0] : $num_photos = 0;
 
                     if ( $num_photos > 1 ) {
                         $cff_album = true;
@@ -1023,7 +1025,7 @@ function display_cff($atts) {
                                     array(
                                         'id' => $message_tag[0]->id,
                                         'name' => $message_tag[0]->name,
-                                        'type' => $message_tag[0]->type,
+                                        'type' => isset($message_tag[0]->type) ? $message_tag[0]->type : '',
                                         'offset' => $message_tag[0]->offset,
                                         'length' => $message_tag[0]->length
                                     )
@@ -1786,12 +1788,13 @@ function cff_add_my_stylesheet() {
     wp_enqueue_style( 'cff' );
 
     $options = get_option('cff_style_settings');
-    if( $options[ 'cff_font_source' ] == 'local' ){
+    if( $options[ 'cff_font_source' ] == 'none' ){
+        //Do nothing
+    } else if( $options[ 'cff_font_source' ] == 'local' ){
         wp_enqueue_style( 'cff-font-awesome', plugins_url('css/font-awesome.min.css', __FILE__), array(), '4.3.0' );
     } else {
         wp_enqueue_style( 'cff-font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', array(), '4.2.0' );
     }
-
 }
 //Enqueue scripts
 add_action( 'wp_enqueue_scripts', 'cff_scripts_method' );
@@ -2225,6 +2228,7 @@ function cff_autolink_email($text, $tagfill=''){
 ####################################################################
 
 
-//Comment out the line below to view errors
-//error_reporting(0);
+//Comment out the lines below to view PHP notices and errors
+ini_set('display_errors', 1);
+error_reporting(~0);
 ?>
