@@ -2229,6 +2229,6 @@ function cff_autolink_email($text, $tagfill=''){
 
 
 //Comment out the lines below to view PHP notices and errors
-ini_set('display_errors', 1);
-error_reporting(~0);
+// ini_set('display_errors', 1);
+// error_reporting(~0);
 ?>
