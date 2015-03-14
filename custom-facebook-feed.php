@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 2.3.2
+Version: 2.3.3
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //Include admin
 include dirname( __FILE__ ) .'/custom-facebook-feed-admin.php';
 
-define('CFFVER', '2.3.2');
+define('CFFVER', '2.3.3');
 
 // Add shortcodes
 add_shortcode('custom-facebook-feed', 'display_cff');
@@ -1788,13 +1788,22 @@ function cff_add_my_stylesheet() {
     wp_enqueue_style( 'cff' );
 
     $options = get_option('cff_style_settings');
-    if( $options[ 'cff_font_source' ] == 'none' ){
-        //Do nothing
-    } else if( $options[ 'cff_font_source' ] == 'local' ){
-        wp_enqueue_style( 'cff-font-awesome', plugins_url('css/font-awesome.min.css', __FILE__), array(), '4.3.0' );
-    } else {
+
+    if( !isset( $options[ 'cff_font_source' ] ) ){
         wp_enqueue_style( 'cff-font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', array(), '4.2.0' );
+    } else {
+
+        if( $options[ 'cff_font_source' ] == 'none' ){
+            //Do nothing
+        } else if( $options[ 'cff_font_source' ] == 'local' ){
+            wp_enqueue_style( 'cff-font-awesome', plugins_url('css/font-awesome.min.css', __FILE__), array(), '4.3.0' );
+        } else {
+            wp_enqueue_style( 'cff-font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css', array(), '4.2.0' );
+        }
+
     }
+
+    
 }
 //Enqueue scripts
 add_action( 'wp_enqueue_scripts', 'cff_scripts_method' );
