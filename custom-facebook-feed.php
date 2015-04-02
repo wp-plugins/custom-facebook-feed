@@ -3,7 +3,7 @@
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
 Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 2.3.3
+Version: 2.3.4
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //Include admin
 include dirname( __FILE__ ) .'/custom-facebook-feed-admin.php';
 
-define('CFFVER', '2.3.3');
+define('CFFVER', '2.3.4');
 
 // Add shortcodes
 add_shortcode('custom-facebook-feed', 'display_cff');
@@ -643,6 +643,10 @@ function display_cff($atts) {
     if ($cff_like_box_outside) $like_box .= ' cff-outside';
     $like_box .= ($cff_like_box_position == 'top') ? ' cff-top' : ' cff-bottom';
     $like_box .= '" ' . $cff_likebox_styles . '><script src="https://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1 '.$cff_like_box_params.'"></script><fb:like-box href="http://www.facebook.com/' . $page_id . '" show_faces="'.$cff_like_box_faces.'" stream="false" header="false" colorscheme="'. $cff_like_box_colorscheme .'" show_border="'. $cff_like_box_border .'" data-height="'.$cff_likebox_height.'"></fb:like-box><div id="fb-root"></div></div>';
+
+    //New like box:
+    // $like_box .= '" ' . $cff_likebox_styles . '><div id="fb-root"></div><script src="https://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1 '.$cff_like_box_params.'"></script><div class="fb-page" data-href="https://www.facebook.com/' . $page_id . '" data-height="'.$cff_likebox_height.'" data-hide-cover="true" data-show-facepile="'.$cff_like_box_faces.'" data-show-posts="false"></div></div>';
+
     //Don't show like box if it's a group
     if($cff_is_group) $like_box = '';
 
@@ -884,11 +888,15 @@ function display_cff($atts) {
 
                 //Is it an album?
                 $cff_album = false;
+                $num_photos = 0;
 
                 if( $news->status_type == 'added_photos' ){
                     //Check 'story' to see whether it contains a number
                     (isset($news->story)) ? $str = $news->story : $str = '';
-                    preg_match('!\d+!', $str, $matches);
+                    
+                    //Only matches number with a space after them
+                    preg_match('!\d+ !', $str, $matches);
+
                     (isset($matches[0])) ? $num_photos = $matches[0] : $num_photos = 0;
 
                     if ( $num_photos > 1 ) {
@@ -1090,6 +1098,7 @@ function display_cff($atts) {
                     //If the post text and description/caption are the same then don't show the description
                     if($post_text == $description_text) $cff_description = '';
 
+                    if( $cff_post_type == 'event' ) $cff_description = '';
                 }
 
                 //LINK

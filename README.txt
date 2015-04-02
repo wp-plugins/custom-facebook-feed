@@ -3,7 +3,7 @@ Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social media
 Requires at least: 3.0
 Tested up to: 4.1.1
-Stable tag: 2.3.3
+Stable tag: 2.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,10 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+= 2.3.4 =
+* Fix: The event description is no longer shown twice in event posts. It was previously shown in the post text itself and in the event details.
+* Fix: Fixed a rare bug which would occur if your Facebook page or group name contained a number
+
 = 2.3.3 =
 * Fix: Removed a PHP notice which was missed in the last update. Apologies for the two updates in quick succession.
 
