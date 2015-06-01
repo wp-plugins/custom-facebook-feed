@@ -2,8 +2,8 @@
 Contributors: smashballoon
 Tags: Facebook, Facebook feed, Facebook posts, Facebook wall, Facebook events, Facebook page, Facebook group, Facebook Like box, Customizable Facebook Feed, custom, customizable, seo, responsive, mobile, social media
 Requires at least: 3.0
-Tested up to: 4.2
-Stable tag: 2.3.4
+Tested up to: 4.2.2
+Stable tag: 2.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -271,6 +271,18 @@ Credit iMarketing Factory - "The Importance of Facebook for Small Businesses"
 9. It's super easy to display your Facebook feed in any page or post
 
 == Changelog ==
+= 2.3.5 =
+* New: Replace the 'Like Box' with the new Facebook 'Page Plugin' as the Like Box will be deprecated on June 23rd, 2015. Settings can be found under the Misc tab on the plugin's Customize page.
+* Fix: Hashtags which contain foreign characters are now correctly linked
+* Fix: Links within post descriptions weren't opening in a new tab
+* Fix: Removed empty style tags from some elements
+* Fix: The URLs used for the 'Share' icons are now encoded to prevent any HTML validation errors
+* Fix: Shared posts now link to the new shared post and not to the original post that was shared
+* Fix: Corrected a minor issue with the plugin caching string
+* Fix: Fixed a minor issue with tags in the post text when creating/sharing an event
+* Tweak: Add some stricter CSS to some parts of the feed to prevent theme conflicts
+* Tweak: Automatically link the event name to the event now rather than it having to be enabled on the plugin's 'Typography' settings page
+
 = 2.3.4 =
 * Fix: The event description is no longer shown twice in event posts. It was previously shown in the post text itself and in the event details.
 * Fix: Fixed a rare bug which would occur if your Facebook page or group name contained a number
