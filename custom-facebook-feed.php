@@ -2,8 +2,8 @@
 /*
 Plugin Name: Custom Facebook Feed
 Plugin URI: http://smashballoon.com/custom-facebook-feed
-Description: Add a completely customizable Facebook feed to your WordPress site
-Version: 2.3.5
+Description: Add completely customizable Facebook feeds to your WordPress site
+Version: 2.3.6
 Author: Smash Balloon
 Author URI: http://smashballoon.com/
 License: GPLv2 or later
@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //Include admin
 include dirname( __FILE__ ) .'/custom-facebook-feed-admin.php';
 
-define('CFFVER', '2.3.5');
+define('CFFVER', '2.3.6');
 
 // Add shortcodes
 add_shortcode('custom-facebook-feed', 'display_cff');
@@ -152,6 +152,8 @@ function display_cff($atts) {
         'likeboxfaces' => isset($options[ 'cff_like_box_faces' ]) ? $options[ 'cff_like_box_faces' ] : '',
         'likeboxborder' => isset($options[ 'cff_like_box_border' ]) ? $options[ 'cff_like_box_border' ] : '',
         'likeboxcover' => isset($options[ 'cff_like_box_cover' ]) ? $options[ 'cff_like_box_cover' ] : '',
+        'likeboxsmallheader' => isset($options[ 'cff_like_box_small_header' ]) ? $options[ 'cff_like_box_small_header' ] : '',
+        'likeboxhidebtn' => isset($options[ 'cff_like_box_hide_cta' ]) ? $options[ 'cff_like_box_hide_cta' ] : '',
 
         'credit' => isset($options[ 'cff_show_credit' ]) ? $options[ 'cff_show_credit' ] : '',
         'nofollow' => 'true',
@@ -484,7 +486,12 @@ function display_cff($atts) {
 
     if ( !isset($cff_likebox_width) || empty($cff_likebox_width) || $cff_likebox_width == '' ) $cff_likebox_width = '100%';
     $cff_like_box_faces = $atts[ 'likeboxfaces' ];
-    if ( !isset($cff_like_box_faces) || empty($cff_like_box_faces) ) $cff_like_box_faces = 'false';
+    if ( !isset($cff_like_box_faces) || empty($cff_like_box_faces) ){
+        $cff_like_box_faces = 'false';
+    } else {
+        $cff_like_box_faces = 'true';
+    }
+
     $cff_like_box_border = $atts[ 'likeboxborder' ];
     if ($cff_like_box_border) {
         $cff_like_box_border = 'true';
@@ -497,6 +504,20 @@ function display_cff($atts) {
         $cff_like_box_cover = 'false';
     } else {
         $cff_like_box_cover = 'true';
+    }
+
+    $cff_like_box_small_header = $atts[ 'likeboxsmallheader' ];
+    if ($cff_like_box_small_header) {
+        $cff_like_box_small_header = 'true';
+    } else {
+        $cff_like_box_small_header = 'false';
+    }
+
+    $cff_like_box_hide_cta = $atts[ 'likeboxhidebtn' ];
+    if ($cff_like_box_hide_cta) {
+        $cff_like_box_hide_cta = 'true';
+    } else {
+        $cff_like_box_hide_cta = 'false';
     }
 
     //Compile Like box styles
@@ -670,12 +691,10 @@ function display_cff($atts) {
     //Get like box vars
     $cff_likebox_width = $atts[ 'likeboxwidth' ];
     if ( !isset($cff_likebox_width) || empty($cff_likebox_width) || $cff_likebox_width == '' ) $cff_likebox_width = 300;
-    $cff_like_box_faces = $atts[ 'likeboxfaces' ];
-    if ( !isset($cff_like_box_faces) || empty($cff_like_box_faces) ) $cff_like_box_faces = 'false';
 
     //Set like box variable
     isset( $options[ 'cff_app_id' ] ) ? $cff_app_id = $options[ 'cff_app_id' ] : $cff_app_id = '';
-    ( isset($cff_app_id) && !empty($cff_app_id) ) ? $cff_like_box_params = '&appId=' .$cff_app_id : $cff_like_box_params = '';
+    ( isset($cff_app_id) && !empty($cff_app_id) ) ? $cff_like_box_params = '&app_id=' .$cff_app_id : $cff_like_box_params = '';
     $like_box = '<div class="cff-likebox';
     if ($cff_like_box_outside) $like_box .= ' cff-outside';
     $like_box .= ($cff_like_box_position == 'top') ? ' cff-top' : ' cff-bottom';
@@ -683,7 +702,7 @@ function display_cff($atts) {
 
     $like_box_page_id = explode(",", str_replace(' ', '', $page_id) );
 
-    $like_box .= '" ><script src="https://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1'.$cff_like_box_params.'"></script><div class="fb-page" data-href="https://www.facebook.com/'.$like_box_page_id[0].'" data-width="'.$cff_likebox_width.'" data-hide-cover="'.$cff_like_box_cover.'" data-show-facepile="'.$cff_like_box_faces.'" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/'.$like_box_page_id[0].'"><a href="https://www.facebook.com/'.$like_box_page_id[0].'">'.$cff_facebook_link_text.'</a></blockquote></div></div><div id="fb-root"></div></div>';
+    $like_box .= '" ><script src="https://connect.facebook.net/' . $cff_locale . '/all.js#xfbml=1'.$cff_like_box_params.'"></script><div class="fb-page" data-href="https://www.facebook.com/'.$like_box_page_id[0].'" data-width="'.$cff_likebox_width.'" data-hide-cover="'.$cff_like_box_cover.'" data-show-facepile="'.$cff_like_box_faces.'" data-small-header="'.$cff_like_box_small_header.'" data-hide-cta="'.$cff_like_box_hide_cta.'" data-show-posts="false" data-adapt-container-width="true"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/'.$like_box_page_id[0].'"><a href="https://www.facebook.com/'.$like_box_page_id[0].'">'.$cff_facebook_link_text.'</a></blockquote></div></div><div id="fb-root"></div></div>';
 
     //Don't show like box if it's a group
     if($cff_is_group) $like_box = '';
@@ -760,7 +779,9 @@ function display_cff($atts) {
     //ALL POSTS
     if (!$cff_events_only){
 
-        $cff_posts_json_url = 'https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token . '&limit=' . $cff_post_limit . '&locale=' . $cff_locale . $cff_ssl;
+        // $cff_posts_json_url = 'https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?access_token=' . $access_token . '&limit=' . $cff_post_limit . '&locale=' . $cff_locale . $cff_ssl;
+
+        $cff_posts_json_url = 'https://graph.facebook.com/' . $page_id . '/' . $graph_query . '?fields=id,from,message,message_tags,story,story_tags,link,source,name,caption,description,type,status_type,object_id,created_time&access_token=' . $access_token . '&limit=' . $cff_post_limit . '&locale=' . $cff_locale . $cff_ssl;
 
         //Don't use caching if the cache time is set to zero
         if ($cff_cache_time != 0){

@@ -673,6 +673,8 @@ function cff_style_page() {
         'cff_like_box_faces'        => false,
         'cff_like_box_border'       => false,
         'cff_like_box_cover'        => true,
+        'cff_like_box_small_header' => false,
+        'cff_like_box_hide_cta'     => false,
 
         'cff_bg_color'              => '',
         'cff_likebox_bg_color'      => '',
@@ -860,6 +862,9 @@ function cff_style_page() {
     $cff_like_box_faces = $options[ 'cff_like_box_faces' ];
     $cff_like_box_border = $options[ 'cff_like_box_border' ];
     $cff_like_box_cover = $options[ 'cff_like_box_cover' ];
+    $cff_like_box_small_header = $options[ 'cff_like_box_small_header' ];
+    $cff_like_box_hide_cta = $options[ 'cff_like_box_hide_cta' ];
+
 
     $cff_show_media = $options[ 'cff_show_media' ];
     $cff_bg_color = $options[ 'cff_bg_color' ];
@@ -1205,6 +1210,9 @@ function cff_style_page() {
             (isset($_POST[ 'cff_like_box_faces' ])) ? $cff_like_box_faces = $_POST[ 'cff_like_box_faces' ] : $cff_like_box_faces = '';
             (isset($_POST[ 'cff_like_box_border' ])) ? $cff_like_box_border = $_POST[ 'cff_like_box_border' ] : $cff_like_box_border = '';
             (isset($_POST[ 'cff_like_box_cover' ])) ? $cff_like_box_cover = $_POST[ 'cff_like_box_cover' ] : $cff_like_box_cover = '';
+            (isset($_POST[ 'cff_like_box_small_header' ])) ? $cff_like_box_small_header = $_POST[ 'cff_like_box_small_header' ] : $cff_like_box_small_header = '';
+            (isset($_POST[ 'cff_like_box_hide_cta' ])) ? $cff_like_box_hide_cta = $_POST[ 'cff_like_box_hide_cta' ] : $cff_like_box_hide_cta = '';
+
 
             if (isset($_POST[ 'cff_video_height' ])) $cff_video_height = $_POST[ 'cff_video_height' ];
             if (isset($_POST[ 'cff_video_action' ])) $cff_video_action = $_POST[ 'cff_video_action' ];
@@ -1237,6 +1245,9 @@ function cff_style_page() {
             $options[ 'cff_like_box_faces' ] = $cff_like_box_faces;
             $options[ 'cff_like_box_border' ] = $cff_like_box_border;
             $options[ 'cff_like_box_cover' ] = $cff_like_box_cover;
+            $options[ 'cff_like_box_small_header' ] = $cff_like_box_small_header;
+            $options[ 'cff_like_box_hide_cta' ] = $cff_like_box_hide_cta;
+
 
             $options[ 'cff_video_height' ] = $cff_video_height;
             $options[ 'cff_video_action' ] = $cff_video_action;
@@ -2537,9 +2548,21 @@ function cff_style_page() {
                         <th class="bump-left" scope="row"><label><?php _e('Include the Cover Photo'); ?></label></th>
                         <td>
                             <input type="checkbox" name="cff_like_box_cover" id="cff_like_box_cover" <?php if($cff_like_box_cover == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
-                            <i style="color: #666; font-size: 11px; margin-left: 5px;"><?php _e('Only applicable if you are showing faces of fans'); ?></i>
                         </td>
                     </tr>
+                    <tr valign="top">
+                        <th class="bump-left" scope="row"><label><?php _e('Use a small header'); ?></label></th>
+                        <td>
+                            <input type="checkbox" name="cff_like_box_small_header" id="cff_like_box_small_header" <?php if($cff_like_box_small_header == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <th class="bump-left" scope="row"><label><?php _e('Hide the call to action button (if available)'); ?></label></th>
+                        <td>
+                            <input type="checkbox" name="cff_like_box_hide_cta" id="cff_like_box_hide_cta" <?php if($cff_like_box_hide_cta == true) echo 'checked="checked"' ?> />&nbsp;<?php _e('Yes'); ?>
+                        </td>
+                    </tr>
+
 
                     <tr valign="top">
                         <th class="bump-left" for="cff_likebox_width" scope="row"><label><?php _e('Custom Like Box Width'); ?></label></th>
