@@ -1509,7 +1509,7 @@ function cff_fetchUrl($url){
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 20);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_ENCODING, 'gzip,deflate,sdch');
+        curl_setopt($ch, CURLOPT_ENCODING, '');
         $feedData = curl_exec($ch);
         curl_close($ch);
     //If not then use file_get_contents
